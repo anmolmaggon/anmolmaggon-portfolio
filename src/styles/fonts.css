@@ -1,0 +1,97 @@
+/* Self-hosted Nyght Serif — the cdnfonts CDN only shipped the heavy "Dark" (800) cut,
+   which forced every weight to render bold. These are the real Light/Regular/Medium files. */
+@font-face {
+  font-family: 'Nyght Serif';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('./fonts/NyghtSerif-Light.woff2') format('woff2'),
+       url('./fonts/NyghtSerif-Light.woff') format('woff');
+}
+@font-face {
+  font-family: 'Nyght Serif';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url('./fonts/NyghtSerif-LightItalic.woff2') format('woff2'),
+       url('./fonts/NyghtSerif-LightItalic.woff') format('woff');
+}
+@font-face {
+  font-family: 'Nyght Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/NyghtSerif-Regular.woff2') format('woff2'),
+       url('./fonts/NyghtSerif-Regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Nyght Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/NyghtSerif-RegularItalic.woff2') format('woff2'),
+       url('./fonts/NyghtSerif-RegularItalic.woff') format('woff');
+}
+@font-face {
+  font-family: 'Nyght Serif';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./fonts/NyghtSerif-Medium.woff2') format('woff2'),
+       url('./fonts/NyghtSerif-Medium.woff') format('woff');
+}
+@font-face {
+  font-family: 'Nyght Serif';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./fonts/NyghtSerif-MediumItalic.woff2') format('woff2'),
+       url('./fonts/NyghtSerif-MediumItalic.woff') format('woff');
+}
+
+:root {
+  --font-serif: 'Nyght Serif', 'Times New Roman', Georgia, serif;
+}
+
+html, body {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-feature-settings: "ss01", "liga";
+}
+
+.display {
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+.display-italic {
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: -0.015em;
+}
+.eyebrow {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  font-size: 13px;
+  text-transform: none;
+}
+.label {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.body {
+  font-weight: 400;
+}
+.numeral {
+  font-weight: 500;
+  font-feature-settings: "tnum";
+}
+
+/* ── Italics disabled for now (per request) ────────────────────────────────
+   Single global override so no italic slips through any component, including
+   ones set via inline style={{ fontStyle: "italic" }}. To bring italics back,
+   delete this block. */
+* {
+  font-style: normal !important;
+}
