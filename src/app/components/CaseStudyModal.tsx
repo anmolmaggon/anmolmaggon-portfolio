@@ -1,6 +1,11 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import { Label } from "./Label";
+import { HoverLink } from "./HoverLink";
+import { useGlobalContext } from "../context/GlobalContext";
+import { Linkedin, Instagram } from "lucide-react";
 
 export type CaseStudyDetail = {
   number: string;
@@ -11,10 +16,12 @@ export type CaseStudyDetail = {
   meta: string[];
   problem: string;
   approach: string;
+  impactNote?: string;
   impact: { value: string; label: string }[];
   decisions: { title: string; detail: string }[];
   cover: string;
   shots: { src: string; caption: string; wide?: boolean }[];
+  beforeAfter?: { before: string; after: string; caption?: string };
 };
 
 type Props = {
@@ -23,50 +30,56 @@ type Props = {
 };
 
 export function CaseStudyModal({ study, onClose }: Props) {
+  const { pauseBackgroundAudio, resumeBackgroundAudio } = useGlobalContext();
+
   useEffect(() => {
     if (!study) return;
+    
+    // Pause background music while modal is open
+    pauseBackgroundAudio();
+
+    const previousOverflow = document.body.style.overflow;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
+      resumeBackgroundAudio(); // Resume when modal closes
     };
-  }, [study, onClose]);
+  }, [study, onClose, pauseBackgroundAudio, resumeBackgroundAudio]);
 
-  if (!study) return null;
+  if (!study || typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-stretch justify-center"
-      style={{ padding: "40px" }}
+      className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-stretch justify-center p-0"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full h-full bg-[#fafaf7] rounded-[20px] overflow-y-auto overflow-x-hidden shadow-2xl"
+        data-lenis-prevent="true"
+        className="relative w-full h-full bg-[#fafaf7] rounded-none overflow-y-auto overflow-x-hidden shadow-2xl"
       >
         <button
           onClick={onClose}
           aria-label="Close"
-          className="sticky top-6 ml-auto mr-6 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-black text-white text-[12px] hover:bg-black/80 transition-colors"
-          style={{ fontFamily: "system-ui, sans-serif", fontWeight: 500, float: "right" }}
+          className="fixed top-6 right-6 md:top-8 md:right-8 z-[10000] flex items-center justify-center w-12 h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors cursor-pointer"
         >
-          Close ✕
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
         </button>
 
-        <div className="px-8 md:px-16 lg:px-24 py-16 md:py-20 max-w-[1400px] mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="italic numeral text-[14px] opacity-50">{study.number}</span>
-            <Label variant="outline" size="sm">{study.client}</Label>
-            <Label variant="outline" size="sm">{study.year}</Label>
-            <Label variant="outline" size="sm">{study.role}</Label>
-          </div>
+        <div className="px-5 sm:px-8 md:px-16 lg:px-24 py-14 md:py-20 max-w-[1400px] mx-auto">
 
+          {/* 2. Title */}
           <h1
-            className="font-[Nyght_Serif] mb-10"
+            className="font-[Nyght_Serif] mb-12"
             style={{
               fontSize: "clamp(48px, 8vw, 128px)",
               lineHeight: 0.95,
@@ -75,56 +88,63 @@ export function CaseStudyModal({ study, onClose }: Props) {
             }}
           >
             {study.title}
-            <em className="italic" style={{ color: "#fe4638" }}>.</em>
+            <em className="italic">.</em>
           </h1>
 
-          <div className="rounded-[16px] overflow-hidden mb-20 aspect-[16/9] shadow-xl">
+          {/* 3. Cover Image (Hero product shot, no rounded corners, no shadow) */}
+          <div className="overflow-hidden mb-16 aspect-[16/9]">
             <ImageWithFallback src={study.cover} alt={`${study.title} cover`} className="w-full h-full object-cover" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-24">
+          {/* 4. The Problem */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-10 mb-12 md:mb-20">
             <div className="md:col-span-3">
-              <p className="eyebrow opacity-60">The problem</p>
+              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider">The problem</p>
             </div>
             <p
-              className="md:col-span-9 font-[Nyght_Serif] max-w-3xl"
-              style={{ fontSize: "clamp(22px, 2.4vw, 36px)", lineHeight: 1.25, fontWeight: 400, letterSpacing: "-0.01em" }}
+              className="md:col-span-9 font-sans max-w-3xl text-black/80"
+              style={{ fontSize: "clamp(20px, 2.2vw, 32px)", lineHeight: 1.4, fontWeight: 400, letterSpacing: "-0.01em" }}
             >
               {study.problem}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-24">
+          {/* 5. Approach */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-10 mb-16 md:mb-24">
             <div className="md:col-span-3">
-              <p className="eyebrow opacity-60">Approach</p>
+              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider">Approach</p>
             </div>
             <p
-              className="md:col-span-9 max-w-2xl opacity-80 italic"
-              style={{ fontSize: "clamp(17px, 1.4vw, 20px)", lineHeight: 1.55, fontWeight: 400 }}
+              className="md:col-span-9 max-w-2xl text-black/70 font-sans"
+              style={{ fontSize: "clamp(16px, 1.4vw, 20px)", lineHeight: 1.6, fontWeight: 400 }}
             >
               {study.approach}
             </p>
           </div>
 
-          <div className="mb-24">
-            <p className="eyebrow opacity-60 mb-8">Selected screens</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {study.shots.map((s, i) => (
-                <figure
-                  key={i}
-                  className={`${s.wide ? "md:col-span-2" : ""} rounded-[14px] overflow-hidden bg-black/5`}
-                >
-                  <div className={s.wide ? "aspect-[16/8]" : "aspect-[4/3]"}>
-                    <ImageWithFallback src={s.src} alt={s.caption} className="w-full h-full object-cover" />
-                  </div>
-                  <figcaption className="px-4 py-3 italic opacity-60 text-[13px]">{s.caption}</figcaption>
-                </figure>
+          {/* 6. Impact Stats (Moved from top) */}
+          <div className="mb-20 md:mb-24">
+            {study.impactNote && (
+              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-6">{study.impactNote}</p>
+            )}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {study.impact.map((m) => (
+                <div key={m.label} className="py-5 border-t border-black/15 text-black">
+                  <p
+                    className="font-[Nyght_Serif]"
+                    style={{ fontSize: "clamp(32px, 3.5vw, 48px)", lineHeight: 1, fontWeight: 400, letterSpacing: "-0.02em" }}
+                  >
+                    {m.value}
+                  </p>
+                  <p className="mt-3 font-sans opacity-70 text-[14px]">{m.label}</p>
+                </div>
               ))}
             </div>
           </div>
 
+          {/* 7. Design Decisions */}
           <div className="mb-24">
-            <p className="eyebrow opacity-60 mb-8">Design decisions</p>
+            <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">Design decisions</p>
             <ol className="space-y-0">
               {study.decisions.map((d, i) => (
                 <li
@@ -141,8 +161,8 @@ export function CaseStudyModal({ study, onClose }: Props) {
                     {d.title}
                   </h3>
                   <p
-                    className="col-span-12 md:col-span-6 italic opacity-70"
-                    style={{ fontSize: "clamp(15px, 1.1vw, 17px)", lineHeight: 1.55 }}
+                    className="col-span-12 md:col-span-6 text-black/70 font-sans"
+                    style={{ fontSize: "clamp(15px, 1.1vw, 17px)", lineHeight: 1.6 }}
                   >
                     {d.detail}
                   </p>
@@ -151,35 +171,70 @@ export function CaseStudyModal({ study, onClose }: Props) {
             </ol>
           </div>
 
-          <div className="mb-12">
-            <p className="eyebrow opacity-60 mb-8">Impact</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {study.impact.map((m) => (
-                <div key={m.label} className="p-6 rounded-[14px] bg-black text-white">
-                  <p
-                    className="font-[Nyght_Serif]"
-                    style={{ fontSize: "clamp(36px, 4vw, 64px)", lineHeight: 1, fontWeight: 400, letterSpacing: "-0.02em" }}
-                  >
-                    {m.value}
-                  </p>
-                  <p className="mt-2 italic opacity-70 text-[13px]">{m.label}</p>
-                </div>
+          {/* 8. Before/After Slider */}
+          {study.beforeAfter && (
+            <div className="mb-24">
+              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">The redesign</p>
+              <BeforeAfterSlider
+                before={study.beforeAfter.before}
+                after={study.beforeAfter.after}
+                caption={study.beforeAfter.caption}
+              />
+            </div>
+          )}
+
+          {/* 9. Selected Screens (No rounded corners, no shadow) */}
+          <div className="mb-24">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {study.shots.map((s, i) => (
+                <figure
+                  key={i}
+                  className={`${s.wide ? "md:col-span-2" : ""} overflow-hidden`}
+                >
+                  <div className={`${s.wide ? "aspect-[16/8]" : "aspect-[4/3]"} bg-black/5`}>
+                    <ImageWithFallback src={s.src} alt={s.caption} className="w-full h-full object-cover" />
+                  </div>
+                  <figcaption className="pt-4 pb-2 italic opacity-60 text-[13px]">{s.caption}</figcaption>
+                </figure>
               ))}
             </div>
           </div>
 
           <div className="pt-16 border-t border-black/15 flex items-center justify-between gap-6 flex-wrap">
             <p className="italic opacity-60 text-[14px]">Want the full walkthrough?</p>
-            <a
-              href="mailto:anmolmaggon40@gmail.com"
-              className="font-[Nyght_Serif] italic"
-              style={{ fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 400 }}
-            >
-              anmolmaggon40@gmail.com →
-            </a>
+            <div className="flex items-center gap-6 md:gap-8 flex-wrap">
+              <HoverLink
+                href="mailto:anmolmaggon40@gmail.com"
+                className="font-[Nyght_Serif] italic mr-2 md:mr-4"
+                style={{ fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 400 }}
+              >
+                anmolmaggon40@gmail.com →
+              </HoverLink>
+              <div className="flex items-center gap-5">
+                <HoverLink
+                  href="https://www.linkedin.com/in/anmolmaggon"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-black/50 hover:text-black transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={1.5} />
+                </HoverLink>
+                <HoverLink
+                  href="https://www.instagram.com/anmolmaggon"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-black/50 hover:text-black transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={1.5} />
+                </HoverLink>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

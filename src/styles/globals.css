@@ -15,3 +15,29 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-slide-up-fade {
+  animation: slideUpFade 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* When the "Nothing changes" principle is hovered, the section inverts — flip
+   the fixed nav along with it so the whole frame changes state. */
+header {
+  transition: filter 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+html[data-invert="1"] header {
+  filter: invert(1);
+}

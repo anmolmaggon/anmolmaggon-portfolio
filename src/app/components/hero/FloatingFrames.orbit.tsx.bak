@@ -1,0 +1,101 @@
+import { useRef, useMemo } from "react";
+import { useFrame } from "@react-three/fiber";
+import { useTexture } from "@react-three/drei";
+import * as THREE from "three";
+
+import img1 from "../../../imports/image-1.png";
+import img3 from "../../../imports/image-3.png";
+import img4 from "../../../imports/image-4.png";
+import img5 from "../../../imports/image-5.png";
+import img6 from "../../../imports/image-6.png";
+import img7 from "../../../imports/image-7.png";
+import img8 from "../../../imports/image-8.png";
+import img10 from "../../../imports/image-10.png";
+
+const FRAME_URLS = [img1, img3, img4, img5, img6, img7, img8, img10];
+const FRAME_COUNT = FRAME_URLS.length;
+
+/* ─── Orbit Config ───────────────────────────────────────────────────── */
+// The orbit ellipse is centered on the silhouette (x: 2.5)
+const ORBIT_CENTER_X = 2.5;
+const ORBIT_CENTER_Y = 0.2;
+const ORBIT_RADIUS_X = 5.5;   // Horizontal radius of the ellipse
+const ORBIT_RADIUS_Y = 3.2;   // Vertical radius
+const ORBIT_RADIUS_Z = 4.0;   // Depth radius (how far behind/in front they go)
+const ORBIT_TILT = 0.15;      // Slight tilt of the entire orbital plane (radians)
+const ORBIT_SPEED = 0.04;     // Full revolution speed (very slow, majestic)
+const FRAME_SCALE = 1.6;      // Base frame size
+
+/* ─── Orbiting Frame ─────────────────────────────────────────────────── */
+function OrbitFrame({
+  url,
+  index,
+  total,
+}: {
+  url: string;
+  index: number;
+  total: number;
+}) {
+  const texture = useTexture(url);
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  const material = useMemo(() => {
+    return new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.95,
+    });
+  }, [texture]);
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    const t = state.clock.elapsedTime;
+
+    // Each frame is evenly spaced around the orbit
+    const angleOffset = (index / total) * Math.PI * 2;
+    const angle = t * ORBIT_SPEED + angleOffset;
+
+    // Parametric ellipse in 3D with tilt
+    const x = ORBIT_CENTER_X + Math.cos(angle) * ORBIT_RADIUS_X;
+    const y = ORBIT_CENTER_Y + Math.sin(angle) * ORBIT_RADIUS_Y * Math.cos(ORBIT_TILT);
+    const z = Math.sin(angle) * ORBIT_RADIUS_Z;
+
+    meshRef.current.position.set(x, y, z);
+
+    // Frames always face the camera (billboarding), with a slight lean
+    // based on their orbital position for a natural feel
+    meshRef.current.rotation.set(
+      ORBIT_TILT * Math.sin(angle),    // Gentle pitch
+      Math.PI * 0.05 * Math.cos(angle), // Very subtle yaw wobble
+      Math.sin(angle * 0.5) * 0.08      // Micro roll
+    );
+
+    // Depth-based opacity: frames far behind (z < 0) get slightly dimmer
+    const depthFade = THREE.MathUtils.smoothstep(z, -ORBIT_RADIUS_Z, ORBIT_RADIUS_Z * 0.3);
+    material.opacity = 0.3 + depthFade * 0.65;
+
+    // Depth-based scale: frames farther back get slightly smaller for perspective emphasis
+    const depthScale = 0.7 + depthFade * 0.3;
+    meshRef.current.scale.setScalar(depthScale);
+  });
+
+  return (
+    <mesh ref={meshRef} material={material}>
+      <planeGeometry args={[FRAME_SCALE, FRAME_SCALE * 0.65]} />
+    </mesh>
+  );
+}
+
+/* ─── Exported Group ─────────────────────────────────────────────────── */
+export function FloatingFrames() {
+  return (
+    <group>
+      {FRAME_URLS.map((url, i) => (
+        <OrbitFrame key={i} url={url} index={i} total={FRAME_COUNT} />
+      ))}
+    </group>
+  );
+}
+
+FRAME_URLS.forEach((url) => useTexture.preload(url));
