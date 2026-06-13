@@ -1,0 +1,37 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -28,6 +28,7 @@
+   impact: { value: string; label: string }[];
+   decisions: { title: string; detail: string; image?: string }[];
+   cover: string;
++  coverVideo?: string;
+   approachShot?: { src: string; caption: string };
+   shots: { src: string; caption: string; wide?: boolean }[];
+   beforeAfter?: { before: string; after: string; caption?: string };
+@@ -157,9 +157,24 @@
+             </div>
+           )}
+ 
+-          {/* 4. Cover Image (Hero product shot, no rounded corners, no shadow) */}
++          {/* 4. Cover Image/Video (Hero product shot, no rounded corners, no shadow) */}
+           <div className="overflow-hidden mb-16 aspect-[16/9]">
+-            <ImageWithFallback src={study.cover} alt={`${study.title} cover`} className="w-full h-full object-cover" />
++            {study.coverVideo ? (
++              <video
++                className="w-full h-full object-cover"
++                poster={study.cover}
++                autoPlay
++                muted
++                loop
++                playsInline
++                preload="metadata"
++                aria-hidden="true"
++              >
++                <source src={study.coverVideo} type="video/mp4" />
++              </video>
++            ) : (
++              <ImageWithFallback src={study.cover} alt={`${study.title} cover`} className="w-full h-full object-cover" />
++            )}
+           </div>
+ 
+           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-10 mb-12 md:mb-20">

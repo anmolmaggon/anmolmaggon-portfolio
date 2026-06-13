@@ -1,0 +1,46 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -203,15 +203,14 @@
+     cover: "/case-studies/quick-vibe-check/cover.webp",
+     tilt: -4,
+     problem:
+-      "Job seekers came to company review pages with high-intent questions about culture, leadership, and balance — and were met with an endless wall of chronological text. To get an answer they had to read dozens of reviews and mentally average them. The cognitive load was exhausting, and many dropped off before they could decide with confidence.",
+-    approach:
+-      "We shifted the product paradigm from a chronological feed to an insights engine. Aggregate AI insights moved above the fold, a Quick Vibe Check extracted and categorized sentiment into positives, negatives, and mixed — and the review cards themselves were rebuilt to prioritize scannability over social features.",
+-    // ⚠️ PLACEHOLDER metrics — replace with verified figures before going live
+-    impact: [
+-      { value: "−34%", label: "lower bounce on reviews route" },
+-      { value: "2.1×", label: "time shifted to AI summaries" },
+-      { value: "+27%", label: "more registrations via login gates" },
+-      { value: "+41%", label: "more Helpful upvotes" },
++      "Job seekers looking for answers about culture or leadership were met with an endless wall of chronological text. To get an answer, they had to read dozens of reviews and mentally average them.",
++    approach:
++      "We replaced the chronological feed with an insights engine. AI summaries now sit above the fold, giving users an immediate, categorized snapshot of company sentiment before they read a single review.",
++    impact: [
++      { value: "2.2×", label: "first-fold interaction rate" },
++      { value: "+17%", label: "avg. time spent per user" },
++      { value: "<100ms", label: "added to page load time" },
++      { value: "≥95%", label: "AI accuracy score" },
+     ],
+     decisions: [
+       { title: "Trust through transparency", detail: "Every AI insight is clickable, surfacing the exact raw reviews that generated it. No black box." },
+@@ -218,5 +218,17 @@
+-      { title: "Contextual intent gating", detail: "No hard paywall — a deferred login fires at peak intent and auto-resumes the user's action after sign-in." },
+-    ],
++      { title: "Zero compromise on performance", detail: "Added <100ms to page load time on the highest traffic page of the product. An insight engine is only useful if it doesn't slow down the core experience." },
++    ],
++    beyondDesign: {
++      questions: [
++        { label: "How do you test on the highest traffic page?", question: "How do you test a radical change on your highest traffic page?" },
++        { label: "How do you prevent AI hallucinations?", question: "How do you ensure the AI doesn't hallucinate company culture?" },
++        { label: "How do you handle edge cases?", question: "How do you handle edge cases like massive review bombing?" }
++      ],
++      ctaLead: "Want the full walkthrough?"
++    },
++    whatICut: {
++      chips: ["Chronological sorting", "Endless scroll", "Granular tags"],
++      caption: "Instead of trying to build a better feed, we killed the feed entirely. Every feature was scoped down to answer one question: how fast can a user get a definitive answer?"
++    },
+     beforeAfter: {
+       before: "/case-studies/quick-vibe-check/before.webp",
+       after: "/case-studies/quick-vibe-check/after.webp",

@@ -1,0 +1,22 @@
+--- a/../../../.gemini/antigravity-ide/brain/c492a267-f4ae-42f9-a60d-1212cc4ca6f6/task.md
++++ b/../../../.gemini/antigravity-ide/brain/c492a267-f4ae-42f9-a60d-1212cc4ca6f6/task.md
+@@ -1,12 +1,12 @@
+ # Vibe Check Overhaul (Round 2) Tasks
+ 
+-- `[/]` **1. Copy & Architecture (`CaseStudies.tsx`)**
+-  - `[ ]` Add the new `context` string.
+-  - `[ ]` Replace `problem` and `approach` with the simplified versions.
+-  - `[ ]` Add the 5th FAQ question ("What's next for AI summaries?").
+-  - `[ ]` Delete the 3 bottom screenshots from the `shots` array.
+-  - `[ ]` Add the new "Surfacing the gender gap" Design Decision.
+-  - `[ ]` Add media placeholders to the Design Decisions.
++- `[x]` **1. Copy & Architecture (`CaseStudies.tsx`)**
++  - `[x]` Add the new `context` string.
++  - `[x]` Replace `problem` and `approach` with the simplified versions.
++  - `[x]` Add the 5th FAQ question ("What's next for AI summaries?").
++  - `[x]` Delete the 3 bottom screenshots from the `shots` array.
++  - `[x]` Add the new "Surfacing the gender gap" Design Decision.
++  - `[x]` Add media placeholders to the Design Decisions.
+ - `[ ]` **2. Slider Redesign (`BeforeAfterSlider.tsx`)**
+   - `[ ]` Constrain width to a mobile size (e.g., `max-w-[400px]`) and center it.
+   - `[ ]` Wrap the component in an `overflow-y-auto h-[75vh]` container so the slider scrolls natively.

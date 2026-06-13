@@ -1,0 +1,32 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -1,5 +1,6 @@
+ import { useState, useEffect } from "react";
+ import { ImageWithFallback } from "./figma/ImageWithFallback";
++import { VideoWithFallback } from "./VideoWithFallback";
+ import { CaseStudyModal, type CaseStudyDetail } from "./CaseStudyModal";
+ 
+ type Study = CaseStudyDetail & {
+@@ -301,11 +301,11 @@
+                 </div>
+ 
+                 <div
+-                  className="hidden md:block pointer-events-none absolute right-[6%] top-1/2 w-[320px] aspect-[4/5] opacity-0 scale-90 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:scale-100 rounded-none shadow-2xl"
++                  className="hidden md:block pointer-events-none absolute right-[6%] top-1/2 w-[320px] aspect-[4/5] opacity-0 scale-90 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:scale-100 rounded-none shadow-2xl bg-white"
+                   style={{ transform: `translateY(-50%) rotate(${s.tilt}deg)` }}
+                 >
+                   {s.previewVideo ? (
+-                    <video
++                    <VideoWithFallback
+                       className="w-full h-full object-cover"
+                       poster={s.image}
+                       autoPlay
+@@ -315,7 +315,7 @@
+                       aria-hidden="true"
+                     >
+                       <source src={s.previewVideo} type="video/mp4" />
+-                    </video>
++                    </VideoWithFallback>
+                   ) : (
+                     <ImageWithFallback
+                       src={s.image}

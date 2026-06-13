@@ -1,0 +1,64 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -34,6 +34,7 @@
+ 
+ type Props = {
+   study: CaseStudyDetail | null;
++  prevStudy?: CaseStudyDetail | null;
+   nextStudy?: CaseStudyDetail | null;
+   onNavigate?: (study: CaseStudyDetail) => void;
+   onClose: () => void;
+@@ -40,5 +40,5 @@
+ 
+-export function CaseStudyModal({ study, nextStudy, onNavigate, onClose }: Props) {
++export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClose }: Props) {
+   const { pauseBackgroundAudio, resumeBackgroundAudio } = useGlobalContext();
+   const [isScrolled, setIsScrolled] = useState(false);
+   const scrollRef = useRef<HTMLDivElement>(null);
+@@ -376,16 +376,36 @@
+             </div>
+           )}
+ 
+-          {/* Next Case Study Navigation */}
+-          {nextStudy && onNavigate && (
+-            <div 
+-              className="py-16 md:py-24 border-t border-black/15 text-center group cursor-pointer" 
+-              onClick={() => onNavigate(nextStudy)}
+-            >
+-              <p className="font-sans font-medium text-[13px] uppercase tracking-wider text-black/40 mb-6">Next case study</p>
+-              <h2 className="font-[Nyght_Serif] text-4xl md:text-5xl lg:text-6xl text-black/80 group-hover:text-black transition-colors">
+-                {nextStudy.title} <span className="inline-block transition-transform group-hover:translate-x-2">→</span>
+-              </h2>
++          {/* Previous / Next Case Study Navigation */}
++          {(prevStudy || nextStudy) && onNavigate && (
++            <div className="grid grid-cols-1 md:grid-cols-2 border-t border-black/15">
++              {prevStudy ? (
++                <div 
++                  className="py-12 md:py-20 pr-6 md:pr-12 border-b md:bo
+<truncated 125 bytes>
+
++                >
++                  <p className="font-sans font-medium text-[13px] uppercase tracking-wider text-black/40 mb-6">Previous project</p>
++                  <p className="font-[Nyght_Serif] text-3xl md:text-4xl lg:text-5xl text-black">
++                    <span className="relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-px after:bg-current after:scale-x-0 after:origin-left after:transition-transform after:duration-300 group-hover:after:scale-x-100">
++                      <span aria-hidden className="opacity-40 mr-2 md:mr-3">←</span>{prevStudy.title}
++                    </span>
++                  </p>
++                </div>
++              ) : <div className="hidden md:block border-r border-black/15" />}
++              
++              {nextStudy && (
++                <div 
++                  className="py-12 md:py-20 pl-6 md:pl-12 group cursor-pointer text-left md:text-right"
++                  onClick={() => onNavigate(nextStudy)}
++                >
++                  <p className="font-sans font-medium text-[13px] uppercase tracking-wider text-black/40 mb-6">Next project</p>
++                  <p className="font-[Nyght_Serif] text-3xl md:text-4xl lg:text-5xl text-black">
++                    <span className="relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-px after:bg-current after:scale-x-0 after:origin-left md:after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
++                      {nextStudy.title}<span aria-hidden className="opacity-40 ml-2 md:ml-3">→</span>
++                    </span>
++                  </p>
++                </div>
++              )}
+             </div>
+           )}

@@ -1,0 +1,10 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -5,6 +5,7 @@
+ import { Label } from "./Label";
+ import { HoverLink } from "./HoverLink";
+ import { useGlobalContext } from "../context/GlobalContext";
++import { Linkedin, Instagram } from "lucide-react";
+ 
+ export type CaseStudyDetail = {
+   number: string;

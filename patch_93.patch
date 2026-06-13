@@ -1,0 +1,20 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -368,15 +368,8 @@
+                   </h3>
+ 
+                   <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-hover:max-h-12 group-hover:opacity-100 group-hover:mt-3">
+-                    <p className="font-sans text-black/60 flex flex-wrap gap-x-2 gap-y-1">
+-                      {s.meta.map((m, i) => (
+-                        <span key={m} className="flex items-center gap-2">
+-                          <span style={{ fontSize: 14 }}>
+-                            {m}
+-                          </span>
+-                          {i < s.meta.length - 1 && <span aria-hidden className="opacity-40">•</span>}
+-                        </span>
+-                      ))}
++                    <p className="font-sans text-black/60" style={{ fontSize: 14 }}>
++                      {s.oneLiner || s.meta.join(" • ")}
+                     </p>
+                   </div>
+                 </div>

@@ -1,0 +1,29 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -227,14 +227,14 @@
+             )}
+             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+               {study.impact.map((m) => (
+-                <div key={m.label} className="py-5 border-t border-black/15 text-black">
++                <div key={m.label} className="p-6 md:p-8 rounded-2xl border border-black/10 bg-white/50 shadow-[0_4px_24px_rgba(0,0,0,0.02)] backdrop-blur-sm text-black flex flex-col justify-center items-center text-center transition-transform hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
+                   <p
+                     className="font-[Nyght_Serif]"
+-                    style={{ fontSize: "clamp(32px, 3.5vw, 48px)", lineHeight: 1, fontWeight: 400, letterSpacing: "-0.02em" }}
++                    style={{ fontSize: "clamp(40px, 4vw, 56px)", lineHeight: 1, fontWeight: 400, letterSpacing: "-0.02em" }}
+                   >
+                     {m.value}
+                   </p>
+-                  <p className="mt-3 font-sans opacity-70 text-[14px]">{m.label}</p>
++                  <p className="mt-4 font-sans font-medium opacity-60 uppercase tracking-wider text-[11px] md:text-[12px]">{m.label}</p>
+                 </div>
+               ))}
+             </div>
+@@ -449,7 +449,7 @@
+                       className="group/pill inline-flex items-center gap-2 rounded-full border border-black/20 px-5 py-2.5 md:px-6 md:py-3 font-[Nyght_Serif] text-black/80 transition-colors duration-300 hover:bg-black hover:text-[#fafaf7] hover:border-black"
+                       style={{ fontSize: "clamp(16px, 1.6vw, 21px)", lineHeight: 1.2 }}
+                     >
+-                      {q.label}
++                      {q.question}
+                       <span aria-hidden className="opacity-50 transition-transform duration-300 group-hover/pill:translate-x-0.5">→</span>
+                     </a>
+                   ))}

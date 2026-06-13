@@ -1,0 +1,75 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -12,42 +12,69 @@
+   {
+     number: "01",
+     title: "Notes",
++    subtitle: "A 24-hour format for the small thoughts work produces every day. Built for AmbitionBox Communities.",
+     client: "AmbitionBox Communities",
+     year: "2026",
+-    role: "End-to-end product design + PM",
+-    meta: ["Ephemeral", "Communities", "Pre-launch"],
++    role: "PM + Designer",
++    meta: ["PM + Designer", "AmbitionBox Communities", "2026", "6 weeks", "Team of 4", "Designed in code, no Figma"],
+     image: "/case-studies/notes/preview.svg",
+     cover: "/case-studies/notes/cover.svg",
+     tilt: -6,
+-    problem:
+-      "AmbitionBox Communities had permanent posts, but not every workplace thought deserved to become one. A bad meeting, a quick win, a funny office moment, or a one-line realization felt too small and too risky for a lasting professional post.",
+-    approach:
+-      "Notes became a 24-hour, story-like format for workplace expression: temporary by design, visually lightweight, and tied to the identity that fit the moment. The goal was to lower the cost of sharing without turning Communities into another disposable social feed.",
+-    impactNote: "Pre-launch impact - no live metrics yet",
+-    impact: [
+-      { value: "01", label: "Built a launch-ready Phase 1 Notes experience" },
+-      { value: "02", label: "Created a lower-stakes format next to permanent posts" },
+-      { value: "03", label: "Introduced a sticky-note visual system for workplace content" },
+-      { value: "04", label: "Added story-like consumption without comments or archives" },
+-    ],
+-    decisions: [
+-      { title: "Temporary by contract", detail: "A note lives for 24 hours with no
+<truncated 2174 bytes>
+ir company tomorrow."
++      },
++      {
++        title: "Glanceable, not scrollable",
++        detail: "Type quietly resizes to fit the content, so a note never scrolls. Dense thoughts render smaller – the format teaches brevity on its own."
++      },
++      {
++        title: "One reaction, one signal",
++        detail: "Each viewer leaves a single reaction; a new choice replaces the last. The author reads one clear signal, not noise."
++      }
++    ],
++    whatICut: {
++      chips: ["Templates", "Daily prompts", "Comments", "Video", "Archive"],
++      caption: "Everything cut to answer one question first: will people share at all?"
++    },
++    earlySignal: "Early testers loved dressing up their intrusive thoughts with GIFs and music – pseudonymity let them post without feeling judged.",
++    shots: [
++      {
++        heading: "Share a work moment",
++        label: "COMPOSER",
+         src: "/case-studies/notes/screen-hero.svg",
+-        caption: "Composer with contextual identity picker",
+-        wide: true,
+-      },
+-      {
++        caption: "Text, color, GIFs, music, stickers, identity – published in seconds.",
++        wide: true,
++      },
++      {
++        label: "IMMERSIVE VIEWER",
+         src: "/case-studies/notes/screen-detail-1.svg",
+-        caption: "Dense text and media still fit inside the immersive shell",
+-      },
+-      {
++        caption: "Dense text and media settle into one canvas. Nothing ever scrolls.",
++      },
++      {
++        heading: "Reaction stats",
++        label: "AUTHOR VIEW · ILLUSTRATIVE",
+         src: "/case-studies/notes/screen-detail-2.svg",
+-        caption: "Author reaction stats show one clear audience signal",
++        caption: "One clear audience signal per note – never a comment thread.",
+       },
+     ],
+   },

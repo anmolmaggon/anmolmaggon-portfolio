@@ -390,7 +390,7 @@ export function CaseStudies() {
                 >
                   {s.previewVideo ? (
                     <VideoWithFallback
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                       poster={s.image}
                       muted
                       loop
@@ -404,7 +404,7 @@ export function CaseStudies() {
                     <ImageWithFallback
                       src={s.image}
                       alt={`${s.title} preview`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   )}
                 </div>

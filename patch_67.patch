@@ -1,0 +1,42 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -35,7 +35,7 @@
+         title: "A sticky note, not a post",
+         detail: "The sticky note is the most universal workplace artifact – on monitors, meeting room walls, desk edges everywhere. Notes borrows that shape because the format doesn't need teaching. One canvas, type resizes to fit, no scrolling – brevity is built into the container.",
+         videos: [
+-          { src: "/case-studies/notes/Express.mov", caption: "Express — Pick your voice" }
++          { src: "/case-studies/notes/Express.mov", caption: "Express — A space to let out your everyday work thoughts" }
+         ]
+       },
+       {
+@@ -42,9 +42,9 @@
+         detail: "Color, GIFs, music, stickers – dressing up a thought is the draw. Making expression playful melts the hesitation of a blank canvas.",
+         videos: [
+-          { src: "/case-studies/notes/Note Color.mov", caption: "Colors — Same thought, new mood" },
+-          { src: "/case-studies/notes/Sticker.mov", caption: "Stickers — Say it without typing" },
+-          { src: "/case-studies/notes/GIF Selection.mov", caption: "GIFs — The perfect reaction" },
+-          { src: "/case-studies/notes/Music Selection.mov", caption: "Music — Set the tone" }
++          { src: "/case-studies/notes/Note Color.mov", caption: "Colors — Dress up your thoughts with vibrant backgrounds" },
++          { src: "/case-studies/notes/Sticker.mov", caption: "Stickers — Add playful visual cues to your message" },
++          { src: "/case-studies/notes/GIF Selection.mov", caption: "GIFs — Bring your reactions to life with motion" },
++          { src: "/case-studies/notes/Music Selection.mov", caption: "Music — Set the perfect soundtrack for your mood" }
+         ]
+       },
+       {
+@@ -51,6 +51,6 @@
+         detail: "Each note is posted as a designation or \"works at Company X\" – never a real name. Pseudonymity is the platform's core primitive; Notes just lets users wear it more flexibly.",
+         videos: [
+-          { src: "/case-studies/notes/Identity Selection.mov", caption: "Identity — Who are you today?" }
++          { src: "/case-studies/notes/Identity Selection.mov", caption: "Identity — Choose the identity you're most comfortable with" }
+         ]
+       },
+       {
+@@ -65,7 +65,7 @@
+         "Stickiness (DAU/MAU)"
+       ]
+     },
+-    coverCaption: "It's a viewer where you can consume other people's notes & react to it.",
++    coverCaption: "Notes Viewer where you can consume other people's notes & react to it.",
+     beyondDesign: {
+       questions: [
+         { label: "How do you moderate without real names?", question: "How does moderation work when no one has a real name?" },

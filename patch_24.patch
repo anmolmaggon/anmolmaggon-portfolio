@@ -1,0 +1,72 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -70,20 +70,26 @@
+       <div
+         onClick={(e) => e.stopPropagation()}
+         data-lenis-prevent="true"
+-        className="relative w-full h-full bg-[#fafaf7] rounded-none overflow-y-auto overflow-x-hidden shadow-2xl"
++        className="relative w-full h-full bg-[#fafaf7] rounded-none flex flex-col overflow-hidden shadow-2xl"
+       >
+-        <button
+-          onClick={onClose}
+-          aria-label="Close"
+-          className="fixed top-6 right-6 md:top-8 md:right-8 z-[10000] flex items-center justify-center w-12 h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors cursor-pointer"
+-        >
+-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+-            <line x1="18" y1="6" x2="6" y2="18"></line>
+-            <line x1="6" y1="6" x2="18" y2="18"></line>
+-          </svg>
+-        </button>
+-
+-        <div className="px-5 sm:px-8 md:px-16 lg:px-24 py-14 md:py-20 max-w-[1400px] mx-auto">
++        {/* Sticky Header */}
++        <header className="flex-none flex items-center justify-between px-6 py-4 border-b border-black/10 bg-[#fafaf7] z-10">
++          <h2 className="font-[Nyght_Serif] text-xl md:text-2xl text-black/80">{study.title}</h2>
++          <button
++            onClick={onClose}
++            aria-label="Close"
++            className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors cursor-pointer"
++          >
++            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
++              <line x1="18" y1="6" x2="6" y2="18"></line>
++              <line x1="6" y1="6" x2="18" y2="18"></line>
++            </svg>
++          </button>
++        </header>
++
++        {/* Scrollable Content */}
++        <div className="flex-1 overflow-y-auto overflow-x-hidden">
++          <div className="px-5 sm:px-8 md:px-16 lg:px-24 py-10 md:py-16 max-w-[1400px] mx-auto">
+ 
+           {/* 2. Title */}
+           {/* 2. Title & Subtitle */}
+@@ -320,7 +320,12 @@
+             </div>
+           )}
+ 
+-          <div className="pt-16 border-t border-black/15 flex items-center justify-between gap-6 flex-wrap">
++          </div>
++        </div>
++
++        {/* Sticky Footer */}
++        <footer className="flex-none px-6 py-5 border-t border-black/10 bg-[#fafaf7] z-10">
++          <div className="max-w-[1400px] mx-auto flex items-center justify-between gap-6 flex-wrap">
+             <div className="flex items-baseline gap-4 md:gap-6 flex-wrap">
+               <p className="italic opacity-60 text-[14px]">Want the full walkthrough?</p>
+               <HoverLink
+@@ -327,5 +327,5 @@
+                 className="font-[Nyght_Serif] italic"
+-                style={{ fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 400 }}
++                style={{ fontSize: "clamp(20px, 2vw, 24px)", fontWeight: 400 }}
+               >
+                 anmolmaggon40@gmail.com →
+               </HoverLink>
+@@ -348,7 +348,7 @@
+               </HoverLink>
+             </div>
+           </div>
+-        </div>
++        </footer>
+       </div>
+     </div>,
+     document.body,

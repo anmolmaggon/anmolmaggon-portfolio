@@ -1,0 +1,18 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -216,7 +216,6 @@
+                   href="https://www.linkedin.com/in/anmolmaggon"
+                   target="_blank"
+                   rel="noopener noreferrer"
+-                  className="opacity-100 hover:opacity-60 transition-opacity"
+                   aria-label="LinkedIn"
+                 >
+                   <img src={linkedInLogo} alt="LinkedIn" className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] object-contain" />
+@@ -224,7 +224,6 @@
+                   href="https://www.instagram.com/anmolmaggon"
+                   target="_blank"
+                   rel="noopener noreferrer"
+-                  className="opacity-100 hover:opacity-60 transition-opacity"
+                   aria-label="Instagram"
+                 >
+                   <img src={instagramLogo} alt="Instagram" className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] object-contain" />

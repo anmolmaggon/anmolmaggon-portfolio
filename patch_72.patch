@@ -1,0 +1,11 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -68,7 +68,7 @@
+         "Stickiness (DAU/MAU)"
+       ]
+     },
+-    coverCaption: "Notes Viewer where you can consume other people's notes & react to it.",
++    coverCaption: "A viewer to consume and react to notes.",
+     beyondDesign: {
+       questions: [
+         { label: "How do you moderate without real names?", question: "How does moderation work when no one has a real name?" },

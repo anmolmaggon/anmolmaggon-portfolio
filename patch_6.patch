@@ -1,0 +1,11 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -55,7 +55,7 @@
+         <button
+           onClick={onClose}
+           aria-label="Close"
+-          className="fixed top-6 right-6 md:top-8 md:right-8 z-[110] flex items-center justify-center w-12 h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors"
++          className="fixed top-6 right-6 md:top-8 md:right-8 z-[110] flex items-center justify-center w-12 h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors cursor-pointer"
+         >
+           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+             <line x1="18" y1="6" x2="6" y2="18"></line>

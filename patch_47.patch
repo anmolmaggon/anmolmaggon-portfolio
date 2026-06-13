@@ -1,0 +1,109 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -1,4 +1,4 @@
+-import { useState } from "react";
++import { useState, useEffect } from "react";
+ import { ImageWithFallback } from "./figma/ImageWithFallback";
+ import { CaseStudyModal, type CaseStudyDetail } from "./CaseStudyModal";
+ 
+@@ -5,3 +5,4 @@
++  slug: string;
+   image: string;
+   previewVideo?: string;
+   tilt: number;
+@@ -8,6 +8,7 @@
+ 
+ const studies: Study[] = [
+   {
++    slug: "notes",
+     number: "01",
+     title: "Notes",
+     subtitle: "A story-like, 24-hour format for AmbitionBox Communities.",
+@@ -81,6 +81,7 @@
+     ],
+   },
+   {
++    slug: "the-number-that-matters",
+     number: "02",
+     title: "The Number That Matters",
+     client: "AmbitionBox · Salaries",
+@@ -128,6 +128,7 @@
+     ],
+   },
+   {
++    slug: "quick-vibe-check",
+     number: "03",
+     title: "Quick Vibe Check",
+     client: "AmbitionBox · Reviews",
+@@ -179,6 +179,51 @@
+ export function CaseStudies() {
+   const [active, setActive] = useState<CaseStudyDetail | null>(null);
+ 
++  useEffect(() => {
++    const params = new URLSearchParams(window.location.search);
++    const studySlug = params.get("study");
++    if (studySlug) {
++      const match = studies.find(s => s.slug === studySlug);
++      if (match) setActive(match);
++    }
++  }, []);
++
++  useEffect(() => {
++    const handlePopState = () => {
++      const params = new URLSearchParams(window.location.search);
++      const studySlug = params.get("study");
++      if (studySlug) {
++        const match = studies.find(s => s.slug === studySlug);
++        setActive(match || null);
++      } else {
++        setActive(null);
++      }
++    };
++    
++    window.addEventListener("popstate", handlePopState);
++    return () => window.removeEventListener("popstate", handlePopState);
++  }, []);
++
++  const handleNavigate = (study: CaseStudyDetail | null) => {
++    setActive(study);
++    
++    const params = new URLSearchParams(window.location.search);
++    const currentSlug = params.get("study");
++    
++    if (study) {
++      const newSlug = (study as Study).slug;
++      if (currentSlug !== newSlug) {
++        window.history.pushState({}, '', `?study=${newSlug}`);
++      }
++    } else {
++      if (currentSlug) {
++        const url = new URL(window.location.href);
++        url.searchParams.delete('study');
++        window.history.pushState({}, '', url.pathname + url.search);
++      }
++    }
++  };
++
+   const activeIndex = active ? studies.findIndex((s) => s.number === active.number) : -1;
+   const prevStudy = activeIndex !== -1 ? studies[(activeIndex - 1 + studies.length) % studies.length] : null;
+   const nextStudy = activeIndex !== -1 ? studies[(activeIndex + 1) % studies.length] : null;
+@@ -204,7 +204,7 @@
+           <li key={s.number} className="group relative z-0 hover:z-50">
+             <button
+               type="button"
+-              onClick={() => setActive(s)}
++              onClick={() => handleNavigate(s)}
+               onMouseEnter={(event) => {
+                 event.currentTarget.querySelector("video")?.play().catch(() => {});
+               }}
+@@ -280,8 +280,8 @@
+         study={active} 
+         prevStudy={prevStudy}
+         nextStudy={nextStudy}
+-        onNavigate={(study) => setActive(study)}
+-        onClose={() => setActive(null)} 
++        onNavigate={(study) => handleNavigate(study)}
++        onClose={() => handleNavigate(null)} 
+       />
+     </section>
+   );

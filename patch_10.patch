@@ -1,0 +1,23 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -197,16 +197,13 @@
+                   </h3>
+ 
+                   <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-hover:max-h-12 group-hover:opacity-100 group-hover:mt-3">
+-                    <p className="eyebrow opacity-70 flex flex-wrap gap-x-3 gap-y-1">
++                    <p className="font-sans text-black/60 flex flex-wrap gap-x-2 gap-y-1">
+                       {s.meta.map((m, i) => (
+-                        <span key={m} className="flex items-center gap-3">
+-                          <span
+-                            className="uppercase tracking-[0.18em] not-italic"
+-                            style={{ fontWeight: 400, fontSize: 11 }}
+-                          >
++                        <span key={m} className="flex items-center gap-2">
++                          <span style={{ fontSize: 14 }}>
+                             {m}
+                           </span>
+-                          {i < s.meta.length - 1 && <span aria-hidden>•</span>}
++                          {i < s.meta.length - 1 && <span aria-hidden className="opacity-40">•</span>}
+                         </span>
+                       ))}
+                     </p>

@@ -1,0 +1,17 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -214,7 +214,13 @@
+     ],
+     decisions: [
+       { title: "Trust through transparency", detail: "Every AI insight is clickable, surfacing the exact raw reviews that generated it. No black box." },
+-      { title: "Insights first, details later", detail: "Inverted the page so the AI summary leads; raw reviews and secondary widgets move down or to a sidebar." },
++      { 
++        title: "Insights first, details later", 
++        detail: "Inverted the page so the AI summary leads; raw reviews and secondary widgets move down or to a sidebar.",
++        videos: [
++          { src: "/case-studies/quick-vibe-check/Quick Vibe Check.mov" }
++        ]
++      },
+       { title: "Zero compromise on performance", detail: "Added <100ms to page load time on the highest traffic page of the product. An insight engine is only useful if it doesn't slow down the core experience." },
+     ],
+     beyondDesign: {

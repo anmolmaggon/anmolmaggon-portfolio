@@ -1,0 +1,33 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -221,23 +221,19 @@
+     ],
+     decisions: [
+       { 
+-        title: "Trust through transparency", 
+-        detail: "Every AI insight is clickable, surfacing the exact raw reviews that generated it. No black box.",
++        title: "Designing for Providence & Trust", 
++        detail: "AI summaries inherently trigger skepticism. We established strict visual boundaries for AI-generated content to clearly distinguish it from user-generated reviews. More importantly, we eliminated the \"black box\"—every single AI claim is clickable, instantly anchoring the user to the exact raw reviews that generated it.",
+         videos: [{ src: "/case-studies/quick-vibe-check/trust-interaction.mp4", caption: "Clicking an insight reveals the raw reviews" }]
+       },
+       { 
+-        title: "Insights first, details later", 
+-        detail: "Moved the AI summary to the very top; raw reviews and secondary widgets were pushed down or to a sidebar.",
++        title: "Inverting the Information Architecture", 
++        detail: "Instead of forcing users to pan for gold in chronological feeds, we inverted the page hierarchy. The AI insights engine becomes the hero above the fold, while the raw reviews act as a supporting ledger of evidence below.",
+         videos: [{ src: "/case-studies/quick-vibe-check/Quick Vibe Check.mov", caption: "The Quick Vibe Check UI sitting above the fold" }]
+       },
+       { 
+-        title: "Visual distinction", 
+-        detail: "Made the AI-generated elements visually distinct from user-generated reviews to ensure we didn't break trust." 
+-      },
+-      { 
+-        title: "Surfacing the gender gap", 
+-        detail: "Qualitative feedback showed our female audience highly valued insights on workplace safety and gender dynamics. The AI was tuned to pull these themes upfront, turning hidden signals into top-level insights.",
+-        videos: [{ src: "/case-studies/quick-vibe-check/gender-gap.mp4", caption: "Safety and gender dynamics pulled upfront" }]
++        title: "Elevating Marginalized Signals", 
++        detail: "Qualitative feedback revealed that female candidates struggled to find reliable safety and culture signals. Rather than burying this in reviews, we split the top-level Overall Rating by gender directly below the fold, turning historically hidden data into a primary metric.",
++        videos: [{ src: "/case-studies/quick-vibe-check/gender-gap.mp4", caption: "Overall ratings split by gender directly under the summary" }]
+       },
+     ],
+     beyondDesign: {

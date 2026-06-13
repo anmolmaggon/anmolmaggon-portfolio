@@ -1,0 +1,11 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -254,7 +254,7 @@
+         {/* Scrollable Content */}
+         <div 
+           ref={scrollRef}
+-          className="flex-1 overflow-y-auto overflow-x-hidden"
++          className="flex-1 overflow-y-auto overflow-x-hidden overscroll-none"
+           onScroll={(e) => {
+             const el = e.currentTarget;
+             setIsScrolled(el.scrollTop > 100);

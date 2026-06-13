@@ -1,0 +1,11 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -157,7 +157,7 @@
+             <button
+               type="button"
+               onClick={() => setActive(s)}
+-              className="w-full text-left block py-6 md:py-10"
++              className="w-full text-left block py-6 md:py-10 cursor-pointer"
+             >
+               <div className="relative flex items-center">
+                 <span

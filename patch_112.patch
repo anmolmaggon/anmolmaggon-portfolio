@@ -1,0 +1,23 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -223,7 +223,7 @@
+       { 
+         title: "Designing for Providence & Trust", 
+         detail: "AI summaries inherently trigger skepticism. We established strict visual boundaries for AI-generated content to clearly distinguish it from user-generated reviews. More importantly, we eliminated the \"black box\"—every single AI claim is clickable, instantly anchoring the user to the exact raw reviews that generated it.",
+-        videos: [{ src: "/case-studies/quick-vibe-check/trust-interaction.mp4", caption: "Clicking an insight reveals the raw reviews" }]
++        videos: [{ src: "/case-studies/quick-vibe-check/Trust.mov", caption: "Clicking an insight reveals the raw reviews" }]
+       },
+       { 
+         title: "Inverting the Information Architecture", 
+@@ -230,4 +230,4 @@
+-        videos: [{ src: "/case-studies/quick-vibe-check/Quick Vibe Check.mov", caption: "The Quick Vibe Check UI sitting above the fold" }]
++        videos: [{ src: "/case-studies/quick-vibe-check/Inversion.mov", caption: "The Quick Vibe Check UI sitting above the fold" }]
+       },
+       { 
+         title: "Elevating Marginalized Signals", 
+@@ -234,4 +234,4 @@
+-        videos: [{ src: "/case-studies/quick-vibe-check/gender-gap.mp4", caption: "Overall ratings split by gender directly under the summary" }]
++        videos: [{ src: "/case-studies/quick-vibe-check/Gender.mov", caption: "Overall ratings split by gender directly under the summary" }]
+       },
+     ],
+     beyondDesign: {

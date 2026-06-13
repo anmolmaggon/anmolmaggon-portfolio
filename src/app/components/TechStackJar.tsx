@@ -374,15 +374,12 @@ function FireflyJarScene({
   onLeave: (id: string) => void;
   onPin: (id: string) => void;
 }) {
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const groupPositionY = -0.08;
-
   return (
     <>
       <ambientLight intensity={0.28} color="#fff3c4" />
       <pointLight position={[0, -0.1, 2.2]} color="#ffe28a" intensity={2.2} distance={4.8} />
 
-      <group position={[0, groupPositionY, 0]} scale={1.02}>
+      <group position={[0, 0, 0]} scale={1.02}>
         {tools.map((tool) => (
           <Firefly
             key={tool.id}

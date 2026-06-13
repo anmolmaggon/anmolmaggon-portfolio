@@ -1,0 +1,62 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -1,4 +1,4 @@
+-import { useEffect } from "react";
++import { useEffect, useState } from "react";
+ import { createPortal } from "react-dom";
+ import { ImageWithFallback } from "./figma/ImageWithFallback";
+ import { BeforeAfterSlider } from "./BeforeAfterSlider";
+@@ -38,6 +38,7 @@
+ 
+ export function CaseStudyModal({ study, onClose }: Props) {
+   const { pauseBackgroundAudio, resumeBackgroundAudio } = useGlobalContext();
++  const [isScrolled, setIsScrolled] = useState(false);
+ 
+   useEffect(() => {
+     if (!study) return;
+@@ -70,23 +70,32 @@
+         data-lenis-prevent="true"
+         className="relative w-full h-full bg-[#fafaf7] rounded-none flex flex-col overflow-hidden shadow-2xl"
+       >
+-        {/* Sticky Header */}
+-        <header className="flex-none flex items-center justify-between px-6 py-4 border-b border-black/10 bg-[#fafaf7] z-10">
++        {/* Floating Close Button - Always visible */}
++        <button
++          onClick={onClose}
++          aria-label="Close"
++          className="absolute top-4 right-4 md:top-6 md:right-6 z-[10000] flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors cursor-pointer"
++        >
++          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
++            <line x1="18" y1="6" x2="6" y2="18"></line>
++            <line x1="6" y1="6" x2="18" y2="18"></line>
++          </svg>
++        </button>
++
++        {/* Reveal-on-Scroll Header */}
++        <header 
++          className={`absolute top-0 left-0 right-0 flex items-center px-6 py-4 md:py-6 border-b border-black/10 bg-[#fafaf7]/90 backdrop-blur-md z-[9999] transition-all duration-300 pr-20 ${
++            isScrolled ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
++          }`}
++        >
+           <h2 className="font-[Nyght_Serif] text-xl md:text-2xl text-black/80">{study.title}</h2>
+-          <button
+-            onClick={onClose}
+-            aria-label="Close"
+-            className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors cursor-pointer"
+-          >
+-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+-              <line x1="18" y1="6" x2="6" y2="18"></line>
+-              <line x1="6" y1="6" x2="18" y2="18"></line>
+-            </svg>
+-          </button>
+         </header>
+ 
+         {/* Scrollable Content */}
+-        <div className="flex-1 overflow-y-auto overflow-x-hidden">
++        <div 
++          className="flex-1 overflow-y-auto overflow-x-hidden"
++          onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 100)}
++        >
+           <div className="px-5 sm:px-8 md:px-16 lg:px-24 py-10 md:py-16 max-w-[1400px] mx-auto">
+ 
+           {/* 2. Title */}

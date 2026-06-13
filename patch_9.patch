@@ -1,0 +1,24 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -151,6 +151,21 @@
+ 
+   return (
+     <section id="work" className="relative z-10 px-6 md:px-10 pt-10 md:pt-16 pb-12 md:pb-16">
++      <div className="mb-12 md:mb-16 max-w-4xl">
++        <p
++          className="font-[Nyght_Serif] text-black/70"
++          style={{
++            fontSize: "clamp(20px, 2.4vw, 34px)",
++            lineHeight: 1.1,
++            fontWeight: 400,
++            letterSpacing: "-0.015em",
++          }}
++        >
++          Recent work
++          <em className="italic">.</em>
++        </p>
++      </div>
++
+       <ul>
+         {studies.map((s) => (
+           <li key={s.number} className="group relative">

@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "portfolio",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["exec", "vite", "--port", "3333"],
+      "runtimeExecutable": "/Users/anmol.maggon/.nvm/versions/node/v18.20.8/bin/node",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--port", "3333"],
       "port": 3333
     }
   ]

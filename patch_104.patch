@@ -1,0 +1,77 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -155,30 +155,41 @@
+             )}
+           </div>
+ 
+-          {/* 4. Cover Image/Video (Hero product shot, no rounded corners, no shadow) */}
+-          <figure className="mb-16">
+-            <div className="overflow-hidden aspect-[16/9] relative">
+-              {study.coverVideo ? (
+-                <VideoWithFallback
+-                  className="w-full h-full object-cover"
+-                  poster={study.cover}
+-                  autoPlay
+-                  muted
+-                  loop
+-                  playsInline
+-                  preload="metadata"
+-                  aria-hidden="true"
+-                >
+-                  <source src={study.coverVideo} type="video/mp4" />
+-                </VideoWithFallback>
+-              ) : (
+-                <ImageWithFallback src={study.cover} alt={`${study.title} cover`} className="w-full h-full object-cover" />
+-              )}
+-            </div>
+-            {study.coverCaption && (
+-              <figcaption className="pt-4 italic opacity-60 text-[13px]">{study.coverCaption}</figcaption>
+-            )}
+-          </figure>
++          {/* 4. Cover Image/Video OR Slider */}
++          {study.slug === "quick-vibe-check" && study.beforeAfter ? (
++            <div className="mb-16">
++              <BeforeAfterSlider
++                before={study.beforeAfter.before}
++                after={study.beforeAfter.after}
++                caption={study.beforeAfter.caption}
++                isMobileLayout={true}
++              />
++            </div>
++          ) : (
++            <figure className="mb-16">
++              <div className="overflow-hidden aspect-[16/9] relative">
++                {study.coverVideo ? (
++                  <VideoWithFallback
++                    className="w-full h-full object-cover"
++                    poster={study.cover}
++                    autoPlay
++                    muted
++                    loop
++                    playsInline
++                    preload="metadata"
++                    aria-hidden="true"
++                  >
++                    <source src={study.coverVideo} type="video/mp4" />
++                  </VideoWithFallback>
++                ) : (
++                  <ImageWithFallback src={study.cover} alt={`${study.title} cover`} className="w-full h-full object-cover" />
++                )}
++              </div>
++              {study.coverCaption && (
++                <figcaption className="pt-4 italic opacity-60 text-[13px]">{study.coverCaption}</figcaption>
++              )}
++            </figure>
++          )}
+ 
+           {/* 4. Context — boxed aside below the hero, connects the dots */}
+           {study.context && (
+@@ -365,7 +365,7 @@
+           )}
+ 
+           {/* 8. Before/After Slider */}
+-          {study.beforeAfter && (
++          {study.beforeAfter && study.slug !== "quick-vibe-check" && (
+             <div className="mb-24">
+               <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">The redesign</p>
+               <BeforeAfterSlider

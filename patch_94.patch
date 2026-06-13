@@ -1,0 +1,26 @@
+--- a/../../../.gemini/antigravity-ide/brain/c492a267-f4ae-42f9-a60d-1212cc4ca6f6/task.md
++++ b/../../../.gemini/antigravity-ide/brain/c492a267-f4ae-42f9-a60d-1212cc4ca6f6/task.md
+@@ -1,14 +1,14 @@
+ # Vibe Check Overhaul Tasks
+ 
+-- `[/]` **1. Meta Data & Copy (`CaseStudies.tsx`)**
+-  - `[ ]` Rename "Quick Vibe Check" to "Vibe Check".
+-  - `[ ]` Update meta tags to `["Product Designer", "2026", "Live"]`.
+-  - `[ ]` Hook up `image.png` as hero cover.
+-  - `[ ]` Update `beyondDesign` questions to use the 4 finalized questions without short labels.
+-- `[ ]` **2. One-Liner Hover System**
+-  - `[ ]` Add `oneLiner` to `CaseStudy` type in `CaseStudies.tsx`.
+-  - `[ ]` Add one-liners to Notes, Salary, and Vibe Check.
+-  - `[ ]` Update `FloatingFrames.tsx` to render `oneLiner` instead of `meta` tags on hover.
++- `[x]` **1. Meta Data & Copy (`CaseStudies.tsx`)**
++  - `[x]` Rename "Quick Vibe Check" to "Vibe Check".
++  - `[x]` Update meta tags to `["Product Designer", "2026", "Live"]`.
++  - `[x]` Hook up `image.png` as hero cover.
++  - `[x]` Update `beyondDesign` questions to use the 4 finalized questions without short labels.
++- `[x]` **2. One-Liner Hover System**
++  - `[x]` Add `oneLiner` to `CaseStudy` type in `CaseStudies.tsx`.
++  - `[x]` Add one-liners to Notes, Salary, and Vibe Check.
++  - `[x]` Update `FloatingFrames.tsx` to render `oneLiner` instead of `meta` tags on hover.
+ - `[ ]` **3. Impact Cards Design**
+   - `[ ]` Redesign the impact section in `CaseStudyModal.tsx` to use sleek, glassmorphic/light-bordered cards with subtle shadows instead of plain borders.
+ - `[ ]` **4. Before/After Scroll Architecture**

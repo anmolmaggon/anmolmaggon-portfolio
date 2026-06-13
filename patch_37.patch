@@ -1,0 +1,18 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -178,6 +178,7 @@
+   const [active, setActive] = useState<CaseStudyDetail | null>(null);
+ 
+   const activeIndex = active ? studies.findIndex((s) => s.number === active.number) : -1;
++  const prevStudy = activeIndex !== -1 ? studies[(activeIndex - 1 + studies.length) % studies.length] : null;
+   const nextStudy = activeIndex !== -1 ? studies[(activeIndex + 1) % studies.length] : null;
+ 
+   return (
+@@ -276,6 +276,7 @@
+ 
+       <CaseStudyModal 
+         study={active} 
++        prevStudy={prevStudy}
+         nextStudy={nextStudy}
+         onNavigate={(study) => setActive(study)}
+         onClose={() => setActive(null)}

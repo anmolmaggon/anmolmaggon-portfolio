@@ -1,0 +1,11 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -546,7 +546,7 @@
+             <div className="flex items-baseline gap-4 md:gap-6 flex-wrap">
+               <p className="italic opacity-60 text-[14px]">Want the full walkthrough?</p>
+               <HoverLink
+-                href="mailto:anmolmaggon40@gmail.com"
++                href="mailto:anmolmaggon40@gmail.com?subject=Loved%20your%20portfolio!&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D"
+                 className="font-[Nyght_Serif] italic"
+                 style={{ fontSize: "clamp(20px, 2vw, 24px)", fontWeight: 400 }}
+               >

@@ -1,0 +1,75 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -26,7 +26,7 @@
+   whatICut?: { chips: string[]; caption: string };
+   impactNote?: string;
+   impact: { value: string; label: string }[];
+-  decisions: { title: string; detail: string; image?: string }[];
++  decisions: { title: string; detail: string; image?: string; videos?: {src: string; caption?: string}[] }[];
+   cover: string;
+   coverVideo?: string;
+   coverCaption?: string;
+@@ -39,47 +39,7 @@
+   prevStudy?: CaseStudyDetail | null;
+   nextStudy?: CaseStudyDetail | null;
+   onNavigate?: (study: CaseStudyDetail) => void;
+-  onClose: () => void;
+-};
+-
+-/* Six composer capabilities, each rendering a looped video vignette */
+-function ComposerGrid() {
+-  const label = "font-sans font-medium text-[13px] uppercase tracking-wider text-black/50";
+-  const tile = "group border border-black/10 p-6 md:p-8 flex flex-col";
+-  const stage = "flex-1 flex items-center justify-center pt-8";
+-
+-  const blocks = [
+-    { title: "Express", video: "/case-studies/notes/Express.mov" },
+-    { title: "Note Color", video: "/case-studies/notes/Note Color.mov" },
+-    { title: "Sticker", video: "/case-studies/notes/Sticker.mov" },
+-    { title: "GIF", video: "/case-studies/notes/GIF Selection.mov" },
+-    { title: "Music", video: "/case-studies/notes/Music Selection.mov" },
+-    { title: "Identity", video: "/case-studies/notes/Identity Selection.mov" },
+-  ];
+-
+-  return (
+-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+-      {blocks.map((b, i) => (
+-        <div key={i} className={tile}>
+-          <p className={label}>{b.title}</p>
+-          <div className={stage}>
+-            <div className="relative w-full max-w-[300px] rounded-2xl overflow-hidden bg
+<truncated 1143 bytes>
+
+                       {d.detail}
+                     </p>
+                     {d.image && (
+-                      <div className="aspect-[4/3] w-full max-w-[320px] bg-black/5 mt-2">
++                      <div className="aspect-[4/3] w-full max-w-[320px] bg-black/5 mt-2 rounded-xl overflow-hidden">
+                         <ImageWithFallback src={d.image} alt={d.title} className="w-full h-full object-cover" />
+                       </div>
+                     )}
++                    {d.videos && d.videos.length > 0 && (
++                      <div className={`mt-4 w-full ${d.videos.length > 1 ? "grid grid-cols-2 gap-4 max-w-[480px]" : "max-w-[320px]"}`}>
++                        {d.videos.map((vid, vIdx) => (
++                          <div key={vIdx} className="w-full aspect-[4/5] rounded-xl overflow-hidden bg-black/5 relative shadow-sm">
++                            <VideoWithFallback
++                              src={vid.src}
++                              className="w-full h-full object-cover"
++                              autoPlay
++                              muted
++                              loop
++                              playsInline
++                              preload="metadata"
++                            />
++                            {vid.caption && (
++                              <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-black uppercase tracking-wider shadow-sm">
++                                {vid.caption}
++                              </div>
++                            )}
++                          </div>
++                        ))}
++                      </div>
++                    )}
+                   </div>
+                 </li>
+               ))}

@@ -1,0 +1,36 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -5,7 +5,8 @@
+ import { Label } from "./Label";
+ import { HoverLink } from "./HoverLink";
+ import { useGlobalContext } from "../context/GlobalContext";
+-import { Linkedin, Instagram } from "lucide-react";
++import linkedInLogo from "../../imports/InBug-Black.png";
++import instagramLogo from "../../imports/Instagram_Glyph_Black.svg";
+ 
+ export type CaseStudyDetail = {
+   number: string;
+@@ -214,10 +214,10 @@
+                   href="https://www.linkedin.com/in/anmolmaggon"
+                   target="_blank"
+                   rel="noopener noreferrer"
+-                  className="text-black/50 hover:text-black transition-colors"
++                  className="opacity-50 hover:opacity-100 transition-opacity"
+                   aria-label="LinkedIn"
+                 >
+-                  <Linkedin className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={1.5} />
++                  <img src={linkedInLogo} alt="LinkedIn" className="w-5 h-5 md:w-[22px] md:h-[22px] object-contain" />
+                 </HoverLink>
+                 <HoverLink
+                   href="https://www.instagram.com/anmolmaggon"
+@@ -224,8 +224,8 @@
+                   rel="noopener noreferrer"
+-                  className="text-black/50 hover:text-black transition-colors"
++                  className="opacity-50 hover:opacity-100 transition-opacity"
+                   aria-label="Instagram"
+                 >
+-                  <Instagram className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={1.5} />
++                  <img src={instagramLogo} alt="Instagram" className="w-5 h-5 md:w-[22px] md:h-[22px] object-contain" />
+                 </HoverLink>
+               </div>
+             </div>

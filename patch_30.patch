@@ -1,0 +1,11 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -19,7 +19,7 @@
+   context?: string;
+   problem: string;
+   approach: string;
+-  theBet?: { text: string; metrics: { value: string; label: string }[]; caption?: string };
++  watching?: { metrics: { value: string; label: string }[]; caption?: string };
+   noFigma?: string;
+   whatICut?: { chips: string[]; caption: string };
+   earlySignal?: string;

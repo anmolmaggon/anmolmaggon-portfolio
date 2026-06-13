@@ -1,0 +1,18 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -72,7 +72,14 @@
+       caption: "Scoped down until everything that remained could be delightful. A small product done with care beats a big one done adequately – and one question gets a clean answer: will people share at all?"
+     },
+     composerGrid: true,
+-    shots: [],
++    shots: [
++      { src: "/case-studies/notes/Express.mov", caption: "Express" },
++      { src: "/case-studies/notes/Note Color.mov", caption: "Note Color" },
++      { src: "/case-studies/notes/Sticker.mov", caption: "Sticker" },
++      { src: "/case-studies/notes/GIF Selection.mov", caption: "GIF" },
++      { src: "/case-studies/notes/Music Selection.mov", caption: "Music" },
++      { src: "/case-studies/notes/Identity Selection.mov", caption: "Identity" }
++    ],
+   },
+   {
+     slug: "the-number-that-matters",

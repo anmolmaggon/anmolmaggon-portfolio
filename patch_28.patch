@@ -1,0 +1,72 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -35,6 +35,10 @@
+         detail: "Each note is posted as a designation or as \"works at Company X\" – never a real name. The same person can speak as a PM today and as someone at their company tomorrow."
+       },
+       {
++        title: "Fun is the on-ramp",
++        detail: "Color, GIFs, music, stickers – dressing up a thought is the draw. Making expression playful melts the hesitation of a blank canvas."
++      },
++      {
+         title: "Glanceable, not scrollable",
+         detail: "Type quietly resizes to fit the content, so a note never scrolls. Dense thoughts render smaller – the format teaches brevity on its own."
+       },
+@@ -42,6 +42,16 @@
+         detail: "Each viewer leaves a single reaction; a new choice replaces the last. The author reads one clear signal, not noise."
+       }
+     ],
++    earlySignal: "Early testers loved dressing up their intrusive thoughts with GIFs and music – pseudonymity let them post without feeling judged.",
++    // ⚠️ PLACEHOLDER targets — replace with the team's agreed numbers before going live
++    watching: {
++      metrics: [
++        { value: "1 in 10", label: "sessions should create a note" },
++        { value: "60%+", label: "of opened note rails read to the end" },
++        { value: "25%+", label: "of views should leave a reaction" }
++      ],
++      caption: "Pre-agreed targets – what the first 90 days after launch must answer."
++    },
+     whatICut: {
+       chips: ["Templates", "Daily prompts", "Comments", "Video", "Archive"],
+       caption: "Everything cut to answer one question first: will people share at all?"
+@@ -48,22 +48,16 @@
+     earlySignal: "Early testers loved dressing up their intrusive thoughts with GIFs and music – pseudonymity let them post without feeling judged.",
+-    shots: [
+-      {
+-        heading: "Share a work moment",
+-        label: "COMPOSER",
+-        src: "/case-studies/notes/screen-hero.svg",
+-        caption: "Text, color, GIFs, music, stickers, identity – published in seconds.",
+-        wide: true,
+-      },
+-      {
+-        label: "IMMERSIVE VIEWER",
++    approachShot: {
++      src: "/case-studies/notes/screen-hero.svg",
++      caption: "The composer — text, color, GIFs, music, stickers, identity. Published in seconds.",
++    },
++    shots: [
++      {
+         src: "/case-studies/notes/screen-detail-1.svg",
+-        caption: "Dense text and media settle into one canvas. Nothing ever scrolls.",
+-      },
+-      {
+-        heading: "Reaction stats",
+-        label: "AUTHOR VIEW · ILLUSTRATIVE",
++        caption: "The viewer — dense text and media settle into one canvas. Nothing ever scrolls.",
++      },
++      {
+         src: "/case-studies/notes/screen-detail-2.svg",
+-        caption: "One clear audience signal per note – never a comment thread.",
++        caption: "Author view (illustrative) — one clear audience signal per note, never a comment thread.",
+       },
+     ],
+   },
+@@ -72,7 +72,7 @@
+     client: "AmbitionBox · Salaries",
+     year: "2024",
+     role: "Product design & IA",
+-    meta: ["Information Architecture", "Data Viz", "Shipped"],
++    meta: ["Product design & IA", "AmbitionBox · Salaries", "2024", "Shipped"],
+     image: "/case-studies/salary-pages/93c0467c-99f4-4090-ae81-d80f876e3c30.png",
+     previewVideo: "/case-studies/salary-pages/preview.mp4",
+     cover: "/case-studies/salary-pages/cover.webp",

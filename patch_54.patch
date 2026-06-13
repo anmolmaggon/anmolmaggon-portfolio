@@ -1,0 +1,24 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -503,7 +503,20 @@
+                   className={`${s.wide ? "md:col-span-2" : ""} overflow-hidden`}
+                 >
+                   <div className={`${s.wide ? "aspect-[16/8]" : "aspect-[4/3]"} bg-black/5`}>
+-                    <ImageWithFallback src={s.src} alt={s.caption} className="w-full h-full object-cover" />
++                    {s.src.match(/\.(mp4|webm|mov)$/i) ? (
++                      <VideoWithFallback
++                        className="w-full h-full object-cover"
++                        autoPlay
++                        muted
++                        loop
++                        playsInline
++                        preload="metadata"
++                      >
++                        <source src={s.src} />
++                      </VideoWithFallback>
++                    ) : (
++                      <ImageWithFallback src={s.src} alt={s.caption} className="w-full h-full object-cover" />
++                    )}
+                   </div>
+                   <figcaption className="pt-4 pb-2 italic opacity-60 text-[13px]">{s.caption}</figcaption>
+                 </figure>

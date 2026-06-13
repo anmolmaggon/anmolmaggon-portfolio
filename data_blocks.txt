@@ -1,0 +1,71 @@
+ one clear signal, not noise."
+      }
+    ],
+    whatICut: {
+      chips: ["Templates", "Daily prompts", "Comments", "Video", "Archive"],
+      caption: "Everything cut to answer one question first: will people share at all?"
+    },
+    earlySignal: "Early testers loved dressing up their intrusive thoughts with GIFs and music – pseudonymity let them post 
+
+---
+
+d under whichever identity fits the moment.",
+    noFigma: "There was no design file. The spec was a working prototype – built in code with AI, iterating faster than mocks could ever be drawn. Engineering received code, not pictures.",
+        title: "Fun is the on-ramp",
+        detail: "Color, GIFs, music, stickers – dressing up a thought is the draw. M
+
+---
+
+h the team's agreed numbers before going live
+    watching: {
+      metrics: [
+        { value: "1 in 10", label: "sessions should create a note" },
+        { value: "60%+", label: "of opened note rails read to the end" },
+        { value: "25%+", label: "of views should leave a reaction" }
+      ],
+      caption: "Pre-agreed targets – what the first 90 da
+
+---
+
+ofessionals are sharing candidly and react.",
+    noFigma: "Skipped Figma entirely. I built the spec as a working coded prototype using AI, allowing us to validate interactions instantly and hand off a living asset to engineering.",
+        { label: "How do you rank the feed?", question: "How do you rank a feed with no permanent history?" },
+        { lab
+
+---
+
+n't slow down the core experience." },
+    ],
+    beyondDesign: {
+      questions: [
+        { label: "How do you test on the highest traffic page?", question: "How do you test a radical change on your highest traffic page?" },
+        { label: "How do you prevent AI hallucinations?", question: "How do you ensure the AI doesn't hallucinate company culture?" },
+
+---
+
+ ctaLead: "Want the full walkthrough?"
+    },
+    whatICut: {
+      chips: ["Chronological sorting", "Endless scroll", "Granular tags"],
+      caption: "Instead of trying to build a better feed, we killed the feed entirely. Every feature was scoped down to answer one question: how fast can a user get a definitive answer?"
+    },
+      { 
+        title: "In
+
+---
+
+ ctaLead: "Want the full walkthrough?"
+    },
+    whatICut: {
+      chips: ["Department filters", "Endless scroll", "Granular tags"],
+      caption: "I initially wanted department-level AI summaries. But data showed users just glance at the overall level. So I killed my own feature to get the core concept shipped."
+      before: "/case-studies/quick-vibe-c
+
+---
+
+k up `image.png` as hero cover.
+  - `[x]` Update `beyondDesign` questions to use the 4 finalized questions without short labels.
+- `[x]` **2. One-Liner Hover System**
+  - `[x]` Add `oneLiner` to `CaseStudy` type in `CaseStudies.tsx`.
+  - `[x]` Add one-liners to Notes, Salary, and Vibe Check.
+  - `[x]` Update `FloatingFrames.tsx` to render `oneLiner` instead of

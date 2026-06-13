@@ -1,0 +1,31 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -43,7 +43,7 @@
+     <div
+       role="dialog"
+       aria-modal="true"
+-      className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-stretch justify-center p-0 sm:p-6 md:p-10"
++      className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-stretch justify-center p-0"
+       onClick={onClose}
+     >
+       <div
+@@ -50,5 +50,5 @@
+         data-lenis-prevent="true"
+-        className="relative w-full h-full bg-[#fafaf7] rounded-none sm:rounded-[20px] overflow-y-auto overflow-x-hidden shadow-2xl"
++        className="relative w-full h-full bg-[#fafaf7] rounded-none overflow-y-auto overflow-x-hidden shadow-2xl"
+       >
+         <button
+           onClick={onClose}
+@@ -55,7 +55,9 @@
+-          className="sticky top-6 ml-auto mr-6 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-black text-white text-[12px] hover:bg-black/80 transition-colors"
+-          style={{ fontFamily: "system-ui, sans-serif", fontWeight: 500, float: "right" }}
++          className="fixed top-6 right-6 md:top-8 md:right-8 z-[110] flex items-center justify-center w-12 h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors"
+         >
+-          Close ✕
++          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
++            <line x1="18" y1="6" x2="6" y2="18"></line>
++            <line x1="6" y1="6" x2="18" y2="18"></line>
++          </svg>
+         </button>
+ 
+         <div className="px-5 sm:px-8 md:px-16 lg:px-24 py-14 md:py-20 max-w-[1400px] mx-auto">

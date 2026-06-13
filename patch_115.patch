@@ -1,0 +1,25 @@
+--- a/src/app/components/BeforeAfterSlider.tsx
++++ b/src/app/components/BeforeAfterSlider.tsx
+@@ -65,7 +65,7 @@
+               </div>
+             </div>
+ 
+-            {/* The actual control: full-area, invisible, drives `pos`. Uses onMouseMove for desktop hover-to-drag. */}
++            {/* The actual control: full-area, invisible, drives `pos`. */}
+             <input
+               type="range"
+               min={0}
+@@ -72,13 +72,5 @@
+               value={pos}
+               onChange={(e) => setPos(Number(e.target.value))}
+-              onMouseMove={(e) => {
+-                if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+-                  const rect = e.currentTarget.getBoundingClientRect();
+-                  const x = e.clientX - rect.left;
+-                  const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+-                  setPos(percentage);
+-                }
+-              }}
+               aria-label="Drag to compare the design before and after the redesign"
+               className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
+             />

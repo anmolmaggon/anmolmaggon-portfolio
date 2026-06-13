@@ -1,0 +1,46 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -203,13 +203,12 @@
+     cover: "/case-studies/quick-vibe-check/cover.svg",
+     tilt: -4,
+     problem:
+-      "Most people don't really read reviews. Despite having deep filters, we saw users just glance at a rating, skim 1-2 opinions, and move on. The existing review page was an endless chronological wall of text. To actually understand a company's culture, a user had to read dozens of reviews and mentally average them. The cognitive load was simply too high.",
+-    approach:
+-      "The goal became: how do you help someone understand a company in a glance? We replaced the chronological feed with an insights engine. AI summaries now sit directly above the fold—delivering an honest 'Quick Vibe Check' of what it actually feels like to work there, before they read a single review.",
++      "Most people don't really read reviews. Despite having deep filters, we saw users just glance at a rating, skim 1-2 opinions, and move on. The existing review page was an endless wall of old text. To actually understand a company's culture, a user had to read dozens of reviews and mentally average them. The cognitive load was simply too high.",
++    approach:
++      "The goal became: how do you help someone understand a company in a glance? We replaced the endless list of reviews with an insights engine. AI summaries now sit directly above the fold—delivering an honest 'Quick Vibe Check' of what it actually feels like to work there, before they read a single review.",
+     impact: [
+       { value: "2.2×", label: "first-fold interaction rate" },
+       { value: "+17%", label: "avg. time spent per user" },
+-      { value: "<100ms", label: "added to page load time
+<truncated 297 bytes>
+   detail: "Moved the AI summary to the very top; raw reviews and secondary widgets were pushed down or to a sidebar.",
+         videos: [
+           { src: "/case-studies/quick-vibe-check/Quick Vibe Check.mov" }
+         ]
+@@ -222,4 +222,4 @@
+-      { title: "Zero compromise on performance", detail: "Added <100ms to page load time on the highest traffic page of the product. An insight engine is only useful if it doesn't slow down the core experience." },
++      { title: "Visual distinction", detail: "Made the AI-generated elements visually distinct from user-generated reviews to ensure we didn't break trust." },
+     ],
+     beyondDesign: {
+       questions: [
+@@ -226,11 +226,11 @@
+         { label: "Handling thin data?", question: "How does the UI react when data is thin?" },
+-        { label: "Testing at scale?", question: "How do you test a radical change on your highest traffic page?" }
+-      ],
+-      ctaLead: "Want the full walkthrough?"
+-    },
+-    whatICut: {
+-      chips: ["Chronological sorting", "Endless scroll", "Granular tags"],
+-      caption: "Instead of trying to build a better feed, we killed the feed entirely. Every feature was scoped down to answer one question: how fast can a user get a definitive answer?"
++        { label: "Aligning with Sales?", question: "How did you align with Sales, given monetization is tied to review pages?" }
++      ],
++      ctaLead: "Want the full walkthrough?"
++    },
++    whatICut: {
++      chips: ["Department filters", "Endless scroll", "Granular tags"],
++      caption: "I initially wanted department-level AI summaries. But data showed users just glance at the overall level. So I killed my own feature to get the core concept shipped."
+     },
+     beforeAfter: {
+       before: "/case-studies/quick-vibe-check/before.svg",

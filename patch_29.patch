@@ -1,0 +1,11 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -131,7 +131,7 @@
+     client: "AmbitionBox · Reviews",
+     year: "2025",
+     role: "Product design & IA",
+-    meta: ["AI", "Information Architecture", "Shipped"],
++    meta: ["Product design & IA", "AmbitionBox · Reviews", "2025", "AI", "Shipped"],
+     image: "/case-studies/quick-vibe-check/preview.webp",
+     previewVideo: "/case-studies/quick-vibe-check/preview.mp4",
+     cover: "/case-studies/quick-vibe-check/cover.webp",

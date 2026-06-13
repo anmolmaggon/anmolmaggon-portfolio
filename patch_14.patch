@@ -1,0 +1,57 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -202,28 +202,10 @@
+ 
+           <div className="pt-16 border-t border-black/15 flex items-center justify-between gap-6 flex-wrap">
+             <p className="italic opacity-60 text-[14px]">Want the full walkthrough?</p>
+-            <div className="flex items-center gap-6 md:gap-10 flex-wrap">
+-              <div className="flex items-center gap-6">
+-                <HoverLink
+-                  href="https://www.linkedin.com/in/anmolmaggon"
+-                  target="_blank"
+-                  rel="noopener noreferrer"
+-                  className="font-sans font-medium text-[14px] text-black/60 hover:text-black transition-colors"
+-                >
+-                  LinkedIn
+-                </HoverLink>
+-                <HoverLink
+-                  href="https://www.instagram.com/anmolmaggon"
+-                  target="_blank"
+-                  rel="noopener noreferrer"
+-                  className="font-sans font-medium text-[14px] text-black/60 hover:text-black transition-colors"
+-                >
+-                  Instagram
+-                </HoverLink>
+-              </div>
++            <div className="flex items-center gap-6 md:gap-8 flex-wrap">
+               <HoverLink
+                 href="mailto:anmolmaggon40@gmail.com"
+-                className="font-[Nyght_Serif] italic"
++                className="font-[Nyght_Serif] italic mr-2 md:mr-4"
+                 style={{ fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 400 }}
+               >
+                 anmolmaggon40@gmail.com →
+@@ -230,3 +230,23 @@
++              <div className="flex items-center gap-5">
++                <HoverLink
++                  href="https://www.linkedin.com/in/anmolmaggon"
++                  target="_blank"
++                  rel="noopener noreferrer"
++                  className="text-black/50 hover:text-black transition-colors"
++                  aria-label="LinkedIn"
++                >
++                  <Linkedin className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={1.5} />
++                </HoverLink>
++                <HoverLink
++                  href="https://www.instagram.com/anmolmaggon"
++                  target="_blank"
++                  rel="noopener noreferrer"
++                  className="text-black/50 hover:text-black transition-colors"
++                  aria-label="Instagram"
++                >
++                  <Instagram className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={1.5} />
++                </HoverLink>
++              </div>
+             </div>
+           </div>
+         </div>

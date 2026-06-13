@@ -1,0 +1,13 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -75,8 +75,8 @@
+       questions: [
+         { label: "How do you moderate without real names?", question: "How does moderation work when no one has a real name?" },
+         { label: "How do you get content on day one?", question: "How do you kickstart content when the product is brand new?" },
+-        { label: "How do you rank the feed?", question: "How do you rank a feed with no permanent history?" },
+-        { label: "How does personalization work?", question: "How do you personalize content without identity-based profiles?" },
++        { label: "How do you sort notes?", question: "How do you sort notes?" },
++        { label: "How does personalization work?", question: "How do you personalize content for users?" },
+         { label: "Can your employer trace you?", question: "Can your employer trace you on a pseudonymous platform?" }
+       ],
+       ctaLead: "Want the full walkthrough?"

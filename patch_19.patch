@@ -1,0 +1,11 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -202,7 +202,7 @@
+           </div>
+ 
+           <div className="pt-16 border-t border-black/15 flex items-center justify-between gap-6 flex-wrap">
+-            <div className="flex items-center gap-4 md:gap-6 flex-wrap">
++            <div className="flex items-baseline gap-4 md:gap-6 flex-wrap">
+               <p className="italic opacity-60 text-[14px]">Want the full walkthrough?</p>
+               <HoverLink
+                 href="mailto:anmolmaggon40@gmail.com"

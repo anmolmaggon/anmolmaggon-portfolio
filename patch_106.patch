@@ -1,0 +1,39 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -205,17 +205,21 @@
+     image: "/case-studies/quick-vibe-check/preview.svg",
+     previewVideo: "/case-studies/quick-vibe-check/preview.mp4",
+     cover: "/case-studies/quick-vibe-check/image.png",
++    subtitle: "AI summaries for company reviews.",
+     tilt: -4,
+     context:
+-      "AmbitionBox users are job seekers at the highest-stakes moments of their careers—preparing for an interview or deciding whether to accept an offer. They are looking for honest, unfiltered signals about what working there is actually like.",
+-    problem:
+-      "Job seekers use reviews to figure out the reality of a company before interviewing or joining. While the platform had thousands of reviews, users had to read dozens of them and manually synthesize the insights themselves. The cognitive load was simply too high, so they would just skim a few recent reviews and leave with an incomplete picture.",
+-    approach:
+-      "The goal became: how can we help users get a sense of the company in a single glance? We replaced the endless scroll with an AI insights engine that sits directly above the fold, delivering an instant, honest read on the culture before they read a single raw review.",
+-    impact: [
++      "AmbitionBox users are job seekers at the highest-stakes moments of their careers: preparing for an interview or deciding whether to accept an offer. They are looking for honest, unfiltered signals about what working there is actually like.",
++    problem:
++      "Job seekers use reviews to understand a company, but reading dozens of them to manually synthesize insights creates too much cognitive load.",
++    approach:
++      "We built an AI insights engine that sits directly above the fold, giving users an instant, honest read on the culture.",
++    impact: [
++    impact: [
++      { value: "10k+", label: "companies live with summaries" },
++      { value: "78%", label: "users found insights helpful" },
+       { value: "2.2×", label: "first-fold interaction rate" },
+       { value: "+17%", label: "avg. time spent per user" },
+-      { value: "≥95%", label: "AI accuracy score" },
++    ],
+     ],
+     decisions: [
+       { 
+@@ -254,7 +254,6 @@
+     beforeAfter: {
+       before: "/case-studies/quick-vibe-check/Company Reviews Page.png",
+       after: "/case-studies/quick-vibe-check/Thick Data copy.png",
+-      caption: "Drag to compare — the old chronological feed vs. the insights-first redesign.",
+     },
+     shots: [],
+   },

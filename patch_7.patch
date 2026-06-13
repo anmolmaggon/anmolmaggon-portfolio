@@ -1,0 +1,11 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -199,7 +199,7 @@
+                 </div>
+ 
+                 <div
+-                  className="hidden md:block pointer-events-none absolute right-[6%] top-1/2 w-[380px] aspect-[5/4] opacity-0 scale-90 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:scale-100 overflow-hidden rounded-none shadow-2xl"
++                  className="hidden md:block pointer-events-none absolute right-[6%] top-1/2 w-[380px] aspect-[5/4] opacity-0 scale-90 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:scale-100 rounded-none shadow-2xl"
+                   style={{ transform: `translateY(-50%) rotate(${s.tilt}deg)` }}
+                 >
+                   <ImageWithFallback

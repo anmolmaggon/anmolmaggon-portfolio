@@ -1,0 +1,64 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -248,36 +248,41 @@
+               {study.decisions.map((d, i) => (
+                 <li
+                   key={d.title}
+-                  className="grid grid-cols-12 items-baseline gap-4 md:gap-8 py-6 md:py-8 border-t border-black/15 last:border-b"
+-                >
+-                  <span className="col-span-2 md:col-span-1 italic numeral text-[13px] opacity-50">
+-                    {String(i + 1).padStart(2, "0")}
+-                  </span>
+-                  <h3
+-                    className="col-span-10 md:col-span-5 font-[Nyght_Serif]"
+-                    style={{ fontSize: "clamp(20px, 2vw, 28px)", lineHeight: 1.2, fontWeight: 400 }}
+-                  >
+-                    {d.title}
+-                  </h3>
+-                  <div className="col-span-12 md:col-span-6 flex flex-col gap-4">
+-                    <p
+-                      className="text-black/70 font-sans"
+-                      style={{ fontSize: "clamp(15px, 1.1vw, 17px)", lineHeight: 1.6 }}
+-                    >
+-                      {d.detail}
+-                    </p>
+-                    {d.image && (
+-                      <div className="aspect-[4/3] w-full max-w-[320px] bg-black/5 mt-2 rounded-xl overflow-hidden">
+-                        <ImageWithFallback src={d.image} alt={d.title} className="w-full h-full object-cover" />
+-                      </div>
+-                    )}
+-                    {d.videos && d.videos.length > 0 && (
+-                      <div className={`mt-4 w-full ${d.videos.length > 1 ? "grid grid-cols-2 gap-4 max-w-[480px]" : "max-w-[320px]"}`}>
++                  className="py-8 md:py-12 border-t border-black/15 last:border-b flex 
+<truncated 1414 bytes>
+<div className="w-full">
++                      <div className={`grid gap-4 md:gap-6 ${d.videos.length === 4 ? "grid-cols-2 md:grid-cols-4" : d.videos.length > 1 ? "grid-cols-2" : "grid-cols-1 max-w-sm mx-auto"}`}>
+                         {d.videos.map((vid, vIdx) => (
+-                          <div key={vIdx} className="w-full aspect-[4/5] rounded-xl overflow-hidden bg-black/5 relative shadow-sm">
++                          <div key={vIdx} className="w-full rounded-[24px] overflow-hidden bg-black/5 relative shadow-md border border-black/5">
+                             <VideoWithFallback
+                               src={vid.src}
+-                              className="w-full h-full object-cover"
++                              className="w-full h-auto block"
+                               autoPlay
+                               muted
+                               loop
+@@ -284,7 +284,7 @@
+                               preload="metadata"
+                             />
+                             {vid.caption && (
+-                              <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-black uppercase tracking-wider shadow-sm">
++                              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-bold text-black uppercase tracking-wider shadow-sm">
+                                 {vid.caption}
+                               </div>
+                             )}
+@@ -291,7 +291,7 @@
+                         ))}
+                       </div>
+-                    )}
+-                  </div>
++                    </div>
++                  )}
+                 </li>
+               ))}
+               {study.whatICut && (

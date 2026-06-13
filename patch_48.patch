@@ -1,0 +1,18 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -222,7 +222,7 @@
+     <div
+       role="dialog"
+       aria-modal="true"
+-      className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-stretch justify-center p-0"
++      className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-stretch justify-center p-0 transform-gpu"
+       onClick={onClose}
+     >
+       <div
+@@ -229,5 +229,5 @@
+         data-lenis-prevent="true"
+-        className="relative w-full h-full bg-[#fafaf7] rounded-none flex flex-col overflow-hidden shadow-2xl"
++        className="relative w-full h-full bg-[#fafaf7] rounded-none flex flex-col overflow-hidden shadow-2xl transform-gpu"
+       >
+         {/* Floating Close Button - Always visible */}
+         <button

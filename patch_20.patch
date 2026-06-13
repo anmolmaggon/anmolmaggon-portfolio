@@ -1,0 +1,23 @@
+--- a/src/app/components/CaseStudyModal.tsx
++++ b/src/app/components/CaseStudyModal.tsx
+@@ -15,13 +15,19 @@
+   year: string;
+   role: string;
+   meta: string[];
++  subtitle?: string;
++  context?: string;
+   problem: string;
+   approach: string;
++  theBet?: { text: string; metrics: { value: string; label: string }[]; caption?: string };
++  noFigma?: string;
++  whatICut?: { chips: string[]; caption: string };
++  earlySignal?: string;
+   impactNote?: string;
+   impact: { value: string; label: string }[];
+-  decisions: { title: string; detail: string }[];
++  decisions: { title: string; detail: string; image?: string }[];
+   cover: string;
+-  shots: { src: string; caption: string; wide?: boolean }[];
++  shots: { src: string; caption: string; wide?: boolean; heading?: string; label?: string }[];
+   beforeAfter?: { before: string; after: string; caption?: string };
+ };

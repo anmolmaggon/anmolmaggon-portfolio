@@ -1,0 +1,11 @@
+--- a/src/app/components/BeforeAfterSlider.tsx
++++ b/src/app/components/BeforeAfterSlider.tsx
+@@ -25,7 +25,7 @@
+ 
+   return (
+     <figure className="w-full">
+-      <div className="relative w-full aspect-[16/9] overflow-hidden rounded-[16px] bg-black/5 select-none shadow-xl">
++      <div className="relative w-full aspect-[16/9] overflow-hidden rounded-none bg-black/5 select-none">
+         {/* Base layer: AFTER (fills, shown on the right of the divider) */}
+         <ImageWithFallback
+           src={after}

@@ -1,0 +1,12 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -238,8 +238,8 @@
+     ],
+     beyondDesign: {
+       questions: [
+-        { label: "Guardrails for trust?", question: "What are the specific guardrails for trust in summaries?" },
+         { label: "Handling thin data?", question: "How does the UI react when data is thin?" },
++        { label: "Guardrails for trust?", question: "What are the specific guardrails for trust in summaries?" },
+         { label: "Aligning with Sales?", question: "How did you align with Sales, given monetization is tied to review pages?" },
+         { label: "Ensuring quality output?", question: "What thresholds are in place to ensure AI quality output?" },
+         { label: "What's next?", question: "What's next for AI summaries on the platform?" }

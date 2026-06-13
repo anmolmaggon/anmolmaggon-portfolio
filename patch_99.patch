@@ -1,0 +1,54 @@
+--- a/src/app/components/CaseStudies.tsx
++++ b/src/app/components/CaseStudies.tsx
+@@ -206,10 +206,12 @@
+     previewVideo: "/case-studies/quick-vibe-check/preview.mp4",
+     cover: "/case-studies/quick-vibe-check/image.png",
+     tilt: -4,
+-    problem:
+-      "Most people don't really read reviews. Despite having deep filters, we saw users just glance at a rating, skim 1-2 opinions, and move on. The existing review page was an endless wall of old text. To actually understand a company's culture, a user had to read dozens of reviews and mentally average them. The cognitive load was simply too high.",
+-    approach:
+-      "The goal became: how do you help someone understand a company in a glance? We replaced the endless list of reviews with an insights engine. AI summaries now sit directly above the fold—delivering an honest 'Quick Vibe Check' of what it actually feels like to work there, before they read a single review.",
++    context:
++      "AmbitionBox users are job seekers at the highest-stakes moments of their careers—preparing for an interview or deciding whether to accept an offer. They are looking for honest, unfiltered signals about what working there is actually like.",
++    problem:
++      "Job seekers use reviews to figure out the reality of a company before interviewing or joining. While the platform had thousands of reviews, users had to read dozens of them and manually synthesize the insights themselves. The cognitive load was simply too high, so they would just skim a few recent reviews and leave with an incomplete picture.",
++    approach:
++      "The goal became: how can we help users get a sense of the company in a single glance? We replaced the endless scroll with an AI insights engine that sits directly abov
+<truncated 1723 bytes>
+ce safety and gender dynamics. The AI was tuned to pull these themes upfront, turning hidden signals into top-level insights.",
++        videos: [{ src: "/case-studies/quick-vibe-check/gender-gap.mp4", caption: "Safety and gender dynamics pulled upfront" }]
++      },
+     ],
+     beyondDesign: {
+       questions: [
+@@ -230,6 +230,7 @@
+         { label: "Handling thin data?", question: "How does the UI react when data is thin?" },
+         { label: "Aligning with Sales?", question: "How did you align with Sales, given monetization is tied to review pages?" },
+-        { label: "Ensuring quality output?", question: "What thresholds are in place to ensure AI quality output?" }
++        { label: "Ensuring quality output?", question: "What thresholds are in place to ensure AI quality output?" },
++        { label: "What's next?", question: "What's next for AI summaries on the platform?" }
+       ],
+       ctaLead: "Want the full walkthrough?"
+     },
+@@ -241,21 +241,7 @@
+       after: "/case-studies/quick-vibe-check/Thick Data copy.png",
+       caption: "Drag to compare — the old chronological feed vs. the insights-first redesign.",
+     },
+-    shots: [
+-      {
+-        src: "/case-studies/quick-vibe-check/stakeholder-alignment.png",
+-        caption: "Early explorations: aligning stakeholders using Figma Make",
+-        wide: true,
+-      },
+-      {
+-        src: "/case-studies/quick-vibe-check/scope-control.png",
+-        caption: "Scope control: deferred team-level summaries to Phase II since majority of users glance at the overall level",
+-      },
+-      {
+-        src: "/case-studies/quick-vibe-check/whats-next.png",
+-        caption: "What's next: nudging users in the right direction on the supply side is a game changer",
+-      },
+-    ],
++    shots: [],
+   },
+ ];
