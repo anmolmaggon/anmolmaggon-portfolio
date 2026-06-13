@@ -11,13 +11,7 @@ export function About() {
           {clients.map((c, i) => (
             <span
               key={c}
-              className="font-[Nyght_Serif]"
-              style={{
-                fontSize: "clamp(22px, 2.2vw, 36px)",
-                fontWeight: 400,
-                fontStyle: i % 3 === 1 ? "italic" : "normal",
-                letterSpacing: "-0.01em",
-              }}
+              className={`font-[Nyght_Serif] text-[#171613] text-fluid-h3 leading-[1.3] font-normal tracking-[-0.01em] ${i % 3 === 1 ? "italic" : "normal-case"}`}
             >
               {c}
               <span className="opacity-30 ml-8 italic">·</span>

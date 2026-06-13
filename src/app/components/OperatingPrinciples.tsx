@@ -5,6 +5,7 @@ import { ButlerNote } from "./principles/ButlerNote";
 import { SunCursor } from "./principles/SunCursor";
 import { SakuraPetals } from "./principles/SakuraPetals";
 import { ScrollCursor } from "./principles/ScrollCursor";
+import { SectionHeader } from "./ui/SectionHeader";
 
 type Principle = {
   id: string;
@@ -90,38 +91,17 @@ export function OperatingPrinciples() {
       className="relative"
       style={{ cursor: cursorHidden ? "none" : undefined }}
     >
-      {/* Cursor-attached scenes — desktop pointer only */}
-      {canHover && (
-        <>
-          {/* 02 — pointer becomes the "Trust your energy" sticker */}
-          <SunCursor active={hoveredId === "energy"} />
-          {/* 04 — pointer becomes a hanging scroll carrying this exact moment */}
-          <ScrollCursor active={hoveredId === "ichigo"} />
-        </>
-      )}
-
       {/* the whole section inverts when "change" is hovered */}
       <motion.div
-        className="px-6 md:px-10 py-24 md:py-40"
-        style={{ background: "#fafaf7" }}
+        className="px-6 md:px-10 py-24 md:py-40 bg-brand-light"
         initial={false}
         animate={{ filter: inverted ? "invert(1)" : "invert(0)" }}
         transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="mb-12 md:mb-20 max-w-4xl">
-          <p
-            className="font-[Nyght_Serif] text-black/70"
-            style={{
-              fontSize: "clamp(20px, 2.4vw, 34px)",
-              lineHeight: 1.1,
-              fontWeight: 400,
-              letterSpacing: "-0.015em",
-            }}
-          >
-            What I keep close
-            <em className="italic">.</em>
-          </p>
-        </div>
+        <SectionHeader 
+          title="What I keep close" 
+          subtitle="Tap a principle to unlock its scene." 
+        />
 
         <ol className="space-y-0">
           {principles.map((p, i) => {
@@ -130,26 +110,33 @@ export function OperatingPrinciples() {
             return (
               <li
                 key={p.id}
-                onMouseEnter={() => setHovered(i)}
-                onMouseLeave={() => setHovered((cur) => (cur === i ? null : cur))}
-                className="group relative isolate grid grid-cols-12 items-start gap-4 md:gap-8 py-10 md:py-14 border-t border-black/15 last:border-b last:border-black/15 transition-colors duration-500"
+                onMouseEnter={() => canHover && setHovered(i)}
+                onMouseLeave={() => canHover && setHovered((cur) => (cur === i ? null : cur))}
+                onClick={() => {
+                  // Touch: tap toggles the principle's scene (tap again / tap
+                  // another to switch). Desktop is driven by hover above.
+                  if (!canHover) setHovered((cur) => (cur === i ? null : i));
+                }}
+                className="group relative isolate grid grid-cols-12 items-start gap-4 md:gap-8 py-10 md:py-14 border-t border-black/15 last:border-b last:border-black/15 transition-colors duration-500 cursor-pointer md:cursor-default"
               >
-                {/* bespoke hover scenes (wired by id, so order can change freely) */}
-                {p.id === "hospitality" && <ButlerNote active={isHovered} />}
+                {/* Bespoke scenes (wired by id). The contained ones play on both
+                    hover (desktop) and tap (mobile) via `active`. The cursor-attached
+                    note/sun/scroll are handled separately but now support touch via centering. */}
+                {p.id === "hospitality" && <ButlerNote active={isHovered} touch={!canHover} />}
                 {p.id === "goldfish" && <GoldfishLayer active={isHovered} />}
                 {p.id === "ichigo" && <SakuraPetals active={isHovered} />}
+                {p.id === "ichigo" && <ScrollCursor active={isHovered} touch={!canHover} />}
+                {p.id === "energy" && <SunCursor active={isHovered} touch={!canHover} />}
+
+                {/* Energy's sun cursor works on touch now. No ambient radial glow needed. */}
 
                 <span className={`col-span-2 md:col-span-1 italic numeral text-[14px] md:text-[15px] leading-none mt-[2px] md:mt-[16px] transition-opacity duration-500 group-hover:opacity-100 ${canHover ? "opacity-40" : "opacity-100"}`}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
 
                 <motion.h3
-                  className={`col-span-10 md:col-span-6 font-[Nyght_Serif] transition-colors duration-500 group-hover:text-black ${canHover ? "text-black/35" : "text-black"}`}
+                  className={`col-span-10 md:col-span-6 font-[Nyght_Serif] transition-colors duration-500 group-hover:text-black text-fluid-h2 leading-[1.02] tracking-[-0.025em] font-normal ${canHover ? "text-black/35" : "text-black"}`}
                   style={{
-                    fontSize: "clamp(30px, 4.6vw, 68px)",
-                    lineHeight: 1.02,
-                    fontWeight: 400,
-                    letterSpacing: "-0.025em",
                     fontFamily: p.cjk ? CJK_SERIF : undefined,
                   }}
                   animate={{
@@ -162,8 +149,7 @@ export function OperatingPrinciples() {
                 </motion.h3>
 
                 <p
-                  className={`col-span-12 md:col-span-5 max-w-md mt-3 md:mt-[10px] transition-all duration-500 group-hover:opacity-80 ${canHover ? "opacity-50" : "opacity-80"}`}
-                  style={{ fontSize: "clamp(15px, 1.2vw, 19px)", lineHeight: 1.5, whiteSpace: "pre-line" }}
+                  className={`col-span-12 md:col-span-5 max-w-md mt-3 md:mt-[10px] transition-all duration-500 group-hover:opacity-80 text-fluid-body leading-[1.5] whitespace-pre-line ${canHover ? "opacity-50" : "opacity-80"}`}
                 >
                   {p.detail}
                 </p>

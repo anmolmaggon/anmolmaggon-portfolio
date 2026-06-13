@@ -1,0 +1,6 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#F0F0F0" />
+  <rect x="60" y="60" width="1080" height="480" rx="24" fill="#FFFFFF" stroke="#E2E2E2" stroke-width="2"/>
+  <text x="600" y="280" font-family="sans-serif" font-size="48" font-weight="bold" fill="#111" text-anchor="middle">Insights Engine Hero</text>
+  <text x="600" y="340" font-family="sans-serif" font-size="24" fill="#666" text-anchor="middle">Cover Image Placeholder</text>
+</svg>

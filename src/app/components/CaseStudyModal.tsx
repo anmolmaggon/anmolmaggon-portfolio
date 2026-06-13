@@ -1,11 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { VideoWithFallback } from "./VideoWithFallback";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
+import { BeforeAfterScroll } from "./BeforeAfterScroll";
 import { Label } from "./Label";
 import { HoverLink } from "./HoverLink";
 import { useGlobalContext } from "../context/GlobalContext";
-import { Linkedin, Instagram } from "lucide-react";
+import linkedInLogo from "../../imports/InBug-Black.png";
+import instagramLogo from "../../imports/Instagram_Glyph_Black.svg";
 
 export type CaseStudyDetail = {
   number: string;
@@ -14,23 +17,48 @@ export type CaseStudyDetail = {
   year: string;
   role: string;
   meta: string[];
+  subtitle?: string;
+  context?: string;
   problem: string;
   approach: string;
+  watching?: { metrics: string[]; caption?: string };
+  beyondDesign?: { questions: { label: string; question: string }[]; ctaLead: string };
+  noFigma?: string;
+  whatICut?: { chips: string[]; caption: string };
   impactNote?: string;
   impact: { value: string; label: string }[];
-  decisions: { title: string; detail: string }[];
+  decisions: { title: string; detail: string; image?: string; images?: {src: string; caption?: string}[]; videos?: {src: string; caption?: string}[] }[];
   cover: string;
-  shots: { src: string; caption: string; wide?: boolean }[];
+  coverVideo?: string;
+  coverCaption?: string;
+  composerGrid?: boolean;
+  shots: { src: string; caption: string; wide?: boolean; heading?: string; label?: string }[];
   beforeAfter?: { before: string; after: string; caption?: string };
 };
 
 type Props = {
   study: CaseStudyDetail | null;
+  prevStudy?: CaseStudyDetail | null;
+  nextStudy?: CaseStudyDetail | null;
+  onNavigate?: (study: CaseStudyDetail) => void;
   onClose: () => void;
 };
 
-export function CaseStudyModal({ study, onClose }: Props) {
+/* ComposerGrid has been removed as features are merged into Design Decisions */
+
+export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClose }: Props) {
   const { pauseBackgroundAudio, resumeBackgroundAudio } = useGlobalContext();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [atEnd, setAtEnd] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+    setIsScrolled(false);
+    setAtEnd(false);
+  }, [study]);
 
   useEffect(() => {
     if (!study) return;
@@ -56,54 +84,124 @@ export function CaseStudyModal({ study, onClose }: Props) {
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-stretch justify-center p-0"
+      className="fixed inset-0 z-[9999] bg-black/40 flex items-stretch justify-center p-0"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         data-lenis-prevent="true"
-        className="relative w-full h-full bg-[#fafaf7] rounded-none overflow-y-auto overflow-x-hidden shadow-2xl"
+        className="relative w-full h-[100dvh] bg-brand-light rounded-none flex flex-col overflow-hidden shadow-2xl"
       >
+        {/* Floating Close Button - Always visible */}
         <button
           onClick={onClose}
           aria-label="Close"
-          className="fixed top-6 right-6 md:top-8 md:right-8 z-[10000] flex items-center justify-center w-12 h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors cursor-pointer"
+          className="absolute top-3 right-3 md:top-4 md:right-4 z-[10000] flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors cursor-pointer"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
 
-        <div className="px-5 sm:px-8 md:px-16 lg:px-24 py-14 md:py-20 max-w-[1400px] mx-auto">
+        {/* Reveal-on-Scroll Header */}
+        <header 
+          className={`absolute top-0 left-0 right-0 flex items-center h-16 md:h-20 px-6 border-b border-black/10 bg-[#fafaf7]/90 backdrop-blur-md z-[9999] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pr-20 ${
+            isScrolled ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
+          }`}
+        >
+          <h2 className="font-[Nyght_Serif] text-xl md:text-2xl text-black/80">{study.title}</h2>
+        </header>
 
-          {/* 2. Title */}
-          <h1
-            className="font-[Nyght_Serif] mb-12"
-            style={{
-              fontSize: "clamp(48px, 8vw, 128px)",
-              lineHeight: 0.95,
-              fontWeight: 400,
-              letterSpacing: "-0.03em",
-            }}
-          >
-            {study.title}
-            <em className="italic">.</em>
-          </h1>
+        {/* Scrollable Content */}
+        <div 
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto overflow-x-hidden overscroll-none"
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            setIsScrolled(el.scrollTop > 100);
+            setAtEnd(el.scrollTop + el.clientHeight >= el.scrollHeight - 100);
+          }}
+        >
+          <div className="px-6 md:px-10 py-10 md:py-16 pb-28 md:pb-32">
 
-          {/* 3. Cover Image (Hero product shot, no rounded corners, no shadow) */}
-          <div className="overflow-hidden mb-16 aspect-[16/9]">
-            <ImageWithFallback src={study.cover} alt={`${study.title} cover`} className="w-full h-full object-cover" />
+          {/* 2. Meta eyebrow, title & subtitle */}
+          <div className="mb-14 md:mb-20">
+            <p className="font-sans font-medium text-[13px] uppercase tracking-wider text-black/50 flex flex-wrap items-center gap-x-3 gap-y-2 mb-6 pr-12 md:pr-0">
+              {study.meta.map((m, i, arr) => (
+                <span key={m} className="flex items-center gap-3">
+                  {m}
+                  {i < arr.length - 1 && <span aria-hidden className="text-black/25">·</span>}
+                </span>
+              ))}
+            </p>
+            <h2
+              className="font-[Nyght_Serif] text-fluid-massive leading-[0.95] tracking-[-0.025em] font-normal"
+            >
+              {study.title}
+              <em className="italic">.</em>
+            </h2>
+            {study.subtitle && (
+              <p className="font-sans text-black/70 max-w-2xl" style={{ fontSize: "clamp(20px, 2.5vw, 28px)", lineHeight: 1.4 }}>
+                {study.subtitle}
+              </p>
+            )}
           </div>
 
-          {/* 4. The Problem */}
+          {/* 4. Cover Image/Video OR Slider */}
+          {(study.slug === "quick-vibe-check" || study.slug === "the-number-that-matters") && study.beforeAfter ? (
+            <div className="mb-16 md:mb-24 flex flex-col items-center">
+              <BeforeAfterSlider
+                before={study.beforeAfter.before}
+                after={study.beforeAfter.after}
+                caption={study.beforeAfter.caption}
+                isMobileLayout={true}
+              />
+            </div>
+          ) : (
+            <figure className="mb-16">
+              <div className="overflow-hidden aspect-[16/9] relative">
+                {study.coverVideo ? (
+                  <VideoWithFallback
+                    className="w-full h-full object-cover"
+                    poster={study.cover}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-hidden="true"
+                  >
+                    <source src={study.coverVideo} type="video/mp4" />
+                  </VideoWithFallback>
+                ) : (
+                  <ImageWithFallback src={study.cover} alt={`${study.title} cover`} className="w-full h-full object-cover" />
+                )}
+              </div>
+              {study.coverCaption && (
+                <figcaption className="pt-4 italic opacity-60 text-[13px]">{study.coverCaption}</figcaption>
+              )}
+            </figure>
+          )}
+
+          {/* 4. Context - boxed aside below the hero, connects the dots */}
+          {study.context && (
+            <div className="border border-black/15 p-6 md:p-8 mb-16 md:mb-20">
+              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-4">For context</p>
+              <p
+                className="max-w-3xl text-black/70 font-sans text-fluid-body-sm leading-[1.6] font-normal"
+              >
+                {study.context}
+              </p>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-10 mb-12 md:mb-20">
             <div className="md:col-span-3">
               <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider">The problem</p>
             </div>
             <p
-              className="md:col-span-9 font-sans max-w-3xl text-black/80"
-              style={{ fontSize: "clamp(20px, 2.2vw, 32px)", lineHeight: 1.4, fontWeight: 400, letterSpacing: "-0.01em" }}
+              className="md:col-span-9 font-sans max-w-3xl text-black/80 text-fluid-h4 leading-[1.4] tracking-[-0.01em] font-normal"
             >
               {study.problem}
             </p>
@@ -115,32 +213,34 @@ export function CaseStudyModal({ study, onClose }: Props) {
               <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider">Approach</p>
             </div>
             <p
-              className="md:col-span-9 max-w-2xl text-black/70 font-sans"
-              style={{ fontSize: "clamp(16px, 1.4vw, 20px)", lineHeight: 1.6, fontWeight: 400 }}
+              className="md:col-span-9 font-sans max-w-3xl text-black/80 text-fluid-h4 leading-[1.4] tracking-[-0.01em] font-normal"
             >
               {study.approach}
             </p>
           </div>
 
           {/* 6. Impact Stats (Moved from top) */}
+          {study.impact.length > 0 && (
           <div className="mb-20 md:mb-24">
+            <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">The impact</p>
             {study.impactNote && (
               <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-6">{study.impactNote}</p>
             )}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {study.impact.map((m) => (
-                <div key={m.label} className="py-5 border-t border-black/15 text-black">
+                <div key={m.label} className="p-6 md:p-8 rounded-2xl border border-black/10 bg-white/50 shadow-[0_4px_24px_rgba(0,0,0,0.02)] backdrop-blur-sm text-black flex flex-col justify-center items-center text-center transition-transform hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
                   <p
                     className="font-[Nyght_Serif]"
-                    style={{ fontSize: "clamp(32px, 3.5vw, 48px)", lineHeight: 1, fontWeight: 400, letterSpacing: "-0.02em" }}
+                    style={{ fontSize: "clamp(40px, 4vw, 56px)", lineHeight: 1, fontWeight: 400, letterSpacing: "-0.02em" }}
                   >
                     {m.value}
                   </p>
-                  <p className="mt-3 font-sans opacity-70 text-[14px]">{m.label}</p>
+                  <p className="mt-4 font-sans font-medium opacity-60 uppercase tracking-wider text-[11px] md:text-[12px]">{m.label}</p>
                 </div>
               ))}
             </div>
           </div>
+          )}
 
           {/* 7. Design Decisions */}
           <div className="mb-24">
@@ -149,41 +249,159 @@ export function CaseStudyModal({ study, onClose }: Props) {
               {study.decisions.map((d, i) => (
                 <li
                   key={d.title}
-                  className="grid grid-cols-12 items-baseline gap-4 md:gap-8 py-6 md:py-8 border-t border-black/15 last:border-b"
+                  className="py-8 md:py-12 border-t border-black/15 last:border-b flex flex-col gap-8 md:gap-12"
                 >
+                  <div className="grid grid-cols-12 items-baseline gap-4 md:gap-8">
+                    <span className="col-span-2 md:col-span-1 italic numeral text-[13px] opacity-50">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3
+                      className="col-span-10 md:col-span-5 font-[Nyght_Serif]"
+                      style={{ fontSize: "clamp(20px, 2vw, 28px)", lineHeight: 1.2, fontWeight: 400 }}
+                    >
+                      {d.title}
+                    </h3>
+                    <div className="col-span-12 md:col-span-6 flex flex-col gap-4">
+                      <p
+                        className="text-black/70 font-sans"
+                        style={{ fontSize: "clamp(15px, 1.1vw, 17px)", lineHeight: 1.6 }}
+                      >
+                        {d.detail}
+                      </p>
+                      {d.image && (
+                        <div className="w-full max-w-[320px] bg-black/5 mt-4 rounded-xl overflow-hidden">
+                          <ImageWithFallback src={d.image} alt={d.title} className="w-full h-auto object-cover" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {d.videos && d.videos.length > 0 && (
+                    <div className="w-full">
+                      <div className={`grid gap-4 md:gap-6 ${d.videos.length === 4 ? "grid-cols-2 md:grid-cols-4" : d.videos.length > 1 ? "grid-cols-2" : "grid-cols-1 max-w-sm mx-auto"}`}>
+                        {d.videos.map((vid, vIdx) => (
+                          <div key={vIdx} className="flex flex-col gap-3">
+                            <div className="w-full rounded-[24px] overflow-hidden bg-black/5 shadow-md border border-black/5">
+                              <VideoWithFallback
+                                src={vid.src}
+                                className="w-full h-auto block"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="metadata"
+                              />
+                            </div>
+                            {vid.caption && (
+                              <p className="text-center font-sans text-[13px] text-black/50 px-2 leading-snug">
+                                {vid.caption}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {d.images && d.images.length > 0 && (
+                    <div className="w-full">
+                      <div className={`grid gap-4 md:gap-6 ${d.images.length > 1 ? "grid-cols-2" : "grid-cols-1 max-w-sm mx-auto"}`}>
+                        {d.images.map((img, imgIdx) => (
+                          <div key={imgIdx} className="flex flex-col gap-3">
+                            <div className="w-full rounded-[24px] overflow-hidden bg-black/5 shadow-md border border-black/5">
+                              <ImageWithFallback
+                                src={img.src}
+                                alt={img.caption || d.title}
+                                className="w-full h-auto block"
+                              />
+                            </div>
+                            {img.caption && (
+                              <p className="text-center font-sans text-[13px] text-black/50 px-2 leading-snug">
+                                {img.caption}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </li>
+              ))}
+              {study.whatICut && (
+                <li className="grid grid-cols-12 items-baseline gap-4 md:gap-8 py-6 md:py-8 border-t border-black/15 last:border-b">
                   <span className="col-span-2 md:col-span-1 italic numeral text-[13px] opacity-50">
-                    {String(i + 1).padStart(2, "0")}
+                    {String(study.decisions.length + 1).padStart(2, "0")}
                   </span>
                   <h3
                     className="col-span-10 md:col-span-5 font-[Nyght_Serif]"
-                    style={{ fontSize: "clamp(22px, 2vw, 30px)", fontWeight: 400, letterSpacing: "-0.01em" }}
+                    style={{ fontSize: "clamp(20px, 2vw, 28px)", lineHeight: 1.3, fontWeight: 400 }}
                   >
-                    {d.title}
+                    {study.whatICut.chips.map((chip, i) => (
+                      <span key={chip}>
+                        <span className="text-black/35 line-through decoration-1 decoration-black/40 transition-colors duration-300 hover:text-black/60">
+                          {chip}
+                        </span>
+                        {i < study.whatICut!.chips.length - 1 && <span className="text-black/25">, </span>}
+                      </span>
+                    ))}
+                    <span className="text-black/25">.</span>
                   </h3>
                   <p
                     className="col-span-12 md:col-span-6 text-black/70 font-sans"
                     style={{ fontSize: "clamp(15px, 1.1vw, 17px)", lineHeight: 1.6 }}
                   >
-                    {d.detail}
+                    {study.whatICut.caption}
                   </p>
                 </li>
-              ))}
+              )}
             </ol>
           </div>
 
+          {/* Designed in code - rendered as an editor snippet */}
+          {study.noFigma && (
+            <div className="mb-20 md:mb-24">
+              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">Designed in code</p>
+              <div className="bg-black text-[#fafaf7]">
+                <div className="flex items-center gap-2 px-5 md:px-8 py-3.5 border-b border-white/10">
+                  <span aria-hidden className="w-2.5 h-2.5 rounded-full bg-white/15" />
+                  <span aria-hidden className="w-2.5 h-2.5 rounded-full bg-white/15" />
+                  <span aria-hidden className="w-2.5 h-2.5 rounded-full bg-white/15" />
+                  <span className="ml-3 font-mono text-[12px] text-white/40">
+                    {study.title.toLowerCase().replace(/\s+/g, "-")}.tsx
+                  </span>
+                </div>
+                <div className="px-5 md:px-8 py-8 md:py-10 font-mono text-[14px] md:text-[15px] leading-[1.9]">
+                  {study.noFigma.split(/(?<=[.!?])\s+/).map((line, i) => (
+                    <p key={i} className="text-white/50" style={{ paddingLeft: "3ch", textIndent: "-3ch" }}>
+                      {"// "}
+                      {line}
+                    </p>
+                  ))}
+                  <p className="mt-6 text-white/90">
+                    <span className="text-white/50">const</span> spec <span className="text-white/50">=</span> {"<"}WorkingPrototype{" "}
+                    {"/>"};
+                    <span aria-hidden className="text-white/40 animate-pulse"> ▍</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* 8. Before/After Slider */}
-          {study.beforeAfter && (
+          {study.beforeAfter && study.slug !== "quick-vibe-check" && study.slug !== "the-number-that-matters" && (
             <div className="mb-24">
               <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">The redesign</p>
               <BeforeAfterSlider
                 before={study.beforeAfter.before}
                 after={study.beforeAfter.after}
                 caption={study.beforeAfter.caption}
+                isMobileLayout={study.slug === "quick-vibe-check"}
               />
             </div>
           )}
 
           {/* 9. Selected Screens (No rounded corners, no shadow) */}
+          {study.shots.length > 0 && (
           <div className="mb-24">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {study.shots.map((s, i) => (
@@ -192,47 +410,209 @@ export function CaseStudyModal({ study, onClose }: Props) {
                   className={`${s.wide ? "md:col-span-2" : ""} overflow-hidden`}
                 >
                   <div className={`${s.wide ? "aspect-[16/8]" : "aspect-[4/3]"} bg-black/5`}>
-                    <ImageWithFallback src={s.src} alt={s.caption} className="w-full h-full object-cover" />
+                    {s.src.match(/\.(mp4|webm|mov)$/i) ? (
+                      <VideoWithFallback
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                      >
+                        <source src={s.src} />
+                      </VideoWithFallback>
+                    ) : (
+                      <ImageWithFallback src={s.src} alt={s.caption} className="w-full h-full object-cover" />
+                    )}
                   </div>
                   <figcaption className="pt-4 pb-2 italic opacity-60 text-[13px]">{s.caption}</figcaption>
                 </figure>
               ))}
             </div>
           </div>
+          )}
 
-          <div className="pt-16 border-t border-black/15 flex items-center justify-between gap-6 flex-wrap">
-            <p className="italic opacity-60 text-[14px]">Want the full walkthrough?</p>
-            <div className="flex items-center gap-6 md:gap-8 flex-wrap">
+          {/* Early Signal */}
+          {study.earlySignal && (
+            <div className="mb-24 border-l-2 border-black/20 pl-6 md:pl-10">
+              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-6">Early Signal</p>
+              <p
+                className="font-[Nyght_Serif] italic text-black/90 max-w-3xl"
+                style={{ fontSize: "clamp(24px, 3vw, 40px)", lineHeight: 1.2, letterSpacing: "-0.01em" }}
+              >
+                "{study.earlySignal}"
+              </p>
+            </div>
+          )}
+
+          {/* What we're watching - directional community-health metrics, quiet ledger rows */}
+          {study.watching && (
+            <div className="mb-24">
+              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">What we're watching</p>
+              <ul>
+                {study.watching.metrics.map((m) => (
+                  <li key={m} className="py-4 md:py-5 border-t border-black/15 last:border-b">
+                    <p
+                      className="font-[Nyght_Serif] text-black/85"
+                      style={{ fontSize: "clamp(18px, 2vw, 26px)", lineHeight: 1.2, fontWeight: 400, letterSpacing: "-0.01em" }}
+                    >
+                      <span aria-hidden className="text-black/35 mr-3 text-[0.8em]">↑</span>
+                      {m}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              {study.watching.caption && (
+                <p className="font-sans italic text-[14px] text-black/50 mt-6">{study.watching.caption}</p>
+              )}
+            </div>
+          )}
+
+          {/* Beyond the design - open product questions, footer-feel closing band */}
+          {study.beyondDesign && (
+            <div className="relative -mx-6 md:-mx-10 px-6 md:px-10 py-16 md:py-24 overflow-hidden">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(80% 130% at 50% 100%, rgba(171,143,255,0.12), rgba(127,200,232,0.05) 55%, rgba(127,200,232,0) 80%)",
+                  maskImage: "linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%)",
+                  WebkitMaskImage: "linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%)",
+                }}
+              />
+              <div className="relative">
+                <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-10 text-center">You're probably wondering</p>
+                <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-14 md:mb-16">
+                  {study.beyondDesign.questions.map((q) => (
+                    <a
+                      key={q.label}
+                      href={`mailto:anmolmaggon40@gmail.com?subject=${encodeURIComponent(`${study.title} - ${q.question}`)}&body=${encodeURIComponent(`Hi Anmol - I went through your ${study.title} case study, and I'd love to learn more about how you're thinking about this: ${q.question}`)}`}
+                      className="group/pill inline-flex items-center gap-2 rounded-full border border-black/20 px-5 py-2.5 md:px-6 md:py-3 font-[Nyght_Serif] text-black/80 transition-colors duration-300 hover:bg-black hover:text-[#fafaf7] hover:border-black"
+                      style={{ fontSize: "clamp(16px, 1.6vw, 21px)", lineHeight: 1.2 }}
+                    >
+                      {q.question}
+                      <span aria-hidden className="opacity-50 transition-transform duration-300 group-hover/pill:translate-x-0.5">→</span>
+                    </a>
+                  ))}
+                </div>
+                <div className="text-center pt-4 md:pt-8">
+                  <p className="font-sans italic text-[14px] text-black/55 mb-3">{study.beyondDesign.ctaLead}</p>
+                  <HoverLink
+                    href="mailto:anmolmaggon40@gmail.com?subject=Let's%20chat%20about%20your%20portfolio%20%26%20work&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D"
+                    className="font-[Nyght_Serif] italic"
+                    style={{ fontSize: "clamp(22px, 2.4vw, 32px)", fontWeight: 400 }}
+                  >
+                    anmolmaggon40@gmail.com →
+                  </HoverLink>
+                  <div className="flex items-center justify-center gap-5 mt-8">
+                    <HoverLink
+                      href="https://www.linkedin.com/in/anmolmaggon"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="LinkedIn"
+                    >
+                      <img src={linkedInLogo} alt="LinkedIn" className="w-[20px] h-[20px] md:w-[22px] md:h-[22px] object-contain" />
+                    </HoverLink>
+                    <HoverLink
+                      href="https://www.instagram.com/anmolmaggon"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Instagram"
+                    >
+                      <img src={instagramLogo} alt="Instagram" className="w-[20px] h-[20px] md:w-[22px] md:h-[22px] object-contain" />
+                    </HoverLink>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Previous / Next - slim bar the sticky footer hands off to */}
+          {(prevStudy || nextStudy) && onNavigate && (
+            <div className="-mx-6 md:-mx-10 -mb-28 md:-mb-32 border-t border-black/10">
+              <div className="px-6 md:px-10 flex items-center justify-between gap-4 py-5 md:py-6">
+                {prevStudy ? (
+                  <button
+                    type="button"
+                    onClick={() => onNavigate(prevStudy)}
+                    aria-label={`Previous case study: ${prevStudy.title}`}
+                    className="group inline-flex items-center gap-2 md:gap-3 min-w-0 max-w-[50%] text-left cursor-pointer"
+                  >
+                    <span
+                      aria-hidden
+                      className="inline-block font-[Nyght_Serif] font-normal text-sm md:text-lg opacity-40 transition-transform duration-500 ease-out group-hover:-translate-x-1 shrink-0"
+                    >
+                      ←
+                    </span>
+                    <span className="font-[Nyght_Serif] font-normal text-sm md:text-lg text-black/70 group-hover:text-black transition-colors duration-300 truncate relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-current after:scale-x-0 after:origin-left after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                      {prevStudy.title}
+                    </span>
+                  </button>
+                ) : <div className="flex-1" />}
+                
+                {nextStudy ? (
+                  <button
+                    type="button"
+                    onClick={() => onNavigate(nextStudy)}
+                    aria-label={`Next case study: ${nextStudy.title}`}
+                    className="group inline-flex items-center justify-end gap-2 md:gap-3 min-w-0 max-w-[50%] text-right cursor-pointer ml-auto"
+                  >
+                    <span className="font-[Nyght_Serif] font-normal text-sm md:text-lg text-black/70 group-hover:text-black transition-colors duration-300 truncate relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-current after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                      {nextStudy.title}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="inline-block font-[Nyght_Serif] font-normal text-sm md:text-lg opacity-40 transition-transform duration-500 ease-out group-hover:translate-x-1 shrink-0"
+                    >
+                      →
+                    </span>
+                  </button>
+                ) : <div className="flex-1" />}
+              </div>
+            </div>
+          )}
+
+          </div>
+        </div>
+
+        {/* Reveal-on-Scroll Footer - hands off to the prev/next bar at page end */}
+        <footer
+          className={`absolute bottom-0 left-0 right-0 py-5 border-t border-black/10 bg-[#fafaf7]/90 backdrop-blur-md z-[9999] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isScrolled && !atEnd ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
+          }`}
+        >
+          <div className="px-6 md:px-10 flex items-center justify-between gap-6 flex-wrap">
+            <div className="flex items-baseline gap-4 md:gap-6 flex-wrap">
+              <p className="italic opacity-60 text-[14px]">Want the full walkthrough?</p>
               <HoverLink
-                href="mailto:anmolmaggon40@gmail.com"
-                className="font-[Nyght_Serif] italic mr-2 md:mr-4"
-                style={{ fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 400 }}
+                href="mailto:anmolmaggon40@gmail.com?subject=Let's%20chat%20about%20your%20portfolio%20%26%20work&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D"
+                className="font-[Nyght_Serif] italic"
+                style={{ fontSize: "clamp(20px, 2vw, 24px)", fontWeight: 400 }}
               >
                 anmolmaggon40@gmail.com →
               </HoverLink>
-              <div className="flex items-center gap-5">
-                <HoverLink
-                  href="https://www.linkedin.com/in/anmolmaggon"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-black/50 hover:text-black transition-colors"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={1.5} />
-                </HoverLink>
-                <HoverLink
-                  href="https://www.instagram.com/anmolmaggon"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-black/50 hover:text-black transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={1.5} />
-                </HoverLink>
-              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <HoverLink
+                href="https://www.linkedin.com/in/anmolmaggon"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                <img src={linkedInLogo} alt="LinkedIn" className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] object-contain" />
+              </HoverLink>
+              <HoverLink
+                href="https://www.instagram.com/anmolmaggon"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
+                <img src={instagramLogo} alt="Instagram" className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] object-contain" />
+              </HoverLink>
             </div>
           </div>
-        </div>
+        </footer>
       </div>
     </div>,
     document.body,

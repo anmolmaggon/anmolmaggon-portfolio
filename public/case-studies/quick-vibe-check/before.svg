@@ -1,0 +1,6 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#FAFAFA" />
+  <rect x="40" y="40" width="720" height="520" rx="16" fill="#F5F5F5" stroke="#E5E5E5" stroke-width="2"/>
+  <text x="400" y="280" font-family="sans-serif" font-size="32" font-weight="bold" fill="#999" text-anchor="middle">Chronological Feed</text>
+  <text x="400" y="320" font-family="sans-serif" font-size="20" fill="#BBB" text-anchor="middle">Before (Old Design)</text>
+</svg>

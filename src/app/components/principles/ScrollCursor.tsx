@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { motion, useMotionValue, useSpring } from "motion/react";
 
 /**
- * "一期一会" hover scene — the pointer becomes a hanging scroll. While the
+ * "一期一会" hover scene - the pointer becomes a hanging scroll. While the
  * principle is hovered the native cursor is hidden and a scroll follows the
  * mouse, carrying a live timestamp of the visitor's own visit: this precise
  * encounter, happening now, that can never be repeated. No next time.
@@ -13,7 +13,7 @@ const W = 230;
 const H = 320;
 const ROD = "linear-gradient(180deg, #c39a63 0%, #9c7741 45%, #6f5230 100%)";
 
-export function ScrollCursor({ active }: { active: boolean }) {
+export function ScrollCursor({ active, touch = false }: { active: boolean; touch?: boolean }) {
   const x = useMotionValue(-600);
   const y = useMotionValue(-600);
   const sx = useSpring(x, { stiffness: 300, damping: 28, mass: 0.5 });
@@ -21,7 +21,7 @@ export function ScrollCursor({ active }: { active: boolean }) {
   const [now, setNow] = useState(() => new Date());
 
   // Track the cursor continuously (even while hidden) so the scroll is already
-  // under the pointer when it fades in — no glide-in from off-screen.
+  // under the pointer when it fades in - no glide-in from off-screen.
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       x.set(e.clientX);
@@ -57,8 +57,8 @@ export function ScrollCursor({ active }: { active: boolean }) {
   return createPortal(
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[9999]"
-      style={{ x: sx, y: sy }}
+      className="pointer-events-none fixed z-[9999]"
+      style={touch ? { left: "50%", top: "50%" } : { left: 0, top: 0, x: sx, y: sy }}
       initial={false}
       animate={{ opacity: active ? 1 : 0, scale: active ? 1 : 0.9 }}
       transition={{ duration: 0.3, ease: "easeOut" }}

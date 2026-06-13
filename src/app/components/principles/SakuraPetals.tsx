@@ -2,7 +2,7 @@ import { useId } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
 /**
- * "一期一会" hover scene — cherry-blossom petals always drifting down the row;
+ * "一期一会" hover scene - cherry-blossom petals always drifting down the row;
  * hovering simply fades them in (so they're already mid-fall). Transience, the
  * fleeting moment. Behind the text, pointer-events off, color only as story.
  */

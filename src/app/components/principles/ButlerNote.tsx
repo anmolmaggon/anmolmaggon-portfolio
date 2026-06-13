@@ -5,20 +5,20 @@ import { motion, useMotionValue, useSpring } from "motion/react";
 /**
  * "Unreasonable Hospitality" hover scene. On hover the row floods with the
  * book's cover yellow (#ffe30b), and an aura-gradient note (centred on the
- * cursor, sharp-edged, set in the display serif) follows along — a disarmingly
+ * cursor, sharp-edged, set in the display serif) follows along - a disarmingly
  * personal touch left just for the visitor.
  */
 
 const SIZE = 236;
 
-export function ButlerNote({ active }: { active: boolean }) {
+export function ButlerNote({ active, touch = false }: { active: boolean; touch?: boolean }) {
   const x = useMotionValue(-600);
   const y = useMotionValue(-600);
   const sx = useSpring(x, { stiffness: 300, damping: 28, mass: 0.5 });
   const sy = useSpring(y, { stiffness: 300, damping: 28, mass: 0.5 });
 
   // Track the cursor continuously (even while hidden) so the note is already
-  // under the pointer when it fades in — no glide-in from off-screen.
+  // under the pointer when it fades in - no glide-in from off-screen.
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       x.set(e.clientX);
@@ -45,13 +45,13 @@ export function ButlerNote({ active }: { active: boolean }) {
         }}
       />
 
-      {/* cursor-attached aura note (centred on the pointer) */}
+      {/* cursor-attached aura note (centred on the pointer on desktop, centred on screen on touch). */}
       {typeof document !== "undefined" &&
         createPortal(
           <motion.div
             aria-hidden
-            className="pointer-events-none fixed left-0 top-0 z-[9999]"
-            style={{ x: sx, y: sy }}
+            className="pointer-events-none fixed z-[9999]"
+            style={touch ? { left: "50%", top: "50%" } : { left: 0, top: 0, x: sx, y: sy }}
             initial={false}
             animate={{ opacity: active ? 1 : 0, scale: active ? 1 : 0.88 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
@@ -96,7 +96,7 @@ export function ButlerNote({ active }: { active: boolean }) {
                   So glad you came by. Stay as long as you like.
                 </p>
                 <p style={{ fontSize: 18, textAlign: "right", opacity: 0.7 }}>
-                  - Anmol
+ - Anmol
                 </p>
               </div>
             </div>

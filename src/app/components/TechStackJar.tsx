@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Billboard, Html } from "@react-three/drei";
 import { motion, useReducedMotion } from "motion/react";
@@ -374,12 +374,15 @@ function FireflyJarScene({
   onLeave: (id: string) => void;
   onPin: (id: string) => void;
 }) {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const groupPositionY = -0.08;
+
   return (
     <>
       <ambientLight intensity={0.28} color="#fff3c4" />
       <pointLight position={[0, -0.1, 2.2]} color="#ffe28a" intensity={2.2} distance={4.8} />
 
-      <group position={[0, -0.08, 0]} scale={1.02}>
+      <group position={[0, groupPositionY, 0]} scale={1.02}>
         {tools.map((tool) => (
           <Firefly
             key={tool.id}
@@ -451,8 +454,33 @@ export function TechStackJar() {
   const activeId = hoveredId ?? pinnedId;
   const activeTool = tools.find((tool) => tool.id === activeId) ?? null;
 
+  // On touch there's no hover; tapping a firefly fires pointerover→pointerout
+  // and would flicker the hover state. Gate the hover setters behind a real
+  // hover-capable pointer so tap (pin) drives selection cleanly on mobile.
+  const [canHover, setCanHover] = useState(true);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const sync = () => setCanHover(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
   return (
-    <section id="stack" className="relative isolate overflow-hidden bg-[#fafaf7] px-6 pb-14 pt-20 text-[#171613] md:px-10 md:pb-20 md:pt-28">
+    <section
+      id="stack"
+      className="relative isolate overflow-hidden bg-[#fafaf7] px-6 pb-14 pt-20 text-[#171613] md:px-10 md:pb-20 md:pt-28"
+      onClick={(e) => {
+        // Tap-outside-to-deselect: clear unless the tap landed on the 3D canvas
+        // (firefly taps keep their pin; empty-canvas taps are cleared by the
+        // Canvas's onPointerMissed). R3F's stopPropagation doesn't stop the DOM
+        // click, so guard on the canvas element here.
+        if (!(e.target as HTMLElement).closest("canvas")) {
+          setHoveredId(null);
+          setPinnedId(null);
+        }
+      }}
+    >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-0 h-full w-[64vw] opacity-70"
@@ -463,7 +491,7 @@ export function TechStackJar() {
       />
 
       <div className="relative z-10 mx-auto grid min-h-[560px] max-w-[1680px] items-center gap-12 lg:grid-cols-[minmax(500px,0.9fr)_minmax(480px,600px)] lg:gap-[clamp(56px,6vw,124px)]">
-        <div className="relative mx-auto aspect-[1122/1402] w-full max-w-[460px] overflow-visible md:max-w-[550px]">
+        <div className="relative mx-auto aspect-[1122/1402] w-full max-w-[540px] overflow-visible md:max-w-[550px] scale-[1.18] md:scale-100 origin-center">
           
           <img
             src={jarImage}
@@ -480,8 +508,8 @@ export function TechStackJar() {
               activeId={activeId}
               pinnedId={pinnedId}
               reduceMotion={reduceMotion}
-              onHover={(id) => setHoveredId(id)}
-              onLeave={(id) => setHoveredId((current) => (current === id ? null : current))}
+              onHover={(id) => { if (canHover) setHoveredId(id); }}
+              onLeave={(id) => { if (canHover) setHoveredId((current) => (current === id ? null : current)); }}
               onPin={(id) => setPinnedId((current) => (current === id ? null : id))}
               onClear={() => {
                 setHoveredId(null);
@@ -508,13 +536,7 @@ export function TechStackJar() {
 
         <div className="relative z-20 max-w-[600px] pb-4 lg:pb-0">
           <h2
-            className="font-[Nyght_Serif] text-[#171613]"
-            style={{
-              fontSize: "clamp(34px, 3.8vw, 64px)",
-              lineHeight: 1,
-              fontWeight: 400,
-              letterSpacing: 0,
-            }}
+            className="font-[Nyght_Serif] text-[#171613] text-fluid-h2 leading-[1] font-normal tracking-[0]"
           >
             Borrowed light.
           </h2>

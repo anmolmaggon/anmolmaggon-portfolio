@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { HoverLink } from "./HoverLink";
+import { ButtonCTA } from "./ui/ButtonCTA";
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -62,21 +63,20 @@ export function Nav() {
         aria-hidden
         className={`absolute inset-0 -z-10 transition-all duration-500 ease-out ${
           onDark
-            ? "bg-[#06110f]/70 backdrop-blur-md border-b border-white/10"
+            ? "bg-brand-dark/70 backdrop-blur-md border-b border-white/10"
             : scrolled
-            ? "bg-[#fafaf7]/95 backdrop-blur-md border-b border-black/5"
+            ? "bg-brand-light/95 backdrop-blur-md border-b border-black/5"
             : "bg-gradient-to-b from-black/50 via-black/20 to-transparent"
         }`}
       />
       <div
         className={`flex items-center justify-between px-6 md:px-10 py-5 transition-colors duration-500 ${
-          lightNav ? "text-black" : "text-white"
+          lightNav ? "text-brand-dark" : "text-white"
         }`}
       >
         <HoverLink 
           href="#top" 
-          className="italic font-[Nyght_Serif] text-xl md:text-2xl tracking-tight" 
-          style={{ fontWeight: 500 }}
+          className="italic font-[Nyght_Serif] text-xl md:text-2xl tracking-tight font-medium" 
         >
           Anmol Maggon
         </HoverLink>
@@ -93,20 +93,13 @@ export function Nav() {
             </HoverLink>
           ))}
           
-          {/* Primary CTA Button */}
-          <a 
-            href="mailto:anmolmaggon40@gmail.com"
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-full backdrop-blur-sm transition-all duration-300 border font-sans font-medium text-[15px] ${
-              onDark
-                ? "bg-white text-black border-white hover:bg-white/90 hover:scale-105"
-                : scrolled 
-                ? "bg-black text-white border-black hover:bg-black/80 hover:scale-105" 
-                : "bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/40 hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
-            }`}
+          <ButtonCTA 
+            href="mailto:anmolmaggon40@gmail.com?subject=Let's%20chat%20about%20your%20portfolio%20%26%20work&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D"
+            variant={onDark ? "dark" : scrolled ? "light" : "transparent"}
+            className="px-5 py-2.5"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
             Let's Talk
-          </a>
+          </ButtonCTA>
         </nav>
         {/* Mobile hamburger */}
         <button
@@ -115,7 +108,7 @@ export function Nav() {
           aria-expanded={menuOpen ? "true" : "false"}
           onClick={() => setMenuOpen(true)}
           className={`md:hidden -mr-2 flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-            lightNav ? "text-black" : "text-white"
+            lightNav ? "text-brand-dark" : "text-white"
           }`}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -128,14 +121,14 @@ export function Nav() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-[60] md:hidden bg-[#06110f] text-white flex flex-col"
+            className="fixed inset-0 z-[60] md:hidden bg-brand-dark text-white flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="flex items-center justify-between px-6 py-5">
-              <span className="italic font-[Nyght_Serif] text-xl" style={{ fontWeight: 500 }}>
+              <span className="italic font-[Nyght_Serif] text-xl font-medium">
                 Anmol Maggon
               </span>
               <button
@@ -157,8 +150,7 @@ export function Nav() {
                   href={l.href}
                   onClick={() => setMenuOpen(false)}
                   {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="font-[Nyght_Serif] py-3 text-white/90 hover:text-white transition-colors"
-                  style={{ fontSize: "clamp(34px, 11vw, 56px)", lineHeight: 1.05, fontWeight: 400, letterSpacing: "-0.02em" }}
+                  className="font-[Nyght_Serif] py-3 text-white/90 hover:text-white transition-colors text-fluid-h2 font-normal tracking-[-0.02em] leading-[1.05]"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.08 + i * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -169,14 +161,14 @@ export function Nav() {
             </nav>
 
             <div className="px-6 pb-10">
-              <a
-                href="mailto:anmolmaggon40@gmail.com"
+              <ButtonCTA
+                href="mailto:anmolmaggon40@gmail.com?subject=Let's%20chat%20about%20your%20portfolio%20%26%20work&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center gap-2 w-full px-5 py-4 rounded-full bg-white text-black font-sans font-medium text-[16px]"
+                variant="dark"
+                className="justify-center w-full px-5 py-4 text-[16px]"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 Let's Talk
-              </a>
+              </ButtonCTA>
             </div>
           </motion.div>
         )}

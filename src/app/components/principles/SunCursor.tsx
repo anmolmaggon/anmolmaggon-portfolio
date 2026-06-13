@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
 
 /**
- * "Everything is energy" hover scene — the pointer becomes the "Trust your
+ * "Everything is energy" hover scene - the pointer becomes the "Trust your
  * energy" sticker. While the principle is hovered the native cursor is hidden
  * and the sticker follows the mouse (spring-smoothed), gently bobbing, with a
  * warm soft-light halo that illuminates whatever it passes over. Portaled to
@@ -11,9 +11,9 @@ import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/reac
  */
 
 const SIZE = 280;
-const STICKER = "/trust-your-energy-green.png"; // served from /public
+const STICKER = "/trust-your-energy-green.webp"; // served from /public
 
-export function SunCursor({ active }: { active: boolean }) {
+export function SunCursor({ active, touch = false }: { active: boolean; touch?: boolean }) {
   const reduce = useReducedMotion();
   const x = useMotionValue(-600);
   const y = useMotionValue(-600);
@@ -21,7 +21,7 @@ export function SunCursor({ active }: { active: boolean }) {
   const sy = useSpring(y, { stiffness: 350, damping: 30, mass: 0.4 });
 
   // Track the cursor continuously (even while hidden) so the sticker is already
-  // under the pointer when it fades in — no glide-in from off-screen.
+  // under the pointer when it fades in - no glide-in from off-screen.
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       x.set(e.clientX);
@@ -36,13 +36,13 @@ export function SunCursor({ active }: { active: boolean }) {
   return createPortal(
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[9999]"
-      style={{ x: sx, y: sy }}
+      className="pointer-events-none fixed z-[9999]"
+      style={touch ? { left: "50%", top: "50%" } : { left: 0, top: 0, x: sx, y: sy }}
       initial={false}
       animate={{ opacity: active ? 1 : 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      {/* the sticker — centred on the cursor (square asset, so left/top offsets center it) */}
+      {/* the sticker - centred on the cursor (square asset, so left/top offsets center it) */}
       <motion.div
         style={{ position: "absolute", left: -SIZE / 2, top: -SIZE / 2, width: SIZE, height: SIZE }}
         animate={reduce ? undefined : { rotate: [-4, 4, -4] }}
