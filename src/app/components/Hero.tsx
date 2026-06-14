@@ -21,7 +21,7 @@ export function Hero() {
               side-cropped. Falls back to the desktop image until the portrait
               asset (1080x2340+ / ideally 1440x3120) is supplied. */}
           <img
-            src="/4e47deea-7a35-49bd-8241-7408697e4ada.png"
+            src="/e8836cc6-c4cc-4e74-a775-c50bb2058f6c.png"
             alt="Portal Landscape"
             className="block md:hidden w-full h-full object-cover"
             onError={(e) => {
@@ -34,13 +34,23 @@ export function Hero() {
           />
         </div>
         {/* Soft scrim anchored bottom-left so the headline + company list stay
-            legible against the bright dawn sky. */}
+            legible against the bright dawn sky. Desktop keeps the gentle wash;
+            mobile darkens earlier and harder at the bottom so the larger
+            headline + company line never get lost behind the tall portrait. */}
         <div
           aria-hidden
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none hidden md:block"
           style={{
             background:
               "linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.8) 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none md:hidden"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 18%, rgba(0,0,0,0) 38%, rgba(0,0,0,0.92) 100%)",
           }}
         />
 
@@ -50,6 +60,9 @@ export function Hero() {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="absolute left-0 right-0 bottom-0 px-6 md:px-10 pb-20 md:pb-24 pointer-events-none"
         >
+          <p className="text-white/85 font-sans uppercase tracking-[0.28em] text-[11px] md:text-[12px] font-semibold mb-3 md:mb-4 drop-shadow-md">
+            Product design builder
+          </p>
           <h1
             className="font-[Nyght_Serif] text-white max-w-5xl text-fluid-hero leading-[1.0] font-normal tracking-[-0.03em]"
             style={{
@@ -62,19 +75,18 @@ export function Hero() {
             blow people's mind.
           </h1>
 
-          {/* Mobile-only company bar: the desktop bar (below) is hidden on
+          {/* Mobile-only company line: the desktop line (below) is hidden on
               mobile, so surface a compact version directly under the headline. */}
-          <div className="md:hidden mt-5 text-white font-sans uppercase tracking-widest drop-shadow-md">
-            <span className="block opacity-60 text-[10px] font-semibold mb-1.5">Places I've helped shape</span>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium opacity-90">
-              <span>AmbitionBox</span>
-              <span className="opacity-40">·</span>
-              <span>Draup</span>
-              <span className="opacity-40">·</span>
-              <span>Avathi</span>
-              <span className="opacity-40">·</span>
-              <span>Roamhome</span>
-            </div>
+          <div className="md:hidden mt-5 text-white font-sans uppercase tracking-widest text-[11px] font-medium opacity-90 drop-shadow-md">
+            <span className="opacity-60 font-semibold">Currently working at </span>
+            <a
+              href="https://www.ambitionbox.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pointer-events-auto underline-offset-4 hover:underline"
+            >
+              AmbitionBox (InfoEdge)
+            </a>
           </div>
         </motion.div>
 
@@ -83,16 +95,17 @@ export function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-          className="absolute bottom-8 left-6 md:left-10 text-white font-sans text-[12px] md:text-[14px] uppercase tracking-widest font-medium pointer-events-none hidden md:flex items-center gap-6 drop-shadow-md"
+          className="absolute bottom-8 left-6 md:left-10 text-white font-sans text-[12px] md:text-[14px] uppercase tracking-widest font-medium pointer-events-none hidden md:flex items-center gap-3 drop-shadow-md"
         >
-          <span className="opacity-60 text-[11px] font-semibold">Places I've helped shape:</span>
-          <div className="flex items-center gap-6 opacity-90">
-             {/* Partner logos with grayscale -> color hover effect */}
-             <span className="opacity-100 hover:opacity-70 transition-opacity cursor-pointer pointer-events-auto">AmbitionBox</span>
-             <span className="opacity-100 hover:opacity-70 transition-opacity cursor-pointer pointer-events-auto">Draup</span>
-             <span className="opacity-100 hover:opacity-70 transition-opacity cursor-pointer pointer-events-auto">Avathi</span>
-             <span className="opacity-100 hover:opacity-70 transition-opacity cursor-pointer pointer-events-auto">Roamhome</span>
-          </div>
+          <span className="opacity-60 text-[11px] font-semibold">Currently working at</span>
+          <a
+            href="https://www.ambitionbox.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="opacity-90 hover:opacity-70 transition-opacity cursor-pointer pointer-events-auto underline-offset-4 hover:underline"
+          >
+            AmbitionBox (InfoEdge)
+          </a>
         </motion.div>
 
         {/* Sleek Scroll Nudge */}
