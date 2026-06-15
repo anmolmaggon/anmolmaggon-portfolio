@@ -1,7 +1,13 @@
-import { useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { VideoWithFallback } from "./VideoWithFallback";
-import { CaseStudyModal, type CaseStudyDetail } from "./CaseStudyModal";
+import { type CaseStudyDetail } from "./CaseStudyModal";
+
+// The modal (and its before/after slider, media, etc.) only matters once a
+// study is opened — lazy-load it so it stays out of the initial bundle.
+const CaseStudyModal = lazy(() =>
+  import("./CaseStudyModal").then((m) => ({ default: m.CaseStudyModal })),
+);
 
 type Study = CaseStudyDetail & {
   slug: string;
@@ -463,13 +469,17 @@ export function CaseStudies() {
         ))}
       </ul>
 
-      <CaseStudyModal 
-        study={active} 
-        prevStudy={prevStudy}
-        nextStudy={nextStudy}
-        onNavigate={(study) => handleNavigate(study)}
-        onClose={() => handleNavigate(null)} 
-      />
+      {active && (
+        <Suspense fallback={null}>
+          <CaseStudyModal
+            study={active}
+            prevStudy={prevStudy}
+            nextStudy={nextStudy}
+            onNavigate={(study) => handleNavigate(study)}
+            onClose={() => handleNavigate(null)}
+          />
+        </Suspense>
+      )}
     </section>
   );
 }

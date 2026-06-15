@@ -48,4 +48,11 @@ export default defineConfig({
 
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
+
+  build: {
+    // three.js / R3F live in the lazy-loaded FireflyJarCanvas chunk (~860kB),
+    // which is intentionally off the initial critical path. Raise the warning
+    // ceiling so that expected async chunk doesn't flag every build.
+    chunkSizeWarningLimit: 1000,
+  },
 })
