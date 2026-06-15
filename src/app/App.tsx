@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { CaseStudies } from "./components/CaseStudies";
@@ -38,6 +39,7 @@ export default function App() {
       {/* <StickyNote /> Temporarily hidden per request */}
         </div>
       </SmoothScroll>
+      <Analytics />
     </GlobalProvider>
   );
 }
