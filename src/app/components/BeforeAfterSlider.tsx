@@ -59,8 +59,15 @@ export function BeforeAfterSlider({
               className="pointer-events-none absolute top-0 bottom-0 w-[2px] bg-white/90 shadow-[0_0_12px_rgba(0,0,0,0.4)]"
               style={{ left: `${pos}%`, transform: "translateX(-1px)" }}
             >
-              {/* The grip floats in the absolute center of the long image */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-black text-[14px]">
+              {/* The grip stays pinned near the top. On the mobile layout the
+                  slider lives in its own vertical scroll container, so it's
+                  `sticky` there to stay visible (and draggable) at any scroll
+                  position; on desktop it's simply anchored near the top. */}
+              <div
+                className={`${
+                  isMobileLayout ? "sticky top-6" : "absolute top-6 left-1/2"
+                } -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-black text-[14px]`}
+              >
                 ↔
               </div>
             </div>

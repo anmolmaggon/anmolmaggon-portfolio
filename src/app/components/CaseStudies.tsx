@@ -150,7 +150,7 @@ const studies: Study[] = [
     client: "AmbitionBox · Salaries",
     year: "2025",
     role: "Product Designer",
-    meta: ["Product Designer", "AmbitionBox · Salaries", "2025", "Shipped"],
+    meta: ["Product Designer", "2025", "Shipped"],
     oneLiner: "Data to negotiate your next offer.",
     subtitle: "Fixing a broken Information Architecture",
     image: "/case-studies/salary-pages/93c0467c-99f4-4090-ae81-d80f876e3c30.png",
@@ -325,8 +325,8 @@ export function CaseStudies() {
   const nextStudy = activeIndex !== -1 ? studies[(activeIndex + 1) % studies.length] : null;
 
   return (
-    <section id="work" className="relative z-10 px-6 md:px-10 pt-10 md:pt-16 pb-12 md:pb-16">
-      <div className="mb-12 md:mb-16 max-w-4xl">
+    <section id="work" className="relative z-10 px-6 md:px-10 pt-16 md:pt-16 pb-12 md:pb-16">
+      <div className="mb-6 md:mb-16 max-w-4xl">
         <p
           className="font-[Nyght_Serif] text-black/70"
           style={{
@@ -353,9 +353,11 @@ export function CaseStudies() {
               onMouseLeave={(event) => {
                 event.currentTarget.querySelector("video")?.pause();
               }}
-              className="w-full text-left block py-6 md:py-10 cursor-pointer"
+              className="w-full text-left block py-8 md:py-10 cursor-pointer"
             >
-              <div className="relative flex items-center">
+              {/* Desktop: faded titles that reveal subtext + a floating preview
+                  on hover. Hidden on mobile where there's no hover. */}
+              <div className="relative hidden md:flex items-center">
                 <span
                   aria-hidden
                   className="font-[Nyght_Serif] absolute left-0 top-1/2 -translate-y-1/2 opacity-0 -translate-x-2 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:translate-x-0"
@@ -392,6 +394,53 @@ export function CaseStudies() {
                     <VideoWithFallback
                       className="w-full h-full object-contain"
                       poster={s.image}
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      aria-hidden="true"
+                    >
+                      <source src={s.previewVideo} type="video/mp4" />
+                    </VideoWithFallback>
+                  ) : (
+                    <ImageWithFallback
+                      src={s.image}
+                      alt={`${s.title} preview`}
+                      className="w-full h-full object-contain"
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile: everything upfront (no hover). Title with the arrow on
+                  the left, then subtext, then a centered preview. */}
+              <div className="md:hidden">
+                <div className="flex items-baseline gap-3">
+                  <span
+                    aria-hidden
+                    className="font-[Nyght_Serif] shrink-0 text-black"
+                    style={{ fontSize: "clamp(26px, 7vw, 40px)", fontWeight: 400 }}
+                  >
+                    →
+                  </span>
+                  <h3
+                    className="font-[Nyght_Serif] text-black flex-1 min-w-0"
+                    style={{ fontSize: "clamp(30px, 8vw, 52px)", lineHeight: 0.98, fontWeight: 400, letterSpacing: "-0.025em" }}
+                  >
+                    {s.title}
+                  </h3>
+                </div>
+
+                <p className="font-sans text-black/60 mt-3" style={{ fontSize: 14 }}>
+                  {s.oneLiner || s.meta.join(" • ")}
+                </p>
+
+                <div className="mt-5 mx-auto w-[80%] max-w-[320px] aspect-[4/5] shadow-2xl bg-white overflow-hidden">
+                  {s.previewVideo ? (
+                    <VideoWithFallback
+                      className="w-full h-full object-contain"
+                      poster={s.image}
+                      autoPlay
                       muted
                       loop
                       playsInline

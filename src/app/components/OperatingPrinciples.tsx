@@ -59,6 +59,8 @@ export function OperatingPrinciples() {
   // hanging scroll) and `cursor: none` would just strand the user. Detect a
   // hover-capable pointer and gate all the cursor magic behind it.
   const [canHover, setCanHover] = useState(true);
+  // Once the user has tapped a principle on mobile, retire the tap nudges.
+  const [hasInteracted, setHasInteracted] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
     const sync = () => setCanHover(mq.matches);
@@ -66,6 +68,19 @@ export function OperatingPrinciples() {
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, []);
+
+  // Mobile: a centered scene stranded over the page if you scroll away feels
+  // broken. While one is open on touch, dismiss it on any scroll gesture.
+  useEffect(() => {
+    if (canHover || hovered === null) return;
+    const close = () => setHovered(null);
+    window.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("touchmove", close, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", close);
+      window.removeEventListener("touchmove", close);
+    };
+  }, [canHover, hovered]);
 
   const hoveredId = hovered === null ? null : principles[hovered].id;
   const inverted = hoveredId === "change";
@@ -98,9 +113,9 @@ export function OperatingPrinciples() {
         animate={{ filter: inverted ? "invert(1)" : "invert(0)" }}
         transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
       >
-        <SectionHeader 
-          title="What I keep close" 
-          subtitle="Tap a principle to unlock its scene." 
+        <SectionHeader
+          title="What I keep close"
+          subtitle={canHover ? "Hover a principle to unlock its scene." : undefined}
         />
 
         <ol className="space-y-0">
@@ -115,10 +130,33 @@ export function OperatingPrinciples() {
                 onClick={() => {
                   // Touch: tap toggles the principle's scene (tap again / tap
                   // another to switch). Desktop is driven by hover above.
-                  if (!canHover) setHovered((cur) => (cur === i ? null : i));
+                  if (!canHover) {
+                    setHasInteracted(true);
+                    setHovered((cur) => (cur === i ? null : i));
+                  }
                 }}
                 className="group relative isolate grid grid-cols-12 items-start gap-4 md:gap-8 py-10 md:py-14 border-t border-black/15 last:border-b last:border-black/15 transition-colors duration-500 cursor-pointer md:cursor-default"
               >
+                {/* Mobile nudge: one tooltip under the first principle, pointing
+                    up at it with a gentle bounce. Retires after the first tap. */}
+                {!canHover && !hasInteracted && i === 0 && (
+                  <motion.div
+                    aria-hidden
+                    className="md:hidden pointer-events-none absolute left-12 top-full z-20 -mt-2"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: [0, 6, 0] }}
+                    transition={{
+                      opacity: { duration: 0.4 },
+                      y: { duration: 1.4, repeat: Infinity, ease: "easeInOut" },
+                    }}
+                  >
+                    {/* upward caret pointing at the principle */}
+                    <span className="absolute -top-[6px] left-6 h-3 w-3 rotate-45 rounded-[2px] bg-black" />
+                    <span className="relative inline-flex items-center rounded-full bg-black px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-[#fafaf7]">
+                      Tap to see magic
+                    </span>
+                  </motion.div>
+                )}
                 {/* Bespoke scenes (wired by id). The contained ones play on both
                     hover (desktop) and tap (mobile) via `active`. The cursor-attached
                     note/sun/scroll are handled separately but now support touch via centering. */}

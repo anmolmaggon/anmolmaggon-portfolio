@@ -74,22 +74,22 @@ type Tool = {
 };
 
 const tools: Tool[] = [
-  { id: "antigravity", name: "Antigravity", role: "Agentic workflows", logo: "antigravity", glow: "#ffe8a1", accent: "#75b8ff", base: [0.0, 1.3, -0.1], amp: [0.1, 0.15, 0.1], speed: 0.78, phase: 2.1, radius: 0.32 },
-  { id: "claude", name: "Claude", role: "Thinking partner", logo: "claude", glow: "#ffd485", accent: "#d97757", base: [-0.65, 0.9, 0.2], amp: [0.1, 0.1, 0.1], speed: 0.62, phase: 1.4, radius: 0.3 },
-  { id: "gemini", name: "Gemini", role: "For quick prototyping", logo: "gemini", glow: "#ffdb70", accent: "#4c8bf5", base: [0.55, 0.7, -0.2], amp: [0.08, 0.12, 0.08], speed: 0.72, phase: 3.2, radius: 0.28 },
-  { id: "chatgpt", name: "ChatGPT", role: "Image Generation", logo: "chatgpt", glow: "#ffe699", accent: "#10a37f", base: [0.75, 0.2, 0.1], amp: [0.12, 0.08, 0.1], speed: 0.66, phase: 0.8, radius: 0.27 },
-  { id: "figma", name: "Figma", role: "Design surface", logo: "figma", glow: "#ffdb70", accent: "#ff7262", base: [-0.75, 0.3, -0.1], amp: [0.09, 0.13, 0.1], speed: 0.72, phase: 0.2, radius: 0.31 },
-  { id: "claudecode", name: "Claude Code", role: "Coding", logo: "claudecode", glow: "#ffcc66", accent: "#d97757", base: [-0.3, -0.1, 0.2], amp: [0.1, 0.1, 0.1], speed: 0.8, phase: 5.1, radius: 0.26 },
-  { id: "todoist", name: "Todoist", role: "Daily to do", logo: "todoist", glow: "#ffd27f", accent: "#e44332", base: [0.2, -0.35, -0.2], amp: [0.08, 0.1, 0.08], speed: 0.7, phase: 7.2, radius: 0.25 },
-  { id: "notion", name: "Notion", role: "Documentation", logo: "notion", glow: "#fff0b3", accent: "#e0e0e0", base: [-0.65, -0.6, 0.0], amp: [0.1, 0.12, 0.1], speed: 0.65, phase: 2.5, radius: 0.28 },
-  { id: "notebooklm", name: "NotebookLM", role: "Research synthesis", logo: "notebooklm", glow: "#ffeb99", accent: "#4285f4", base: [0.65, -0.7, 0.1], amp: [0.07, 0.1, 0.08], speed: 0.76, phase: 4.8, radius: 0.26 },
-  { id: "granola", name: "Granola", role: "Meeting notes", logo: "granola", glow: "#ffd485", accent: "#f5a623", base: [-0.2, -1.0, -0.1], amp: [0.1, 0.1, 0.1], speed: 0.82, phase: 6.3, radius: 0.24 },
-  { id: "supabase", name: "Supabase", role: "Fast backends", logo: "supabase", glow: "#ffdc7a", accent: "#3ecf8e", base: [0.5, -1.2, 0.2], amp: [0.08, 0.12, 0.08], speed: 0.74, phase: 8.1, radius: 0.3 },
-  { id: "github", name: "GitHub", role: "Version control", logo: "github", glow: "#ffeb99", accent: "#fafbfc", base: [-0.65, -1.35, 0.0], amp: [0.07, 0.09, 0.07], speed: 0.6, phase: 1.1, radius: 0.27 },
-  { id: "pen", name: "Pen & Paper", role: "detangling brain", logo: "pen", glow: "#ffcc66", accent: "#d3d3d3", base: [0.35, -1.6, -0.1], amp: [0.06, 0.08, 0.06], speed: 0.58, phase: 3.5, radius: 0.22 },
-  { id: "midjourney", name: "Midjourney", role: "Visual imagination", logo: "midjourney", glow: "#ffdb70", accent: "#a8b8ff", base: [-0.1, -1.75, 0.1], amp: [0.05, 0.06, 0.05], speed: 0.5, phase: 9.0, radius: 0.28 },
-  { id: "runway", name: "Runway", role: "Video generation", logo: "runway", glow: "#ffd485", accent: "#e8e8e8", base: [0.75, -1.6, 0.15], amp: [0.06, 0.08, 0.06], speed: 0.55, phase: 4.2, radius: 0.26 },
-  { id: "camera", name: "Sony A6700", role: "Photography & Films", logo: "camera", glow: "#ffcc66", accent: "#ffffff", base: [-0.4, 1.1, 0.1], amp: [0.08, 0.1, 0.08], speed: 0.68, phase: 1.8, radius: 0.27 },
+  { id: "antigravity", name: "Antigravity", role: "Agentic workflows", logo: "antigravity", glow: "#ffe8a1", accent: "#75b8ff", base: [0.0, 1.35, -0.1], amp: [0.1, 0.15, 0.1], speed: 0.78, phase: 2.1, radius: 0.32 },
+  { id: "claude", name: "Claude", role: "Thinking partner", logo: "claude", glow: "#ffd485", accent: "#d97757", base: [-0.7, 0.75, 0.2], amp: [0.1, 0.1, 0.1], speed: 0.62, phase: 1.4, radius: 0.3 },
+  { id: "gemini", name: "Gemini", role: "For quick prototyping", logo: "gemini", glow: "#ffdb70", accent: "#4c8bf5", base: [0.6, 0.85, -0.2], amp: [0.08, 0.12, 0.08], speed: 0.72, phase: 3.2, radius: 0.28 },
+  { id: "chatgpt", name: "ChatGPT", role: "Image Generation", logo: "chatgpt", glow: "#ffe699", accent: "#10a37f", base: [0.78, 0.35, 0.1], amp: [0.12, 0.08, 0.1], speed: 0.66, phase: 0.8, radius: 0.27 },
+  { id: "figma", name: "Figma", role: "Design surface", logo: "figma", glow: "#ffdb70", accent: "#ff7262", base: [-0.78, 0.25, -0.1], amp: [0.09, 0.13, 0.1], speed: 0.72, phase: 0.2, radius: 0.31 },
+  { id: "claudecode", name: "Claude Code", role: "Coding", logo: "claudecode", glow: "#ffcc66", accent: "#d97757", base: [-0.35, -0.05, 0.2], amp: [0.1, 0.1, 0.1], speed: 0.8, phase: 5.1, radius: 0.26 },
+  { id: "todoist", name: "Todoist", role: "Daily to do", logo: "todoist", glow: "#ffd27f", accent: "#e44332", base: [0.35, -0.2, -0.2], amp: [0.08, 0.1, 0.08], speed: 0.7, phase: 7.2, radius: 0.25 },
+  { id: "notion", name: "Notion", role: "Documentation", logo: "notion", glow: "#fff0b3", accent: "#e0e0e0", base: [-0.7, -0.45, 0.0], amp: [0.1, 0.12, 0.1], speed: 0.65, phase: 2.5, radius: 0.28 },
+  { id: "notebooklm", name: "NotebookLM", role: "Research synthesis", logo: "notebooklm", glow: "#ffeb99", accent: "#4285f4", base: [0.68, -0.4, 0.1], amp: [0.07, 0.1, 0.08], speed: 0.76, phase: 4.8, radius: 0.26 },
+  { id: "granola", name: "Granola", role: "Meeting notes", logo: "granola", glow: "#ffd485", accent: "#f5a623", base: [-0.15, -0.7, -0.1], amp: [0.1, 0.1, 0.1], speed: 0.82, phase: 6.3, radius: 0.24 },
+  { id: "supabase", name: "Supabase", role: "Fast backends", logo: "supabase", glow: "#ffdc7a", accent: "#3ecf8e", base: [0.55, -0.75, 0.2], amp: [0.08, 0.12, 0.08], speed: 0.74, phase: 8.1, radius: 0.3 },
+  { id: "github", name: "GitHub", role: "Version control", logo: "github", glow: "#ffeb99", accent: "#fafbfc", base: [-0.62, -0.95, 0.0], amp: [0.07, 0.09, 0.07], speed: 0.6, phase: 1.1, radius: 0.27 },
+  { id: "pen", name: "Pen & Paper", role: "detangling brain", logo: "pen", glow: "#ffcc66", accent: "#d3d3d3", base: [0.2, -1.2, -0.1], amp: [0.06, 0.08, 0.06], speed: 0.58, phase: 3.5, radius: 0.22 },
+  { id: "midjourney", name: "Midjourney", role: "Visual imagination", logo: "midjourney", glow: "#ffdb70", accent: "#a8b8ff", base: [-0.45, -1.2, 0.1], amp: [0.05, 0.06, 0.05], speed: 0.5, phase: 9.0, radius: 0.28 },
+  { id: "runway", name: "Runway", role: "Video generation", logo: "runway", glow: "#ffd485", accent: "#e8e8e8", base: [0.72, -1.05, 0.15], amp: [0.06, 0.08, 0.06], speed: 0.55, phase: 4.2, radius: 0.26 },
+  { id: "camera", name: "Sony A6700", role: "Photography & Films", logo: "camera", glow: "#ffcc66", accent: "#ffffff", base: [-0.4, 1.05, 0.1], amp: [0.08, 0.1, 0.08], speed: 0.68, phase: 1.8, radius: 0.27 },
 ];
 
 
@@ -466,7 +466,7 @@ export function TechStackJar() {
   return (
     <section
       id="stack"
-      className="relative isolate overflow-hidden bg-[#fafaf7] px-6 pb-14 pt-20 text-[#171613] md:px-10 md:pb-20 md:pt-28"
+      className="relative isolate overflow-hidden bg-[#fafaf7] px-6 pb-28 pt-20 text-[#171613] md:px-10 md:pb-20 md:pt-28"
       onClick={(e) => {
         // Tap-outside-to-deselect: clear unless the tap landed on the 3D canvas
         // (firefly taps keep their pin; empty-canvas taps are cleared by the
@@ -497,9 +497,11 @@ export function TechStackJar() {
             className="pointer-events-none absolute inset-0 z-10 h-full w-full object-contain drop-shadow-[0_30px_80px_rgba(35,26,12,0.18)]"
           />
 
-          <div ref={portalRef} className="absolute inset-[15%_15%_10%] z-50 pointer-events-none" />
-          
-          <div className="absolute inset-[15%_15%_10%] z-20">
+          {/* Mobile: the swarm reads slightly low-and-right, so nudge the
+              firefly layers up and left to sit inside the jar. */}
+          <div ref={portalRef} className="absolute inset-[15%_15%_10%] z-50 pointer-events-none -translate-x-[6%] md:translate-x-0" />
+
+          <div className="absolute inset-[15%_15%_10%] z-20 -translate-x-[6%] md:translate-x-0">
             <FireflyJarCanvas
               portalRef={portalRef}
               activeId={activeId}
@@ -517,7 +519,7 @@ export function TechStackJar() {
           
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-[22%_20%_15%] z-[25] opacity-50 mix-blend-screen"
+            className="pointer-events-none absolute inset-[22%_20%_15%] z-[25] opacity-50 mix-blend-screen -translate-x-[6%] md:translate-x-0"
             style={{
               background:
                 "radial-gradient(ellipse 50% 45% at 50% 45%, rgba(255, 217, 105, 0.25) 0%, rgba(255, 198, 88, 0.08) 45%, transparent 80%)",

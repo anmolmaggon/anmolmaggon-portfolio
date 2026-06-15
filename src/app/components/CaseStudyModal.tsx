@@ -80,6 +80,27 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
 
   if (!study || typeof document === "undefined") return null;
 
+  // Shared "you're probably wondering" chip. `big` = desktop sizing; both use
+  // the readable sans face. `text` lets mobile show the short label and desktop
+  // the full question.
+  const renderChip = (
+    q: { label: string; question: string },
+    text: string,
+    big: boolean,
+  ) => (
+    <a
+      key={q.label}
+      href={`mailto:anmolmaggon40@gmail.com?subject=${encodeURIComponent(`${study.title} - ${q.question}`)}&body=${encodeURIComponent(`Hi Anmol - I went through your ${study.title} case study, and I'd love to learn more about how you're thinking about this: ${q.question}`)}`}
+      className={`group/pill shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full border border-black/20 font-sans text-black/80 transition-colors duration-300 hover:bg-black hover:text-[#fafaf7] hover:border-black ${
+        big ? "px-6 py-3" : "px-4 py-2"
+      }`}
+      style={{ fontSize: big ? "clamp(16px, 1.6vw, 21px)" : 14, lineHeight: 1.25 }}
+    >
+      {text}
+      <span aria-hidden className="opacity-50 transition-transform duration-300 group-hover/pill:translate-x-0.5">→</span>
+    </a>
+  );
+
   return createPortal(
     <div
       role="dialog"
@@ -106,7 +127,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
 
         {/* Reveal-on-Scroll Header */}
         <header 
-          className={`absolute top-0 left-0 right-0 flex items-center h-16 md:h-20 px-6 border-b border-black/10 bg-[#fafaf7]/90 backdrop-blur-md z-[9999] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pr-20 ${
+          className={`absolute top-0 left-0 right-0 flex items-center h-16 md:h-20 px-6 border-b border-black/10 bg-[#fafaf7]/90 backdrop-blur-md z-[9999] transition-all duration-500 ease-in-out pr-20 ${
             isScrolled ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
           }`}
         >
@@ -483,18 +504,26 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
               />
               <div className="relative">
                 <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-10 text-center">You're probably wondering</p>
-                <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-14 md:mb-16">
-                  {study.beyondDesign.questions.map((q) => (
-                    <a
-                      key={q.label}
-                      href={`mailto:anmolmaggon40@gmail.com?subject=${encodeURIComponent(`${study.title} - ${q.question}`)}&body=${encodeURIComponent(`Hi Anmol - I went through your ${study.title} case study, and I'd love to learn more about how you're thinking about this: ${q.question}`)}`}
-                      className="group/pill inline-flex items-center gap-2 rounded-full border border-black/20 px-5 py-2.5 md:px-6 md:py-3 font-[Nyght_Serif] text-black/80 transition-colors duration-300 hover:bg-black hover:text-[#fafaf7] hover:border-black"
-                      style={{ fontSize: "clamp(16px, 1.6vw, 21px)", lineHeight: 1.2 }}
-                    >
-                      {q.question}
-                      <span aria-hidden className="opacity-50 transition-transform duration-300 group-hover/pill:translate-x-0.5">→</span>
-                    </a>
-                  ))}
+                {/* Mobile: two rows that hug their content, centered when they
+                    fit and horizontally scrollable (left edge stays reachable)
+                    when they don't. */}
+                <div className="md:hidden -mx-6 overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden mb-14">
+                  <div className="mx-auto flex w-max flex-col gap-2.5">
+                    {(() => {
+                      const qs = study.beyondDesign.questions;
+                      const half = Math.ceil(qs.length / 2);
+                      return [qs.slice(0, half), qs.slice(half)].map((rowQs, ri) => (
+                        <div key={ri} className="flex gap-2.5">
+                          {rowQs.map((q) => renderChip(q, q.label, false))}
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                </div>
+
+                {/* Desktop: wrap + centered, full questions, readable sans. */}
+                <div className="hidden md:flex md:flex-wrap md:justify-center gap-4 mb-16">
+                  {study.beyondDesign.questions.map((q) => renderChip(q, q.question, true))}
                 </div>
                 <div className="text-center pt-4 md:pt-8">
                   <p className="font-sans italic text-[14px] text-black/55 mb-3">{study.beyondDesign.ctaLead}</p>
@@ -578,7 +607,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
 
         {/* Reveal-on-Scroll Footer - hands off to the prev/next bar at page end */}
         <footer
-          className={`absolute bottom-0 left-0 right-0 py-5 border-t border-black/10 bg-[#fafaf7]/90 backdrop-blur-md z-[9999] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`absolute bottom-0 left-0 right-0 py-5 border-t border-black/10 bg-[#fafaf7]/90 backdrop-blur-md z-[9999] transition-all duration-500 ease-in-out ${
             isScrolled && !atEnd ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
           }`}
         >

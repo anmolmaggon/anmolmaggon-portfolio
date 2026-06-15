@@ -60,9 +60,6 @@ export function Hero() {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="absolute left-0 right-0 bottom-0 px-6 md:px-10 pb-20 md:pb-24 pointer-events-none"
         >
-          <p className="text-white/85 font-sans uppercase tracking-[0.28em] text-[11px] md:text-[12px] font-semibold mb-3 md:mb-4 drop-shadow-md">
-            Product design builder
-          </p>
           <h1
             className="font-[Nyght_Serif] text-white max-w-5xl text-fluid-hero leading-[1.0] font-normal tracking-[-0.03em]"
             style={{
@@ -72,13 +69,13 @@ export function Hero() {
           >
             I make things that
             <br />
-            blow people's mind.
+            blow people's minds.
           </h1>
 
           {/* Mobile-only company line: the desktop line (below) is hidden on
               mobile, so surface a compact version directly under the headline. */}
           <div className="md:hidden mt-5 text-white font-sans uppercase tracking-widest text-[11px] font-medium opacity-90 drop-shadow-md">
-            <span className="opacity-60 font-semibold">Currently working at </span>
+            Product Designer @{" "}
             <a
               href="https://www.ambitionbox.com"
               target="_blank"
@@ -95,14 +92,14 @@ export function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-          className="absolute bottom-8 left-6 md:left-10 text-white font-sans text-[12px] md:text-[14px] uppercase tracking-widest font-medium pointer-events-none hidden md:flex items-center gap-3 drop-shadow-md"
+          className="absolute bottom-8 left-6 md:left-10 text-white font-sans text-[12px] md:text-[14px] uppercase tracking-widest font-medium pointer-events-none hidden md:flex items-center drop-shadow-md opacity-90"
         >
-          <span className="opacity-60 text-[11px] font-semibold">Currently working at</span>
+          <span>Product Designer @&nbsp;</span>
           <a
             href="https://www.ambitionbox.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="opacity-90 hover:opacity-70 transition-opacity cursor-pointer pointer-events-auto underline-offset-4 hover:underline"
+            className="pointer-events-auto cursor-pointer underline-offset-4 hover:underline"
           >
             AmbitionBox (InfoEdge)
           </a>
