@@ -30,7 +30,7 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
   ) : (
     <div className={`relative overflow-hidden ${className ?? ''}`} style={style}>
       <div 
-        className={`absolute inset-0 bg-black/5 animate-pulse transition-opacity duration-500 ${
+        className={`absolute inset-0 bg-black/[0.07] animate-pulse transition-opacity duration-500 ${
           isLoading ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`} 
       />

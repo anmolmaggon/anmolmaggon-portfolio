@@ -35,15 +35,13 @@ export function VideoWithFallback({ className, style, ...rest }: React.VideoHTML
   return (
     <div className={`relative overflow-hidden ${className ?? ''}`} style={style}>
       <div
-        className={`absolute inset-0 bg-black/5 animate-pulse transition-opacity duration-500 ${
+        className={`absolute inset-0 bg-black/[0.07] animate-pulse transition-opacity duration-500 ${
           isLoading ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
       />
       <video
         ref={videoRef}
-        className={`w-full h-full object-cover transition-opacity duration-500 ${
-          isLoading ? 'opacity-0' : 'opacity-100'
-        }`}
+        className="w-full h-full object-cover"
         onLoadedData={handleLoadedData}
         {...rest}
       />
