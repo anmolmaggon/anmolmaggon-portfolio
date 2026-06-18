@@ -1,26 +1,26 @@
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Suspense, lazy } from "react";
+import { Routes, Route } from "react-router";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
+
 const CaseStudies = lazy(() => import("./components/CaseStudies").then(m => ({ default: m.CaseStudies })));
 const TechStackJar = lazy(() => import("./components/TechStackJar").then(m => ({ default: m.TechStackJar })));
 const OperatingPrinciples = lazy(() => import("./components/OperatingPrinciples").then(m => ({ default: m.OperatingPrinciples })));
 const ClosingScene = lazy(() => import("./components/ClosingScene").then(m => ({ default: m.ClosingScene })));
+
 import { StickyNote } from "./components/StickyNote";
 import { SmoothScroll } from "./components/SmoothScroll";
 import { GlobalProvider } from "./context/GlobalContext";
 import { GlobalAudio } from "./components/GlobalAudio";
 import { MediaViewerModal } from "./components/MediaViewerModal";
+import { ExperimentsPage } from "./components/experiments/ExperimentsPage";
+import { ExperimentDetailPage } from "./components/experiments/ExperimentDetailPage";
 
-export default function App() {
+function HomePage() {
   return (
-    <GlobalProvider>
-      <SmoothScroll>
-        <div className="min-h-screen w-full bg-[#fafaf7] text-black antialiased">
-          <GlobalAudio />
-          <MediaViewerModal />
-          <Nav />
+    <>
       <main>
         <Hero />
         <Suspense fallback={<div className="min-h-screen bg-[#fafaf7]" />}>
@@ -41,6 +41,23 @@ export default function App() {
         </Suspense>
       </main>
       {/* <StickyNote /> Temporarily hidden per request */}
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <GlobalProvider>
+      <SmoothScroll>
+        <div className="min-h-screen w-full bg-[#fafaf7] text-black antialiased">
+          <GlobalAudio />
+          <MediaViewerModal />
+          <Nav />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/experiments" element={<ExperimentsPage />} />
+            <Route path="/experiments/:slug" element={<ExperimentDetailPage />} />
+          </Routes>
         </div>
       </SmoothScroll>
       <Analytics />

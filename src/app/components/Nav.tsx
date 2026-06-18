@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { HoverLink } from "./HoverLink";
 import { ButtonCTA } from "./ui/ButtonCTA";
@@ -6,6 +7,9 @@ import { ButtonCTA } from "./ui/ButtonCTA";
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [onDark, setOnDark] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHome = location.pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -49,11 +53,16 @@ export function Nav() {
 
   const lightNav = !onDark && scrolled;
 
+  // Hash links get prefixed with / when we're not on the home page,
+  // so clicking "Work" from /experiments navigates to /#work.
+  const hashLink = (hash: string) => (isHome ? hash : `/${hash}`);
+
   const links = [
-    { label: "Work", href: "#work" },
-    { label: "Toolkit", href: "#stack" },
-    { label: "Principles", href: "#principles" },
-    { label: "Films", href: "#off-the-clock" },
+    { label: "Work", href: hashLink("#work") },
+    { label: "Toolkit", href: hashLink("#stack") },
+    { label: "Principles", href: hashLink("#principles") },
+    { label: "Films", href: hashLink("#off-the-clock") },
+    { label: "AI Experiments", href: "/experiments", route: true },
     { label: "Resume ↗", href: "https://drive.google.com/file/d/1b4gRk6FrWEbgmexVSOJjAjAtYRGk7AVJ/view?usp=sharing", external: true },
   ];
 
@@ -88,6 +97,7 @@ export function Nav() {
               key={l.label}
               href={l.href}
               {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              {...(l.route ? { onClick: (e: React.MouseEvent) => { e.preventDefault(); navigate(l.href); } } : {})}
             >
               {l.label}
             </HoverLink>
@@ -148,7 +158,13 @@ export function Nav() {
                 <motion.a
                   key={l.label}
                   href={l.href}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    setMenuOpen(false);
+                    if (l.route) {
+                      e.preventDefault();
+                      navigate(l.href);
+                    }
+                  }}
                   {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   className="font-[Nyght_Serif] py-3 text-white/90 hover:text-white transition-colors text-fluid-h2 font-normal tracking-[-0.02em] leading-[1.05]"
                   initial={{ opacity: 0, y: 16 }}

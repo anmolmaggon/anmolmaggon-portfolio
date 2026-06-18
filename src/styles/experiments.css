@@ -1,0 +1,302 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   AI Experiments — Lab-Notebook Design System
+   Graph-paper background, specimen-label metadata, warm palette
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Graph-paper background ────────────────────────────────────────────────── */
+.lab-page {
+  --grid-color: rgba(180, 172, 158, 0.18);
+  --grid-size: 24px;
+  --margin-line: rgba(210, 120, 100, 0.25);
+  position: relative;
+  min-height: 100vh;
+  background-color: #fafaf7;
+}
+
+.lab-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    /* horizontal lines */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent calc(var(--grid-size) - 1px),
+      var(--grid-color) calc(var(--grid-size) - 1px),
+      var(--grid-color) var(--grid-size)
+    ),
+    /* vertical lines */
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent calc(var(--grid-size) - 1px),
+      var(--grid-color) calc(var(--grid-size) - 1px),
+      var(--grid-color) var(--grid-size)
+    );
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+/* Red margin line (left side, like a real notebook) */
+.lab-page::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 72px;
+  width: 1.5px;
+  background: var(--margin-line);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .lab-page::after {
+    left: 24px;
+  }
+}
+
+/* Content sits above the grid */
+.lab-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Specimen label (metadata header) ──────────────────────────────────────── */
+.specimen-label {
+  border: 1.5px solid rgba(120, 110, 95, 0.3);
+  border-radius: 2px;
+  background: rgba(250, 248, 243, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.specimen-field-title {
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(80, 72, 60, 0.55);
+  line-height: 1;
+}
+
+.specimen-field-value {
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2a2520;
+  line-height: 1.3;
+}
+
+/* ── Status badges ─────────────────────────────────────────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.status-badge--success {
+  background: rgba(34, 139, 34, 0.1);
+  color: #1a7a1a;
+  border: 1px solid rgba(34, 139, 34, 0.2);
+}
+.status-badge--failed {
+  background: rgba(180, 50, 50, 0.1);
+  color: #a03030;
+  border: 1px solid rgba(180, 50, 50, 0.2);
+}
+.status-badge--inconclusive {
+  background: rgba(180, 140, 40, 0.1);
+  color: #8a6a10;
+  border: 1px solid rgba(180, 140, 40, 0.2);
+}
+.status-badge--in-progress {
+  background: rgba(50, 100, 180, 0.1);
+  color: #2a5090;
+  border: 1px solid rgba(50, 100, 180, 0.2);
+}
+
+/* ── Tool tag pills ────────────────────────────────────────────────────────── */
+.tool-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  background: rgba(120, 110, 95, 0.08);
+  color: #5a5245;
+  border: 1px solid rgba(120, 110, 95, 0.15);
+  line-height: 1.4;
+}
+
+/* ── Beaker fun rating ─────────────────────────────────────────────────────── */
+.beaker-rating {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.beaker {
+  width: 18px;
+  height: 18px;
+  opacity: 0.25;
+  transition: opacity 0.2s ease;
+}
+
+.beaker--filled {
+  opacity: 1;
+}
+
+/* ── Experiment card (listing page) ────────────────────────────────────────── */
+.experiment-card {
+  background: rgba(255, 253, 248, 0.9);
+  border: 1px solid rgba(120, 110, 95, 0.15);
+  border-radius: 6px;
+  box-shadow:
+    0 1px 3px rgba(120, 110, 95, 0.06),
+    0 4px 16px rgba(120, 110, 95, 0.04);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.experiment-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 4px 12px rgba(120, 110, 95, 0.1),
+    0 12px 32px rgba(120, 110, 95, 0.08);
+}
+
+/* Darken the "Read the full experiment →" link on card hover */
+.experiment-card:hover .card-read-more {
+  color: #2a2520;
+}
+
+/* ── Narrative prose (detail page) ─────────────────────────────────────────── */
+.experiment-prose {
+  max-width: 680px;
+  font-size: 17px;
+  line-height: 1.75;
+  color: #2a2520;
+}
+
+.experiment-prose h2 {
+  font-family: 'Nyght Serif', Georgia, serif;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #1a1510;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(120, 110, 95, 0.15);
+}
+
+.experiment-prose h2:first-child {
+  margin-top: 0;
+}
+
+.experiment-prose p {
+  margin-bottom: 20px;
+  white-space: pre-line;
+}
+
+/* Architecture block / monospaced inset */
+.experiment-prose pre {
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  background: rgba(120, 110, 95, 0.05);
+  border: 1px solid rgba(120, 110, 95, 0.12);
+  border-radius: 4px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  margin: 16px 0 24px;
+  color: #3a3530;
+}
+
+/* ── Back link ─────────────────────────────────────────────────────────────── */
+.lab-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(80, 72, 60, 0.6);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.lab-back-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lab-back-link:hover {
+  color: #2a2520;
+}
+
+.lab-back-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ── Build Together CTA ────────────────────────────────────────────────────── */
+.build-together-cta {
+  border: 1.5px dashed rgba(120, 110, 95, 0.3);
+  border-radius: 6px;
+  background: rgba(250, 248, 243, 0.6);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.build-together-cta:hover {
+  border-color: rgba(120, 110, 95, 0.5);
+  background: rgba(250, 248, 243, 0.9);
+}
+
+/* ── Entry animations ──────────────────────────────────────────────────────── */
+@keyframes labFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lab-animate-in {
+  animation: labFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+/* Staggered children */
+.lab-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.lab-stagger > *:nth-child(2) { animation-delay: 0.1s; }
+.lab-stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.lab-stagger > *:nth-child(4) { animation-delay: 0.2s; }
+.lab-stagger > *:nth-child(5) { animation-delay: 0.25s; }
+.lab-stagger > *:nth-child(6) { animation-delay: 0.3s; }
+.lab-stagger > *:nth-child(7) { animation-delay: 0.35s; }
+.lab-stagger > *:nth-child(8) { animation-delay: 0.4s; }
