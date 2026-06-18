@@ -393,7 +393,6 @@ export function CaseStudies() {
                   {s.previewVideo ? (
                     <VideoWithFallback
                       className="w-full h-full object-contain"
-                      poster={s.image}
                       muted
                       loop
                       playsInline
@@ -439,7 +438,6 @@ export function CaseStudies() {
                   {s.previewVideo ? (
                     <VideoWithFallback
                       className="w-full h-full object-contain"
-                      poster={s.image}
                       autoPlay
                       muted
                       loop

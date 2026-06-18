@@ -185,7 +185,6 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                 {study.coverVideo ? (
                   <VideoWithFallback
                     className="w-full h-full object-cover"
-                    poster={study.cover}
                     autoPlay
                     muted
                     loop
