@@ -1,11 +1,12 @@
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Suspense, lazy } from "react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
-import { CaseStudies } from "./components/CaseStudies";
-import { TechStackJar } from "./components/TechStackJar";
-import { OperatingPrinciples } from "./components/OperatingPrinciples";
-import { ClosingScene } from "./components/ClosingScene";
+const CaseStudies = lazy(() => import("./components/CaseStudies").then(m => ({ default: m.CaseStudies })));
+const TechStackJar = lazy(() => import("./components/TechStackJar").then(m => ({ default: m.TechStackJar })));
+const OperatingPrinciples = lazy(() => import("./components/OperatingPrinciples").then(m => ({ default: m.OperatingPrinciples })));
+const ClosingScene = lazy(() => import("./components/ClosingScene").then(m => ({ default: m.ClosingScene })));
 import { StickyNote } from "./components/StickyNote";
 import { SmoothScroll } from "./components/SmoothScroll";
 import { GlobalProvider } from "./context/GlobalContext";
@@ -22,20 +23,22 @@ export default function App() {
           <Nav />
       <main>
         <Hero />
-        <CaseStudies />
-        <TechStackJar />
-        <OperatingPrinciples />
+        <Suspense fallback={<div className="min-h-screen bg-[#fafaf7]" />}>
+          <CaseStudies />
+          <TechStackJar />
+          <OperatingPrinciples />
 
-        <div
-          data-nav-theme="dark"
-          className="soul-world relative overflow-clip bg-[#06110f] text-[#f5f3ee]"
-          style={{
-            background:
-              "linear-gradient(180deg, #06110f 0%, #071018 42%, #0c0b0d 78%, #0c0b0d 100%)",
-          }}
-        >
-          <ClosingScene />
-        </div>
+          <div
+            data-nav-theme="dark"
+            className="soul-world relative overflow-clip bg-[#06110f] text-[#f5f3ee]"
+            style={{
+              background:
+                "linear-gradient(180deg, #06110f 0%, #071018 42%, #0c0b0d 78%, #0c0b0d 100%)",
+            }}
+          >
+            <ClosingScene />
+          </div>
+        </Suspense>
       </main>
       {/* <StickyNote /> Temporarily hidden per request */}
         </div>

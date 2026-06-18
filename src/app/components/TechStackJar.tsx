@@ -463,8 +463,23 @@ export function TechStackJar() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { rootMargin: "400px 0px" }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="stack"
       className="relative isolate overflow-hidden bg-[#fafaf7] px-6 pb-28 pt-20 text-[#171613] md:px-10 md:pb-20 md:pt-28"
       onClick={(e) => {
@@ -502,19 +517,21 @@ export function TechStackJar() {
           <div ref={portalRef} className="absolute inset-[15%_15%_10%] z-50 pointer-events-none -translate-x-[6%] md:translate-x-0" />
 
           <div className="absolute inset-[15%_15%_10%] z-20 -translate-x-[6%] md:translate-x-0">
-            <FireflyJarCanvas
-              portalRef={portalRef}
-              activeId={activeId}
-              pinnedId={pinnedId}
-              reduceMotion={reduceMotion}
-              onHover={(id) => { if (canHover) setHoveredId(id); }}
-              onLeave={(id) => { if (canHover) setHoveredId((current) => (current === id ? null : current)); }}
-              onPin={(id) => setPinnedId((current) => (current === id ? null : id))}
-              onClear={() => {
-                setHoveredId(null);
-                setPinnedId(null);
-              }}
-            />
+            {isVisible && (
+              <FireflyJarCanvas
+                portalRef={portalRef}
+                activeId={activeId}
+                pinnedId={pinnedId}
+                reduceMotion={reduceMotion}
+                onHover={(id) => { if (canHover) setHoveredId(id); }}
+                onLeave={(id) => { if (canHover) setHoveredId((current) => (current === id ? null : current)); }}
+                onPin={(id) => setPinnedId((current) => (current === id ? null : id))}
+                onClear={() => {
+                  setHoveredId(null);
+                  setPinnedId(null);
+                }}
+              />
+            )}
           </div>
           
           <div

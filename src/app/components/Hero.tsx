@@ -11,27 +11,15 @@ export function Hero() {
   return (
     <section id="top" className="relative w-full h-[100svh] [@media(min-height:640px)]:min-h-[640px] bg-black overflow-hidden z-20">
       <div className="absolute inset-0">
-          {/* Desktop: the original landscape-ish portal. */}
-          <img
-            src="/Hero Image Portal.webp"
-            alt="Portal Landscape"
-            className="hidden md:block w-full h-full object-cover"
-          />
-          {/* Mobile: a dedicated portrait crop so the tall phone frame isn't
-              side-cropped. Falls back to the desktop image until the portrait
-              asset (1080x2340+ / ideally 1440x3120) is supplied. */}
-          <img
-            src="/e8836cc6-c4cc-4e74-a775-c50bb2058f6c.png"
-            alt="Portal Landscape"
-            className="block md:hidden w-full h-full object-cover"
-            onError={(e) => {
-              const img = e.currentTarget;
-              if (!img.dataset.fellBack) {
-                img.dataset.fellBack = "1";
-                img.src = "/Hero Image Portal.webp";
-              }
-            }}
-          />
+          <picture>
+            <source media="(max-width: 768px)" srcSet="/hero-mobile-fallback.webp" />
+            <img
+              src="/Hero Image Portal.webp"
+              alt="Portal Landscape"
+              className="w-full h-full object-cover"
+              fetchPriority="high"
+            />
+          </picture>
         </div>
         {/* Soft scrim anchored bottom-left so the headline + company list stay
             legible against the bright dawn sky. Desktop keeps the gentle wash;
