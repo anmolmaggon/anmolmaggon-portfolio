@@ -21,16 +21,15 @@ export function Hero() {
             />
           </picture>
         </div>
-        {/* Soft scrim anchored bottom-left so the headline + company list stay
-            legible against the bright dawn sky. Desktop keeps the gentle wash;
-            mobile darkens earlier and harder at the bottom so the larger
-            headline + company line never get lost behind the tall portrait. */}
+        {/* Scrim darkens at the TOP now (headline moved up) with a gentle wash at
+            bottom for the pill nav area. Desktop keeps a soft vignette; mobile
+            darkens earlier at top for the larger headline. */}
         <div
           aria-hidden
           className="absolute inset-0 pointer-events-none hidden md:block"
           style={{
             background:
-              "linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.8) 100%)",
+              "linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.3) 100%)",
           }}
         />
         <div
@@ -38,15 +37,34 @@ export function Hero() {
           className="absolute inset-0 pointer-events-none md:hidden"
           style={{
             background:
-              "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 18%, rgba(0,0,0,0) 38%, rgba(0,0,0,0.92) 100%)",
+              "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.35) 30%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.4) 100%)",
           }}
         />
 
+        {/* ── Name badge — top-right (AirSide-style logo placement) ────────── */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+          className="absolute top-8 right-6 md:right-10 pointer-events-none"
+        >
+          <span
+            className="italic font-[Nyght_Serif] text-white text-lg md:text-xl font-medium tracking-tight"
+            style={{
+              textShadow:
+                "0 0 12px rgba(255,255,255,0.4), 0 0 36px rgba(255,180,116,0.25)",
+            }}
+          >
+            Anmol Maggon
+          </span>
+        </motion.div>
+
+        {/* ── Headline — top-left (AirSide-style) ──────────────────────────── */}
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="absolute left-0 right-0 bottom-0 px-6 md:px-10 pb-20 md:pb-24 pointer-events-none"
+          className="absolute left-0 right-0 top-0 px-6 md:px-10 pt-20 md:pt-24 pointer-events-none"
         >
           <h1
             className="font-[Nyght_Serif] text-white max-w-5xl text-fluid-hero leading-[1.0] font-normal tracking-[-0.03em]"
@@ -60,9 +78,8 @@ export function Hero() {
             blow people's minds.
           </h1>
 
-          {/* Mobile-only company line: the desktop line (below) is hidden on
-              mobile, so surface a compact version directly under the headline. */}
-          <div className="md:hidden mt-5 text-white font-sans uppercase tracking-widest text-[11px] font-medium opacity-90 drop-shadow-md">
+          {/* Company line — directly below headline, all viewports */}
+          <div className="mt-5 md:mt-6 text-white font-sans uppercase tracking-widest text-[11px] md:text-[14px] font-medium opacity-90 drop-shadow-md">
             Product Designer @{" "}
             <a
               href="https://www.ambitionbox.com"
@@ -72,41 +89,6 @@ export function Hero() {
             >
               AmbitionBox (InfoEdge)
             </a>
-          </div>
-        </motion.div>
-
-        {/* Sleek Company Bottom Bar */}
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-          className="absolute bottom-8 left-6 md:left-10 text-white font-sans text-[12px] md:text-[14px] uppercase tracking-widest font-medium pointer-events-none hidden md:flex items-center drop-shadow-md opacity-90"
-        >
-          <span>Product Designer @&nbsp;</span>
-          <a
-            href="https://www.ambitionbox.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="pointer-events-auto cursor-pointer underline-offset-4 hover:underline"
-          >
-            AmbitionBox (InfoEdge)
-          </a>
-        </motion.div>
-
-        {/* Sleek Scroll Nudge */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.9 }}
-          transition={{ duration: 1.2, ease: "linear", delay: 0.8 }}
-          className="absolute left-1/2 -translate-x-1/2 bottom-8 hidden md:flex flex-col items-center gap-4 pointer-events-none drop-shadow-lg"
-        >
-          <span className="text-white font-sans text-[11px] uppercase tracking-[0.4em] font-medium">Scroll</span>
-          <div className="w-[1px] h-12 bg-white/40 relative overflow-hidden">
-            <motion.div
-              className="absolute top-0 left-0 w-full h-1/2 bg-white"
-              animate={{ y: ["-100%", "200%"] }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-            />
           </div>
         </motion.div>
 

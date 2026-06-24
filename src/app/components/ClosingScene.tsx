@@ -70,7 +70,6 @@ const items: Item[] = [
 ];
 
 const footerLinks: [string, string][] = [
-  ["Resume", "https://drive.google.com/file/d/1b4gRk6FrWEbgmexVSOJjAjAtYRGk7AVJ/view?usp=sharing"],
   ["Instagram", "https://www.instagram.com/anmol.maggon/"],
   ["YouTube", "https://www.youtube.com/@anmol.maggon"],
   ["LinkedIn", "#"], // TODO: add real LinkedIn URL

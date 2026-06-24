@@ -9,6 +9,11 @@ interface GlobalContextValue {
   // Audio state
   isMuted: boolean;
   toggleMute: () => void;
+  setMuted: (v: boolean) => void;
+  // Whether the hero track is ACTUALLY audible right now (playing + not muted).
+  // Drives the mute button's icon so a blocked/silent autoplay shows as muted.
+  musicPlaying: boolean;
+  setMusicPlaying: (v: boolean) => void;
   isBackgroundAudioPaused: boolean;
   pauseBackgroundAudio: () => void;
   resumeBackgroundAudio: () => void;
@@ -32,12 +37,14 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
 
   const [isBackgroundAudioPaused, setIsBackgroundAudioPaused] = useState(false);
   const [mediaViewerData, setMediaViewerData] = useState<MediaViewerData>(null);
+  const [musicPlaying, setMusicPlaying] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("gussa_is_muted", isMuted.toString());
   }, [isMuted]);
 
   const toggleMute = () => setIsMuted((prev) => !prev);
+  const setMuted = (v: boolean) => setIsMuted(v);
   const pauseBackgroundAudio = () => setIsBackgroundAudioPaused(true);
   const resumeBackgroundAudio = () => setIsBackgroundAudioPaused(false);
 
@@ -56,6 +63,9 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
       value={{
         isMuted,
         toggleMute,
+        setMuted,
+        musicPlaying,
+        setMusicPlaying,
         isBackgroundAudioPaused,
         pauseBackgroundAudio,
         resumeBackgroundAudio,

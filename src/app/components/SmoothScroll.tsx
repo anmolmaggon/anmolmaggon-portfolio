@@ -6,24 +6,21 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 /**
+ * The live Lenis instance, exposed so full-screen takeovers (e.g. the cosmic
+ * hero's chaptered auto-play) can `stop()`/`start()` smooth scroll while they
+ * own wheel/touch input. `null` when Lenis isn't running (reduced motion).
+ */
+export let lenisInstance: Lenis | null = null;
+
+/**
  * Site-wide buttery smooth scroll (Lenis) wired into GSAP's ticker so
  * ScrollTrigger stays perfectly in sync. Disabled for reduced-motion users.
  */
 export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
-    // The Work section (#work) is pulled to the top of the document by its
-    // `-mt-[100svh]` curtain margin, so a normal anchor jump lands at the top
-    // and reveals nothing. It reads correctly one viewport down, so #work must
-    // scroll to a measured `100svh` instead of the element's position.
-    const measureSvh = () => {
-      const probe = document.createElement("div");
-      probe.style.cssText =
-        "position:fixed;top:0;left:0;width:0;height:100svh;visibility:hidden;pointer-events:none";
-      document.body.appendChild(probe);
-      const h = probe.getBoundingClientRect().height;
-      probe.remove();
-      return h > 0 ? h : window.innerHeight;
-    };
+    // #work scrolls to the Work section's actual position. (It used to need a hard
+    // 100svh offset for a curtain layout; the cosmic hero is a fixed overlay now, so
+    // the Work section is the page's first flow section — its real position is correct.)
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       // No Lenis for reduced-motion users, but the #work anchor still needs the
@@ -34,7 +31,9 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         ) as HTMLAnchorElement | null;
         if (!a) return;
         e.preventDefault();
-        window.scrollTo({ top: measureSvh(), behavior: "smooth" });
+        const work = document.querySelector("#work") as HTMLElement | null;
+        const top = work ? work.getBoundingClientRect().top + window.scrollY : 0;
+        window.scrollTo({ top, behavior: "smooth" });
       };
       document.addEventListener("click", onClick);
       return () => document.removeEventListener("click", onClick);
@@ -45,6 +44,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
+    lenisInstance = lenis;
 
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
@@ -59,10 +59,11 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       if (!a) return;
       const id = a.getAttribute("href");
       if (!id || id === "#") return;
-      // #work: scroll one viewport down so the curtain reveals the Work view.
+      // #work: scroll to the Work section's real position.
       if (id === "#work") {
         e.preventDefault();
-        lenis.scrollTo(measureSvh(), { offset: 0 });
+        const work = document.querySelector("#work");
+        if (work) lenis.scrollTo(work as HTMLElement, { offset: 0 });
         return;
       }
       const target = document.querySelector(id);
@@ -77,6 +78,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       document.removeEventListener("click", onClick);
       gsap.ticker.remove(tick);
       lenis.destroy();
+      lenisInstance = null;
     };
   }, []);
 

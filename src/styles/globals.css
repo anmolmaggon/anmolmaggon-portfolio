@@ -3,6 +3,14 @@ html.lenis,
 html.lenis body {
   height: auto;
 }
+/* Disable browser scroll-anchoring: with Lenis driving real window scroll, the
+   browser otherwise repositions scrollTop when async content settles (lazy
+   sections mounting, hero frames/preview videos decoding) — that's the mobile
+   "scroll jumps a few seconds after landing on Recent Work" glitch. */
+html,
+body {
+  overflow-anchor: none;
+}
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
