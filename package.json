@@ -75,6 +75,7 @@
     "@tailwindcss/vite": "4.1.12",
     "@types/three": "^0.184.1",
     "@vitejs/plugin-react": "4.7.0",
+    "sharp": "^0.35.2",
     "tailwindcss": "4.1.12",
     "vite": "6.3.5"
   },
