@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from "react";
 
 export type MediaViewerData =
   | { type: "photo"; url: string; alt?: string }
@@ -14,6 +14,10 @@ interface GlobalContextValue {
   // Drives the mute button's icon so a blocked/silent autoplay shows as muted.
   musicPlaying: boolean;
   setMusicPlaying: (v: boolean) => void;
+  // Lets the mute button ask the hero to start playback DIRECTLY inside the click
+  // handler (reliable on mobile). The hero registers its play fn; the button calls it.
+  requestMusicPlay: () => void;
+  registerMusicPlay: (fn: (() => void) | null) => void;
   isBackgroundAudioPaused: boolean;
   pauseBackgroundAudio: () => void;
   resumeBackgroundAudio: () => void;
@@ -45,6 +49,14 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
 
   const toggleMute = () => setIsMuted((prev) => !prev);
   const setMuted = (v: boolean) => setIsMuted(v);
+
+  // The hero owns the YT player; it registers a direct play fn here so the mute
+  // button can start playback synchronously inside its click (mobile-safe).
+  const musicPlayRef = useRef<(() => void) | null>(null);
+  const registerMusicPlay = (fn: (() => void) | null) => {
+    musicPlayRef.current = fn;
+  };
+  const requestMusicPlay = () => musicPlayRef.current?.();
   const pauseBackgroundAudio = () => setIsBackgroundAudioPaused(true);
   const resumeBackgroundAudio = () => setIsBackgroundAudioPaused(false);
 
@@ -66,6 +78,8 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
         setMuted,
         musicPlaying,
         setMusicPlaying,
+        requestMusicPlay,
+        registerMusicPlay,
         isBackgroundAudioPaused,
         pauseBackgroundAudio,
         resumeBackgroundAudio,

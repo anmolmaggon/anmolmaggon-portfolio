@@ -64,12 +64,14 @@ type State = "loading" | "restF2" | "playA" | "restF6" | "playB" | "handoff" | "
 
 export function HeroScrubPrototype() {
   // GlobalAudio is removed — the hero owns its own track now; only isMuted is shared.
-  const { isMuted, setMusicPlaying } = useGlobalContext();
+  const { isMuted, setMusicPlaying, registerMusicPlay } = useGlobalContext();
   const isMutedRef = useRef(isMuted);
   isMutedRef.current = isMuted;
   // report actual playback to the mute button (so blocked/silent reads as muted)
   const setMusicPlayingRef = useRef(setMusicPlaying);
   setMusicPlayingRef.current = setMusicPlaying;
+  const registerMusicPlayRef = useRef(registerMusicPlay);
+  registerMusicPlayRef.current = registerMusicPlay;
   const applyAudioRef = useRef<() => void>(() => {});
 
   const stageRef = useRef<HTMLDivElement>(null);
@@ -265,6 +267,27 @@ export function HeroScrubPrototype() {
         setTimeout(startFadeIn, 1500);
       } catch {}
     };
+    // Direct, minimal play — mirrors the production GlobalAudio pattern that works on
+    // mobile: invoked synchronously inside a REAL user gesture (first scroll/touch, or the
+    // mute-button click), it just unmutes + playVideo. No seek / volume-ramp / synthetic
+    // events — those left mobile silent or unstarted. No-op if already playing (keeps the
+    // desktop autoplay fade undisturbed).
+    const forcePlay = () => {
+      if (!player || !playerReady) return;
+      try {
+        if (player.getPlayerState?.() === window.YT?.PlayerState?.PLAYING) return;
+        if (isMutedRef.current) {
+          player.mute();
+        } else {
+          player.unMute();
+          player.setVolume(MUSIC_VOL);
+          volProxy.v = MUSIC_VOL;
+        }
+        player.playVideo();
+      } catch {}
+    };
+    // expose to the mute button so it can start playback directly in its click
+    registerMusicPlayRef.current?.(forcePlay);
     const initPlayer = () => {
       if (player || !ytRef.current || !window.YT?.Player) return;
       player = new window.YT.Player(ytRef.current, {
@@ -306,12 +329,7 @@ export function HeroScrubPrototype() {
       const wait = () => (window.YT?.Player ? initPlayer() : setTimeout(wait, 200));
       wait();
     };
-    const onFirstGesture = () => {
-      doPlay(); // gesture only PLAYS; mute is owned by isMuted
-      // also fire the (un-gated) play path so a blocked autoplay reliably starts on the
-      // first real interaction, not just on a button tap
-      window.dispatchEvent(new Event("hero:play-music"));
-    };
+    const onFirstGesture = () => forcePlay(); // direct play in the gesture (mobile-safe)
     const addGesture = () => {
       window.addEventListener("pointerdown", onFirstGesture, { once: true });
       window.addEventListener("keydown", onFirstGesture, { once: true });
@@ -741,12 +759,8 @@ export function HeroScrubPrototype() {
         } catch {}
       });
     };
-    // the mute button asks the hero to (re)start playback on a user click — works even
-    // if autoplay was blocked, because the click is a valid user gesture.
-    const onPlayRequest = () => resumeMusic();
-    window.addEventListener("hero:play-music", onPlayRequest);
 
-    let heroInView = true; // hero starts in view; initial play is handled by doPlay
+    let heroInView = true; // hero starts in view; initial play is handled by doPlay/forcePlay
     const onHeroVisibility = (entries: IntersectionObserverEntry[]) => {
       const e = entries[0];
       const nowIn = e.isIntersecting && e.intersectionRatio >= 0.5;
@@ -767,7 +781,7 @@ export function HeroScrubPrototype() {
       removeGesture();
       removeContentWatch();
       document.removeEventListener("click", onNavClick, true);
-      window.removeEventListener("hero:play-music", onPlayRequest);
+      registerMusicPlayRef.current?.(null);
       heroIO.disconnect();
       killCh();
       gsap.killTweensOf(volProxy);
@@ -832,20 +846,10 @@ export function HeroScrubPrototype() {
           </div>
         </div>
 
-        {/* YouTube audio player — kept ON-SCREEN, 1px and near-invisible (not off-screen /
-            not opacity:0) so mobile browsers actually load & allow it to play. */}
-        <div
-          style={{
-            position: "fixed",
-            bottom: 0,
-            left: 0,
-            width: 2,
-            height: 2,
-            opacity: 0.01,
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        >
+        {/* hidden YouTube audio player (off-screen — same as production's GlobalAudio,
+            which plays fine on mobile; playback is started by a direct gesture, not by
+            the iframe being visible) */}
+        <div style={{ position: "absolute", top: -9999, left: -9999, width: 1, height: 1, opacity: 0, pointerEvents: "none" }}>
           <div ref={ytRef} />
         </div>
 

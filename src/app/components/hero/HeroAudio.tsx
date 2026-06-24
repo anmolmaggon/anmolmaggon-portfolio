@@ -13,7 +13,7 @@ export function HeroAudio({
 }: {
   positionClassName?: string;
 }) {
-  const { isMuted, setMuted, musicPlaying } = useGlobalContext();
+  const { isMuted, setMuted, musicPlaying, requestMusicPlay } = useGlobalContext();
   // The icon reflects whether sound is ACTUALLY coming out — so a blocked/silent
   // autoplay reads as muted, not as "on but silent".
   const audible = !isMuted && musicPlaying;
@@ -22,10 +22,10 @@ export function HeroAudio({
     if (audible) {
       setMuted(true); // turn sound off
     } else {
-      // turn sound on: set intent unmuted AND ask the hero to (re)start playback —
-      // this click is a valid user gesture, so it works even if autoplay was blocked.
+      // turn sound on: set intent unmuted AND start playback DIRECTLY in this click
+      // (mobile-safe — valid user gesture; works even if autoplay was blocked).
       setMuted(false);
-      window.dispatchEvent(new Event("hero:play-music"));
+      requestMusicPlay();
     }
   };
 
