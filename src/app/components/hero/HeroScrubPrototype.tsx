@@ -269,7 +269,7 @@ export function HeroScrubPrototype() {
       if (player || !ytRef.current || !window.YT?.Player) return;
       player = new window.YT.Player(ytRef.current, {
         videoId: MUSIC_ID,
-        playerVars: { autoplay: 1, controls: 0, loop: 1, playlist: MUSIC_ID, rel: 0, enablejsapi: 1, start: MUSIC_START },
+        playerVars: { autoplay: 1, controls: 0, loop: 1, playlist: MUSIC_ID, rel: 0, enablejsapi: 1, start: MUSIC_START, playsinline: 1 },
         events: {
           onReady: () => {
             playerReady = true;
@@ -832,8 +832,20 @@ export function HeroScrubPrototype() {
           </div>
         </div>
 
-        {/* hidden YouTube audio player */}
-        <div style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none", left: -9999 }}>
+        {/* YouTube audio player — kept ON-SCREEN, 1px and near-invisible (not off-screen /
+            not opacity:0) so mobile browsers actually load & allow it to play. */}
+        <div
+          style={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            width: 2,
+            height: 2,
+            opacity: 0.01,
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        >
           <div ref={ytRef} />
         </div>
 
