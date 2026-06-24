@@ -46,9 +46,10 @@ const WHITE_FLASH = 0.4; // code flash to pure white before the handoff
 const DUR_REV = 4.0;
 const XFADE = 1.5; // rest↔journey cross-dissolve
 
-// handoff (end of chapter B → Recent Work)
-const EXIT_LEAD = 0.5; // begin the scroll-down this many seconds BEFORE the sequence ends
-const HANDOFF_OFFSET = 140; // land this many px past the #work top (scroll a bit deeper)
+// handoff (end of chapter B → Recent Work) — cinematic cream cross-fade, no scroll motion
+const HANDOFF_OFFSET = 140; // instant-jump landing offset past the #work top (a bit deeper)
+const HANDOFF_FADE = 1.0; // cream cover fade-out → Recent Work fades in
+const COVER_COLOR = "#fafbf6"; // matches the Recent Work background → seamless reveal (not pure white)
 const MUSIC_FADE_OUT = 2.0; // fade music out over this long when the hero leaves the viewport
 const MUSIC_FADE_IN = 1.0; // fade music in over this long when the hero (re)enters the viewport
 
@@ -78,6 +79,7 @@ export function HeroScrubPrototype() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const ytRef = useRef<HTMLDivElement>(null);
+  const coverRef = useRef<HTMLDivElement>(null); // #fafbf6 cover for the cinematic fade INTO Recent Work
 
   // keep the hero track's mute in sync with the global mute button
   useEffect(() => {
@@ -154,7 +156,8 @@ export function HeroScrubPrototype() {
         if (im?.complete) cover(im, overlay.alpha);
       }
       if (whiteFlash.v > 0.001) {
-        ctx.fillStyle = `rgba(255,255,255,${whiteFlash.v})`;
+        // flood to the Recent Work cream (#fafbf6), not pure white, so the cover→content fade is seamless
+        ctx.fillStyle = `rgba(250,251,246,${whiteFlash.v})`;
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
       }
       raf = requestAnimationFrame(render);
@@ -530,12 +533,9 @@ export function HeroScrubPrototype() {
         // 1) fast initial speed-bump as it ignites, then 2) STEADY normal pace from mid → end (no slow-mo tail)
         tl.to(proxy, { i: B_DETO_BURST, duration: DUR_BURST, ease: "none", onUpdate: upd });
         tl.to(proxy, { i: last, duration: DUR_DETO, ease: "none", onUpdate: upd });
-        // code flash to pure white → handoff
+        // detonation floods to cream (#fafbf6) on the canvas → onComplete cross-fades
+        // into Recent Work behind a matching cream cover (no scroll motion)
         tl.to(whiteFlash, { v: 1, duration: WHITE_FLASH, ease: "power2.in" });
-        // begin gliding into Recent Work ~1s BEFORE the timeline ends, so the
-        // scroll overlaps the climax/white-out (not stop-then-scroll). This must
-        // NOT kill the timeline — it runs through to onComplete (whiteFlash → 1).
-        tl.call(beginExitScroll, undefined, `-=${EXIT_LEAD}`);
         chapterTween = tl;
       }
     }
@@ -602,45 +602,36 @@ export function HeroScrubPrototype() {
       // music fades out via the hero-visibility observer once the hero leaves the viewport
     };
 
-    // Fired ~EXIT_LEAD before chapter B ends: unlock the page and start scrolling
-    // into Recent Work WHILE the climax/white-out finish on the (now scrolling-away)
-    // hero canvas. Deliberately does NOT kill the chapter timeline and does NOT flip
-    // state to "content" (the timeline must keep owning the canvas until it completes).
-    function beginExitScroll() {
+    function handoff() {
+      // chapter B finished — the canvas has flooded to cream (whiteFlash = 1).
+      // Cross-fade INTO Recent Work behind a matching cream cover: NO scroll motion.
+      played = true; // journey ran to completion → held state becomes the F6 halo
+      killCh();
       removeInput();
       clearOverlay();
+      // pin the fixed cream cover ON (canvas is already cream → seamless), then release scroll
+      if (coverRef.current) gsap.set(coverRef.current, { opacity: 1 });
       lockNative(false);
-      // Force a synchronous reflow NOW so the browser recomputes scrollHeight after
-      // overflow:hidden is removed — otherwise Lenis reads a stale ~0 scroll limit and
-      // clamps the scrollTo target back to the top ("scrolled then reset to top").
-      void document.documentElement.offsetHeight;
+      void document.documentElement.offsetHeight; // reflow so Lenis reads real scroll bounds
       lenisInstance?.start();
       lenisInstance?.resize?.();
       setNav(true);
-      // music fades out on its own as the hero scrolls out of view (handled by the
-      // hero-visibility IntersectionObserver — single source of truth for play/pause).
-      // scroll on the NEXT frame (bounds settled) → land a bit PAST #work. `force`
-      // bypasses Lenis's stop/lock guards so the scroll always lands.
+      go("content");
+      addContentWatch();
+      // music fades out via the hero-visibility observer once the hero leaves the viewport
       requestAnimationFrame(() => {
         lenisInstance?.resize?.();
         const work = document.getElementById("work");
         if (work) {
+          // INSTANT jump (hidden under the cover) — no visible scroll
           if (lenisInstance)
-            lenisInstance.scrollTo(work, { offset: HANDOFF_OFFSET, duration: 1.2, force: true });
-          else work.scrollIntoView({ behavior: "smooth" });
+            lenisInstance.scrollTo(work, { offset: HANDOFF_OFFSET, immediate: true, force: true });
+          else window.scrollTo(0, work.getBoundingClientRect().top + window.scrollY + HANDOFF_OFFSET);
         }
-      });
-    }
-
-    function handoff() {
-      // chapter B finished (whiteFlash = 1); the exit scroll already began ~EXIT_LEAD ago.
-      // Finalize: lock in the played-once held state (F6 halo) and drop the white-out.
-      played = true;
-      go("content");
-      clearOverlay();
-      addContentWatch();
-      gsap.delayedCall(1.0, () => {
-        whiteFlash.v = 0;
+        whiteFlash.v = 0; // canvas cream no longer needed (hero is off-screen now)
+        // fade the cream cover away → Recent Work fades in
+        if (coverRef.current)
+          gsap.to(coverRef.current, { opacity: 0, duration: HANDOFF_FADE, ease: "power2.out" });
       });
     }
 
@@ -762,14 +753,17 @@ export function HeroScrubPrototype() {
 
     let heroInView = true; // hero starts in view; initial play is handled by doPlay/forcePlay
     const onHeroVisibility = (entries: IntersectionObserverEntry[]) => {
-      const e = entries[0];
-      const nowIn = e.isIntersecting && e.intersectionRatio >= 0.5;
+      const nowIn = entries[0].isIntersecting; // hero covers the viewport's vertical center
       if (nowIn === heroInView) return;
       heroInView = nowIn;
       if (nowIn) resumeMusic();
       else pauseMusic();
     };
-    const heroIO = new IntersectionObserver(onHeroVisibility, { threshold: [0, 0.5, 1] });
+    // Trip-line at the viewport's vertical center: collapse the observer root to a
+    // zero-height line (rootMargin -50%/-50%) so "in hero" flips EXACTLY when the hero's
+    // edge passes mid-screen. Gap-free — fixes music continuing while content fills the view
+    // (the old [0,0.5,1] thresholds had no callback between 50%-out and fully-out).
+    const heroIO = new IntersectionObserver(onHeroVisibility, { rootMargin: "-50% 0px -50% 0px", threshold: 0 });
     if (stageRef.current) heroIO.observe(stageRef.current);
 
     return () => {
@@ -796,26 +790,39 @@ export function HeroScrubPrototype() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Dark legibility shadow (not a light glow) so the white headline reads over the bright
+  // F6 halo — invisible on the dark opening, gives glyphs a dark halo on bright frames.
   const heroGlow =
-    "0 0 18px rgba(255,255,255,0.45), 0 0 48px rgba(255,180,116,0.30), 0 0 90px rgba(255,120,80,0.18)";
+    "0 1px 3px rgba(0,0,0,0.55), 0 2px 28px rgba(0,0,0,0.55)";
 
   return (
     <>
       <div ref={stageRef} id="top" data-nav-theme="dark" style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
         <canvas ref={canvasRef} style={{ display: "block", position: "absolute", inset: 0, zIndex: 1 }} />
 
+        {/* legibility scrim — darkens the bottom-left where the tagline sits so the white text
+            reads over the bright F6 halo (the cropped mobile portrait shows the bright core right
+            here); fades to transparent toward the upper-right so the art stays clear */}
         <div
-          ref={textRef}
+          aria-hidden
           style={{
             position: "absolute",
-            left: "clamp(24px, 4vw, 64px)",
-            bottom: "clamp(80px, 12vh, 140px)",
-            opacity: 0,
+            inset: 0,
+            zIndex: 3,
             pointerEvents: "none",
-            zIndex: 6,
-            maxWidth: "60rem",
+            background:
+              "linear-gradient(to top right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.18) 32%, rgba(0,0,0,0) 55%)",
           }}
+        />
+
+        {/* aligned to the site gutter (px-6 md:px-10 left, pb-6 md:pb-10 bottom) so the
+            tagline lines up with the nav logo + content grid */}
+        <div
+          ref={textRef}
+          className="absolute inset-x-0 bottom-0 px-6 md:px-10 pb-6 md:pb-10"
+          style={{ opacity: 0, pointerEvents: "none", zIndex: 6 }}
         >
+          <div style={{ maxWidth: "60rem" }}>
           <h1
             style={{
               fontFamily: "'Nyght Serif', serif",
@@ -835,14 +842,16 @@ export function HeroScrubPrototype() {
           <div
             style={{
               marginTop: "1.25rem",
-              color: "rgba(255,255,255,0.9)",
+              color: "rgba(255,255,255,0.92)",
               textTransform: "uppercase",
               letterSpacing: "0.15em",
               fontSize: 13,
               fontWeight: 500,
+              textShadow: "0 1px 14px rgba(0,0,0,0.6)",
             }}
           >
             Product Designer @ AmbitionBox (InfoEdge)
+          </div>
           </div>
         </div>
 
@@ -857,6 +866,14 @@ export function HeroScrubPrototype() {
             away with the hero (not a sitewide sticky button) */}
         <HeroAudio positionClassName="absolute bottom-10 right-6 md:right-10 md:bottom-12" />
       </div>
+
+      {/* cinematic cover: the climax floods to this cream, the page jumps under it,
+          then it fades away → Recent Work fades in (matches the section bg → seamless) */}
+      <div
+        ref={coverRef}
+        aria-hidden
+        style={{ position: "fixed", inset: 0, zIndex: 90, background: COVER_COLOR, opacity: 0, pointerEvents: "none" }}
+      />
     </>
   );
 }

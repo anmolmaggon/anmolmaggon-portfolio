@@ -12,6 +12,10 @@ gsap.registerPlugin(ScrollTrigger);
  */
 export let lenisInstance: Lenis | null = null;
 
+// How far past the #work section top the "Work" nav link lands (px) — a bit deeper so
+// the "Recent work." heading clears the fixed nav. Tunable dial.
+const WORK_NAV_OFFSET = 120;
+
 /**
  * Site-wide buttery smooth scroll (Lenis) wired into GSAP's ticker so
  * ScrollTrigger stays perfectly in sync. Disabled for reduced-motion users.
@@ -32,7 +36,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         if (!a) return;
         e.preventDefault();
         const work = document.querySelector("#work") as HTMLElement | null;
-        const top = work ? work.getBoundingClientRect().top + window.scrollY : 0;
+        // land a bit deeper past the section top (heading clears the nav)
+        const top = work ? work.getBoundingClientRect().top + window.scrollY + WORK_NAV_OFFSET : 0;
         window.scrollTo({ top, behavior: "smooth" });
       };
       document.addEventListener("click", onClick);
@@ -63,7 +68,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       if (id === "#work") {
         e.preventDefault();
         const work = document.querySelector("#work");
-        if (work) lenis.scrollTo(work as HTMLElement, { offset: 0 });
+        if (work) lenis.scrollTo(work as HTMLElement, { offset: WORK_NAV_OFFSET });
         return;
       }
       const target = document.querySelector(id);
