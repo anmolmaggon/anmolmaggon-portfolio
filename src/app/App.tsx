@@ -14,8 +14,6 @@ import { Loader } from "./components/Loader";
 import { SmoothScroll } from "./components/SmoothScroll";
 import { GlobalProvider } from "./context/GlobalContext";
 import { MediaViewerModal } from "./components/MediaViewerModal";
-import { ExperimentsPage } from "./components/experiments/ExperimentsPage";
-import { ExperimentDetailPage } from "./components/experiments/ExperimentDetailPage";
 import { HeroScrubPrototype } from "./components/hero/HeroScrubPrototype";
 
 function HomePage() {
@@ -54,9 +52,6 @@ export default function App() {
           <Nav />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/experiments" element={<ExperimentsPage />} />
-            <Route path="/experiments/:slug" element={<ExperimentDetailPage />} />
-            <Route path="/hero-test" element={<HeroScrubPrototype />} />
           </Routes>
         </div>
       </SmoothScroll>
