@@ -3,8 +3,9 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router";
 import { Nav } from "./components/Nav";
-
-const CaseStudies = lazy(() => import("./components/CaseStudies").then(m => ({ default: m.CaseStudies })));
+// CaseStudies peeks right below the hero (above the fold) — import it directly so it's
+// present on first paint instead of streaming in as a lazy chunk (no blank gap).
+import { CaseStudies } from "./components/CaseStudies";
 const TechStackJar = lazy(() => import("./components/TechStackJar").then(m => ({ default: m.TechStackJar })));
 const OperatingPrinciples = lazy(() => import("./components/OperatingPrinciples").then(m => ({ default: m.OperatingPrinciples })));
 const ClosingScene = lazy(() => import("./components/ClosingScene").then(m => ({ default: m.ClosingScene })));

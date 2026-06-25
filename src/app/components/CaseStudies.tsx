@@ -325,7 +325,7 @@ export function CaseStudies() {
   const nextStudy = activeIndex !== -1 ? studies[(activeIndex + 1) % studies.length] : null;
 
   return (
-    <section id="work" className="relative z-10 px-6 md:px-10 pt-52 md:pt-52 pb-12 md:pb-16 scroll-mt-24">
+    <section id="work" className="relative z-10 px-6 md:px-10 pt-16 md:pt-24 pb-12 md:pb-16 scroll-mt-24">
       <div className="mb-4 md:mb-8 max-w-4xl">
         <p
           className="font-[Nyght_Serif] text-black/70"

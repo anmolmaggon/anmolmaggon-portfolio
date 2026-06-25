@@ -12,9 +12,15 @@ gsap.registerPlugin(ScrollTrigger);
  */
 export let lenisInstance: Lenis | null = null;
 
-// How far past the #work section top the "Work" nav link lands (px) — a bit deeper so
-// the "Recent work." heading clears the fixed nav. Tunable dial.
-const WORK_NAV_OFFSET = 120;
+// Per-anchor landing offsets (px added to the section top). Positive = scroll a bit deeper;
+// 0 = land at the section top. Tuned so each section's heading clears the fixed nav without
+// over/under-shooting. (#work has a small pt now, so 0 is right; #off-the-clock has a large
+// pt-40, so it needs a deeper landing.) Tunable dials.
+const NAV_OFFSETS: Record<string, number> = {
+  "#work": 10,
+  "#off-the-clock": 80,
+};
+const offsetFor = (id: string) => NAV_OFFSETS[id] ?? 0;
 
 /**
  * Site-wide buttery smooth scroll (Lenis) wired into GSAP's ticker so
@@ -31,13 +37,15 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       // viewport-offset correction (a native jump would land at the top).
       const onClick = (e: MouseEvent) => {
         const a = (e.target as HTMLElement)?.closest?.(
-          'a[href="#work"]',
+          'a[href^="#"]',
         ) as HTMLAnchorElement | null;
         if (!a) return;
+        const id = a.getAttribute("href");
+        if (!id || id === "#") return;
+        const target = document.querySelector(id) as HTMLElement | null;
+        if (!target) return;
         e.preventDefault();
-        const work = document.querySelector("#work") as HTMLElement | null;
-        // land a bit deeper past the section top (heading clears the nav)
-        const top = work ? work.getBoundingClientRect().top + window.scrollY + WORK_NAV_OFFSET : 0;
+        const top = target.getBoundingClientRect().top + window.scrollY + offsetFor(id);
         window.scrollTo({ top, behavior: "smooth" });
       };
       document.addEventListener("click", onClick);
@@ -64,17 +72,10 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       if (!a) return;
       const id = a.getAttribute("href");
       if (!id || id === "#") return;
-      // #work: scroll to the Work section's real position.
-      if (id === "#work") {
-        e.preventDefault();
-        const work = document.querySelector("#work");
-        if (work) lenis.scrollTo(work as HTMLElement, { offset: WORK_NAV_OFFSET });
-        return;
-      }
       const target = document.querySelector(id);
       if (target) {
         e.preventDefault();
-        lenis.scrollTo(target as HTMLElement, { offset: 0 });
+        lenis.scrollTo(target as HTMLElement, { offset: offsetFor(id) });
       }
     };
     document.addEventListener("click", onClick);

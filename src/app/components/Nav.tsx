@@ -8,11 +8,20 @@ export function Nav() {
   const [onDark, setOnDark] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // The compact sticky bar appears only once the hero sequence is scrolled past.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    const onScroll = () => {
+      const hero = document.getElementById("top");
+      if (hero) setScrolled(hero.getBoundingClientRect().bottom <= 80);
+      else setScrolled(window.scrollY > window.innerHeight * 0.6);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   // Lock body scroll while the mobile menu is open, and close on Escape.
@@ -28,6 +37,7 @@ export function Nav() {
     };
   }, [menuOpen]);
 
+  // Sample the section under the nav to flip text/bg between light and dark.
   useEffect(() => {
     const syncTheme = () => {
       const sampleY = 72;
@@ -37,7 +47,6 @@ export function Nav() {
       });
       setOnDark(darkSection);
     };
-
     syncTheme();
     window.addEventListener("scroll", syncTheme, { passive: true });
     window.addEventListener("resize", syncTheme);
@@ -47,7 +56,7 @@ export function Nav() {
     };
   }, []);
 
-  const lightNav = !onDark && scrolled;
+  const textColor = onDark ? "text-white" : "text-brand-dark";
 
   const links = [
     { label: "Work", href: "#work" },
@@ -58,7 +67,12 @@ export function Nav() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 ${scrolled ? "" : "pointer-events-none"}`}
+        style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
+      >
+      {/* background plate — only once the sticky bar is showing */}
       <div
         aria-hidden
         className={`absolute inset-0 -z-10 transition-all duration-500 ease-out ${
@@ -66,22 +80,26 @@ export function Nav() {
             ? onDark
               ? "bg-brand-dark/70 backdrop-blur-md border-b border-white/10"
               : "bg-brand-light/95 backdrop-blur-md border-b border-black/5"
-            : "bg-gradient-to-b from-black/50 via-black/20 to-transparent"
+            : "bg-transparent"
         }`}
       />
-      <div
-        className={`flex items-center justify-between px-6 md:px-10 py-5 transition-colors duration-500 ${
-          lightNav ? "text-brand-dark" : "text-white"
-        }`}
-      >
-        <HoverLink 
-          href="#top" 
-          className="italic font-[Nyght_Serif] text-xl md:text-2xl tracking-tight font-medium" 
+
+      <div className={`flex items-center justify-between px-6 md:px-10 py-5 transition-colors duration-500 ${textColor}`}>
+        {/* logo — hidden in the hero (name lives bottom-left of the sequence), fades in on scroll */}
+        <HoverLink
+          href="#top"
+          className={`italic font-[Nyght_Serif] text-xl md:text-2xl tracking-tight font-medium transition-opacity duration-500 ${
+            scrolled ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         >
           Anmol Maggon
         </HoverLink>
+
+        {/* desktop compact bar — links + CTA, only once scrolled past the hero */}
         <nav
-          className="hidden md:flex items-center gap-10 text-[16px] font-sans tracking-wide font-medium"
+          className={`hidden md:flex items-center gap-10 text-[16px] font-sans tracking-wide font-medium transition-opacity duration-500 ${
+            scrolled ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         >
           {links.map((l) => (
             <HoverLink
@@ -92,45 +110,43 @@ export function Nav() {
               {l.label}
             </HoverLink>
           ))}
-          
-          <ButtonCTA 
+          <ButtonCTA
             href="mailto:anmolmaggon40@gmail.com?subject=Let's%20chat%20about%20your%20portfolio%20%26%20work&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D"
-            variant={onDark ? "dark" : scrolled ? "light" : "transparent"}
+            variant={onDark ? "dark" : "light"}
             className="px-5 py-2.5"
           >
             Let's Talk
           </ButtonCTA>
         </nav>
-        {/* Mobile hamburger */}
+
+        {/* Mobile hamburger — always available */}
         <button
           type="button"
           aria-label="Open menu"
           aria-expanded={menuOpen ? "true" : "false"}
           onClick={() => setMenuOpen(true)}
-          className={`md:hidden -mr-2 flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-            lightNav ? "text-brand-dark" : "text-white"
-          }`}
+          className={`md:hidden pointer-events-auto -mr-2 flex h-10 w-10 items-center justify-center rounded-full transition-colors ${textColor}`}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M3 6h18M3 12h18M3 18h18" />
           </svg>
         </button>
       </div>
+      </header>
 
-      {/* Mobile full-screen drawer */}
+      {/* Mobile full-screen drawer — sibling of <header> so the header's compositing
+          layer (translateZ) doesn't trap this full-screen overlay inside it */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-[60] md:hidden bg-brand-dark text-white flex flex-col"
+            className="fixed inset-0 z-[60] md:hidden pointer-events-auto bg-brand-dark text-white flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="flex items-center justify-between px-6 py-5">
-              <span className="italic font-[Nyght_Serif] text-xl font-medium">
-                Anmol Maggon
-              </span>
+              <span className="italic font-[Nyght_Serif] text-xl font-medium">Anmol Maggon</span>
               <button
                 type="button"
                 aria-label="Close menu"
@@ -173,6 +189,6 @@ export function Nav() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }
