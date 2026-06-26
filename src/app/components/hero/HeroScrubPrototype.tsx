@@ -56,8 +56,8 @@ const MUSIC_START = 60; // begin (and loop) from the 60s mark
 const HERO_VH = 62; // band height (svh) — short enough that "Recent work." peeks below
 
 // identity socials (bottom-left of the band) — same links as the case-study modal
-const IG_URL = "https://www.instagram.com/anmolmaggon";
-const LI_URL = "https://www.linkedin.com/in/anmolmaggon";
+const IG_URL = "https://www.instagram.com/anmol.maggon/";
+const LI_URL = "https://www.linkedin.com/in/anmolmaggon40/";
 const MAIL_URL = "mailto:anmolmaggon40@gmail.com";
 
 // section nav — stacked top-right of the band; scrolls away with the hero

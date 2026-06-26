@@ -535,7 +535,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                   </HoverLink>
                   <div className="flex items-center justify-center gap-5 mt-8">
                     <HoverLink
-                      href="https://www.linkedin.com/in/anmolmaggon"
+                      href="https://www.linkedin.com/in/anmolmaggon40/"
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="LinkedIn"
@@ -543,7 +543,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                       <img src={linkedInLogo} alt="LinkedIn" className="w-[20px] h-[20px] md:w-[22px] md:h-[22px] object-contain" />
                     </HoverLink>
                     <HoverLink
-                      href="https://www.instagram.com/anmolmaggon"
+                      href="https://www.instagram.com/anmol.maggon/"
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Instagram"
@@ -623,7 +623,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
             </div>
             <div className="flex items-center gap-4">
               <HoverLink
-                href="https://www.linkedin.com/in/anmolmaggon"
+                href="https://www.linkedin.com/in/anmolmaggon40/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
@@ -631,7 +631,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                 <img src={linkedInLogo} alt="LinkedIn" className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] object-contain" />
               </HoverLink>
               <HoverLink
-                href="https://www.instagram.com/anmolmaggon"
+                href="https://www.instagram.com/anmol.maggon/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"

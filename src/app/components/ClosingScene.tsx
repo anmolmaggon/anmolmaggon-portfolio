@@ -72,7 +72,7 @@ const items: Item[] = [
 const footerLinks: [string, string][] = [
   ["Instagram", "https://www.instagram.com/anmol.maggon/"],
   ["YouTube", "https://www.youtube.com/@anmol.maggon"],
-  ["LinkedIn", "#"], // TODO: add real LinkedIn URL
+  ["LinkedIn", "https://www.linkedin.com/in/anmolmaggon40/"],
 ];
 
 function FilmTile({ videoId, poster, title }: { videoId: string; poster: string; title: string }) {
