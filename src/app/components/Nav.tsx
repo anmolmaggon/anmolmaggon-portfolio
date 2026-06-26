@@ -24,6 +24,13 @@ export function Nav() {
     };
   }, []);
 
+  // The hero owns its own hamburger (it scrolls away with the hero); it opens this drawer via an event.
+  useEffect(() => {
+    const open = () => setMenuOpen(true);
+    window.addEventListener("hero:open-menu", open);
+    return () => window.removeEventListener("hero:open-menu", open);
+  }, []);
+
   // Lock body scroll while the mobile menu is open, and close on Escape.
   useEffect(() => {
     if (!menuOpen) return;
@@ -70,7 +77,15 @@ export function Nav() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 ${scrolled ? "" : "pointer-events-none"}`}
-        style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
+        style={{
+          // iOS Safari hardening: keep the bar on its own GPU layer so it doesn't lag/drift
+          // during momentum scroll or the URL-bar show/hide (classic fixed-element repaint jitter).
+          transform: "translateZ(0)",
+          WebkitTransform: "translateZ(0)",
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+          willChange: "transform",
+        }}
       >
       {/* background plate — only once the sticky bar is showing */}
       <div
@@ -78,7 +93,7 @@ export function Nav() {
         className={`absolute inset-0 -z-10 transition-all duration-500 ease-out ${
           scrolled
             ? onDark
-              ? "bg-brand-dark/70 backdrop-blur-md border-b border-white/10"
+              ? "bg-black/80 backdrop-blur-md border-b border-white/10"
               : "bg-brand-light/95 backdrop-blur-md border-b border-black/5"
             : "bg-transparent"
         }`}
@@ -119,13 +134,16 @@ export function Nav() {
           </ButtonCTA>
         </nav>
 
-        {/* Mobile hamburger — always available */}
+        {/* Mobile hamburger — part of the sticky bar only; in the hero the hamburger lives in the
+            hero itself (so it scrolls away with it). Fades in once scrolled past the hero. */}
         <button
           type="button"
           aria-label="Open menu"
           aria-expanded={menuOpen ? "true" : "false"}
           onClick={() => setMenuOpen(true)}
-          className={`md:hidden pointer-events-auto -mr-2 flex h-10 w-10 items-center justify-center rounded-full transition-colors ${textColor}`}
+          className={`md:hidden -mr-2 flex h-10 w-10 items-center justify-center rounded-full transition-all duration-500 ${textColor} ${
+            scrolled ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M3 6h18M3 12h18M3 18h18" />
@@ -139,7 +157,7 @@ export function Nav() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-[60] md:hidden pointer-events-auto bg-brand-dark text-white flex flex-col"
+            className="fixed inset-0 z-[60] md:hidden pointer-events-auto bg-black text-white flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

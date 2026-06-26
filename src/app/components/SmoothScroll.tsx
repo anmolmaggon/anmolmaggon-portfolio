@@ -17,8 +17,8 @@ export let lenisInstance: Lenis | null = null;
 // over/under-shooting. (#work has a small pt now, so 0 is right; #off-the-clock has a large
 // pt-40, so it needs a deeper landing.) Tunable dials.
 const NAV_OFFSETS: Record<string, number> = {
-  "#work": 10,
-  "#off-the-clock": 80,
+  "#work": 30,
+  "#off-the-clock": 100,
 };
 const offsetFor = (id: string) => NAV_OFFSETS[id] ?? 0;
 

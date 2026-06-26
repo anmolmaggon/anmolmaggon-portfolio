@@ -543,7 +543,8 @@ export function HeroScrubPrototype() {
     fontWeight: 400,
     lineHeight: 1.0,
     letterSpacing: "-0.03em",
-    fontSize: "clamp(34px, 6vw, 96px)", // same scale as the case-study titles (6vw, cap 96); 34 floor fits the 2nd line on phones
+    // font-size lives in className so it can track the case-study titles per-breakpoint:
+    // mobile = clamp(30px,8vw,52px) (the mobile card title), md+ = clamp(36px,6vw,96px) (the desktop card title).
     textShadow: heroGlow,
     margin: 0,
   } as const;
@@ -556,7 +557,7 @@ export function HeroScrubPrototype() {
     textShadow: "0 1px 14px rgba(0,0,0,0.6)",
   } as const;
   const headlineEl = (
-    <h1 style={headlineStyle}>
+    <h1 className="text-[clamp(30px,8vw,52px)] md:text-[clamp(36px,6vw,96px)]" style={headlineStyle}>
       I make things that
       <br />
       blow people&rsquo;s minds.
@@ -599,8 +600,22 @@ export function HeroScrubPrototype() {
         ))}
       </nav>
 
+      {/* mobile hamburger — lives INSIDE the hero so it scrolls away with the hero (not pinned);
+          opens the Nav drawer via an event. The Nav's own hamburger takes over once scrolled past. */}
+      <button
+        type="button"
+        aria-label="Open menu"
+        onClick={() => window.dispatchEvent(new Event("hero:open-menu"))}
+        className="md:hidden absolute right-6 top-6 flex h-10 w-10 items-center justify-center text-white"
+        style={{ zIndex: 6, filter: "drop-shadow(0 1px 14px rgba(0,0,0,0.6))" }}
+      >
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+          <path d="M3 6h18M3 12h18M3 18h18" />
+        </svg>
+      </button>
+
       {/* BOTTOM slot — desktop: name + socials + full role; mobile: the tagline (punchline) */}
-      <div className="absolute inset-x-0 bottom-0 px-6 md:px-10 pb-8 md:pb-10" style={{ zIndex: 6 }}>
+      <div className="absolute inset-x-0 bottom-0 px-6 md:px-10 pb-6 md:pb-10" style={{ zIndex: 6 }}>
         {/* desktop: name + socials + role */}
         <div className="hidden md:block">
           <div className="flex items-center gap-4">
@@ -611,8 +626,10 @@ export function HeroScrubPrototype() {
               Anmol Maggon
             </span>
             {/* same social glyphs + links as the case-study modal, inverted white for the dark band.
-                text-white → the HoverLink underline (after:bg-current) reads white on hover. */}
-            <div className="flex items-center gap-4 text-white">
+                text-white → the HoverLink underline (after:bg-current) reads white on hover.
+                translateY(5px) drops the icons onto the wordmark's optical centre — geometric flex
+                centring leaves them sitting high against the caps, above the lowercase body. */}
+            <div className="flex items-center gap-4 text-white" style={{ transform: "translateY(5px)" }}>
               <HoverLink href={LI_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-white">
                 <img
                   src={linkedInLogo}
