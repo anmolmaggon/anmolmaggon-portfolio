@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { HoverLink } from "./HoverLink";
 import { ButtonCTA } from "./ui/ButtonCTA";
+import { LETS_TALK_MAILTO } from "../data/contact";
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -126,7 +127,7 @@ export function Nav() {
             </HoverLink>
           ))}
           <ButtonCTA
-            href="mailto:anmolmaggon40@gmail.com?subject=Let's%20chat%20about%20your%20portfolio%20%26%20work&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D"
+            href={LETS_TALK_MAILTO}
             variant={onDark ? "dark" : "light"}
             className="px-5 py-2.5"
           >
@@ -196,7 +197,7 @@ export function Nav() {
 
             <div className="px-6 pb-10">
               <ButtonCTA
-                href="mailto:anmolmaggon40@gmail.com?subject=Let's%20chat%20about%20your%20portfolio%20%26%20work&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D"
+                href={LETS_TALK_MAILTO}
                 onClick={() => setMenuOpen(false)}
                 variant="dark"
                 className="justify-center w-full px-5 py-4 text-[16px]"

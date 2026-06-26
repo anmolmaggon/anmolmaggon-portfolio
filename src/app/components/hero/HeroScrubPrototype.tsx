@@ -6,6 +6,7 @@ import { Mail } from "lucide-react";
 import { HoverLink } from "../HoverLink";
 import linkedInLogo from "../../../imports/InBug-Black.png";
 import instagramLogo from "../../../imports/Instagram_Glyph_Black.svg";
+import { LETS_TALK_MAILTO } from "../../data/contact";
 
 declare global {
   interface Window {
@@ -58,10 +59,8 @@ const HERO_VH = 62; // band height (svh) — short enough that "Recent work." pe
 // identity socials (bottom-left of the band) — same links as the case-study modal
 const IG_URL = "https://www.instagram.com/anmol.maggon/";
 const LI_URL = "https://www.linkedin.com/in/anmolmaggon40/";
-// Same templated email as the "Let's Talk" CTA (pre-filled subject + body), so the hero
-// Email icon opens the same draft instead of a blank message.
-const MAIL_URL =
-  "mailto:anmolmaggon40@gmail.com?subject=Let's%20chat%20about%20your%20portfolio%20%26%20work&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D";
+// Hero Email icon opens the shared "Let's Talk" draft (same as every other CTA).
+const MAIL_URL = LETS_TALK_MAILTO;
 
 // section nav — stacked top-right of the band; scrolls away with the hero
 const HERO_LINKS = [

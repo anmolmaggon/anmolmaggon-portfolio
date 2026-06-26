@@ -4,6 +4,7 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { HoverLink } from "./HoverLink";
 import { useGlobalContext } from "../context/GlobalContext";
 import { SectionHeader } from "./ui/SectionHeader";
+import { LETS_TALK_MAILTO } from "../data/contact";
 
 /* Warm glow used on the closing pitch + email - a soft light bloom so the dark
    text reads as if lit from within against the bright meadow. */
@@ -303,7 +304,7 @@ function FooterContent({ scrollYProgress }: { scrollYProgress: any }) {
               Got a <em className="italic">world worth building</em>? Let's make it real.
             </h2>
             <HoverLink
-              href="mailto:anmolmaggon40@gmail.com?subject=Let's%20chat%20about%20your%20portfolio%20%26%20work&body=Hi%20Anmol%2C%0A%0AI%20was%20just%20looking%20through%20your%20portfolio%20and%20really%20loved%20your%20work.%20I'd%20love%20to%20connect%20and%20chat%20more%20about%20what%20you're%20up%20to!%0A%0ABest%2C%0A%5BYour%20Name%5D"
+              href={LETS_TALK_MAILTO}
               className="mt-8 inline-block italic font-[Nyght_Serif] text-white text-fluid-h5"
               style={{ textShadow: TEXT_GLOW }}
             >
