@@ -411,33 +411,17 @@ export function CaseStudies() {
                 </div>
               </div>
 
-              {/* Mobile: everything upfront (no hover). Title with the arrow on
-                  the left, then subtext, then a centered preview. */}
-              <div className="md:hidden">
-                <div className="flex items-baseline gap-3">
-                  <span
-                    aria-hidden
-                    className="font-[Nyght_Serif] shrink-0 text-black"
-                    style={{ fontSize: "clamp(26px, 7vw, 40px)", fontWeight: 400 }}
-                  >
-                    →
-                  </span>
-                  <h3
-                    className="font-[Nyght_Serif] text-black flex-1 min-w-0"
-                    style={{ fontSize: "clamp(30px, 8vw, 52px)", lineHeight: 0.98, fontWeight: 400, letterSpacing: "-0.025em" }}
-                  >
-                    {s.title}
-                  </h3>
-                </div>
-
-                <p className="font-sans text-black/60 mt-3" style={{ fontSize: 14 }}>
-                  {s.oneLiner || s.meta.join(" • ")}
-                </p>
-
-                <div className="mt-5 mx-auto w-[80%] max-w-[320px] aspect-[4/5] shadow-2xl bg-white overflow-hidden">
+              {/* Mobile: a ruled editorial card (no hover). The image runs
+                  edge-to-edge at the top, then a ruled text compartment: title,
+                  one-liner, impact bullets (only when impact data exists), and a
+                  "Know more" pill. The whole card is the tap target; the pill is
+                  a visual affordance (a span), not a nested button, but carries
+                  the site's hover/pressed states. */}
+              <div className="md:hidden border border-black/12 bg-white/40">
+                <div className="w-full aspect-[4/5] overflow-hidden bg-black/[0.03]">
                   {s.previewVideo ? (
                     <VideoWithFallback
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover"
                       autoPlay
                       muted
                       loop
@@ -451,9 +435,47 @@ export function CaseStudies() {
                     <ImageWithFallback
                       src={s.image}
                       alt={`${s.title} preview`}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover"
                     />
                   )}
+                </div>
+
+                <div className="px-4 py-5 border-t border-black/12">
+                  <h3
+                    className="font-[Nyght_Serif] text-black"
+                    style={{ fontSize: "clamp(28px, 7vw, 44px)", lineHeight: 1.0, fontWeight: 400, letterSpacing: "-0.025em" }}
+                  >
+                    {s.title}
+                  </h3>
+
+                  <p className="mt-3 font-sans text-black/55" style={{ fontSize: 13.5, lineHeight: 1.4 }}>
+                    {s.oneLiner || s.subtitle || s.meta.join(" • ")}
+                  </p>
+
+                  {s.impact.length > 0 && (
+                    <div className="mt-4 space-y-2.5">
+                      {s.impact.slice(0, 3).map((m) => (
+                        <div key={m.label} className="flex items-center gap-3">
+                          <span aria-hidden className="shrink-0 w-[9px] h-[9px] bg-black/80" />
+                          <p className="font-sans text-black/65" style={{ fontSize: 13 }}>
+                            <span className="font-medium text-black">{m.value} </span>
+                            {m.label}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <span
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-black text-white px-5 py-2.5 font-sans font-medium transition-all duration-300 hover:bg-black/80 hover:scale-105 active:scale-95"
+                    style={{ fontSize: 13 }}
+                  >
+                    Know more
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </span>
                 </div>
               </div>
             </button>
