@@ -108,7 +108,7 @@ export function OperatingPrinciples() {
     >
       {/* the whole section inverts when "change" is hovered */}
       <motion.div
-        className="px-6 md:px-10 py-24 md:py-40 bg-brand-light"
+        className="px-gutter md:px-gutter-lg py-section md:py-section-lg bg-brand-light"
         initial={false}
         animate={{ filter: inverted ? "invert(1)" : "invert(0)" }}
         transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
@@ -135,7 +135,7 @@ export function OperatingPrinciples() {
                     setHovered((cur) => (cur === i ? null : i));
                   }
                 }}
-                className="group relative isolate grid grid-cols-12 items-start gap-4 md:gap-8 py-10 md:py-14 border-t border-black/15 last:border-b last:border-black/15 transition-colors duration-500 cursor-pointer md:cursor-default"
+                className="group relative isolate grid grid-cols-12 items-start gap-4 md:gap-8 py-10 md:py-14 border-t border-hairline last:border-b last:border-hairline transition-colors duration-500 cursor-pointer md:cursor-default"
               >
                 {/* Mobile nudge: one tooltip under the first principle, pointing
                     up at it with a gentle bounce. Retires after the first tap. */}
@@ -151,8 +151,8 @@ export function OperatingPrinciples() {
                     }}
                   >
                     {/* upward caret pointing at the principle */}
-                    <span className="absolute -top-[6px] left-6 h-3 w-3 rotate-45 rounded-[2px] bg-black" />
-                    <span className="relative inline-flex items-center rounded-full bg-black px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-[#fafaf7]">
+                    <span className="absolute -top-[6px] left-6 h-3 w-3 rotate-45 rounded-xs bg-ink" />
+                    <span className="relative inline-flex items-center rounded-full bg-ink px-3 py-1.5 text-micro font-medium uppercase tracking-[0.14em] text-brand-light">
                       Tap to see magic
                     </span>
                   </motion.div>
@@ -168,12 +168,12 @@ export function OperatingPrinciples() {
 
                 {/* Energy's sun cursor works on touch now. No ambient radial glow needed. */}
 
-                <span className={`col-span-2 md:col-span-1 italic numeral text-[14px] md:text-[15px] leading-none mt-[2px] md:mt-[16px] transition-opacity duration-500 group-hover:opacity-100 ${canHover ? "opacity-40" : "opacity-100"}`}>
+                <span className={`col-span-2 md:col-span-1 italic numeral text-meta md:text-meta leading-none mt-0.5 md:mt-4 transition-opacity duration-500 group-hover:opacity-100 ${canHover ? "opacity-40" : "opacity-100"}`}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
 
                 <motion.h3
-                  className={`col-span-10 md:col-span-6 font-[Nyght_Serif] transition-colors duration-500 group-hover:text-black text-fluid-h2 leading-[1.02] tracking-[-0.025em] font-normal ${canHover ? "text-black/35" : "text-black"}`}
+                  className={`col-span-10 md:col-span-6 font-[Nyght_Serif] transition-colors duration-500 group-hover:text-ink text-fluid-h2 leading-[1.02] tracking-display-tight font-normal ${canHover ? "text-ink-faint" : "text-ink"}`}
                   style={{
                     fontFamily: p.cjk ? CJK_SERIF : undefined,
                   }}
@@ -187,7 +187,7 @@ export function OperatingPrinciples() {
                 </motion.h3>
 
                 <p
-                  className={`col-span-12 md:col-span-5 max-w-md mt-3 md:mt-[10px] transition-all duration-500 group-hover:opacity-80 text-fluid-body leading-[1.5] whitespace-pre-line ${canHover ? "opacity-50" : "opacity-80"}`}
+                  className={`col-span-12 md:col-span-5 max-w-md mt-3 md:mt-2.5 transition-all duration-500 group-hover:opacity-80 text-fluid-body leading-[1.5] whitespace-pre-line ${canHover ? "opacity-50" : "opacity-80"}`}
                 >
                   {p.detail}
                 </p>

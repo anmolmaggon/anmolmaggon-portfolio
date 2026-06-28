@@ -1,4 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
+import { SectionLabel } from "./SectionLabel";
+import { Pill } from "./Pill";
+import { CloseButton } from "./CloseButton";
+import { useRevealOnScroll } from "../hooks/useRevealOnScroll";
 import { createPortal } from "react-dom";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { VideoWithFallback } from "./VideoWithFallback";
@@ -49,17 +53,7 @@ type Props = {
 
 export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClose }: Props) {
   const { pauseBackgroundAudio, resumeBackgroundAudio } = useGlobalContext();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [atEnd, setAtEnd] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = 0;
-    }
-    setIsScrolled(false);
-    setAtEnd(false);
-  }, [study]);
+  const { scrollRef, isScrolled, atEnd, onScroll } = useRevealOnScroll(study);
 
   useEffect(() => {
     if (!study) return;
@@ -89,24 +83,23 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
     text: string,
     big: boolean,
   ) => (
-    <a
+    <Pill
       key={q.label}
       href={`mailto:anmolmaggon40@gmail.com?subject=${encodeURIComponent(`${study.title} - ${q.question}`)}&body=${encodeURIComponent(`Hi Anmol - I went through your ${study.title} case study, and I'd love to learn more about how you're thinking about this: ${q.question}`)}`}
-      className={`group/pill shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full border border-black/20 font-sans text-black/80 transition-colors duration-300 hover:bg-black hover:text-[#fafaf7] hover:border-black ${
-        big ? "px-6 py-3" : "px-4 py-2"
-      }`}
-      style={{ fontSize: big ? "clamp(16px, 1.6vw, 21px)" : 14, lineHeight: 1.25 }}
+      variant="outline"
+      size={big ? "lg" : "sm"}
+      className="shrink-0"
     >
       {text}
       <span aria-hidden className="opacity-50 transition-transform duration-300 group-hover/pill:translate-x-0.5">→</span>
-    </a>
+    </Pill>
   );
 
   return createPortal(
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-[9999] bg-black/40 flex items-stretch justify-center p-0"
+      className="fixed inset-0 z-[9999] bg-scrim flex items-stretch justify-center p-0"
       onClick={onClose}
     >
       <div
@@ -115,56 +108,48 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
         className="relative w-full h-[100dvh] bg-brand-light rounded-none flex flex-col overflow-hidden shadow-2xl"
       >
         {/* Floating Close Button - Always visible */}
-        <button
+        <CloseButton
           onClick={onClose}
-          aria-label="Close"
-          className="absolute top-3 right-3 md:top-4 md:right-4 z-[10000] flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/5 hover:bg-black/10 text-black transition-colors cursor-pointer"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
+          tone="onLight"
+          iconSize={20}
+          className="absolute top-3 right-3 md:top-4 md:right-4 z-[10000] w-10 h-10 md:w-12 md:h-12"
+        />
 
         {/* Reveal-on-Scroll Header */}
         <header 
-          className={`absolute top-0 left-0 right-0 flex items-center h-16 md:h-20 px-6 border-b border-black/10 bg-[#fafaf7]/90 backdrop-blur-md z-[9999] transition-all duration-500 ease-in-out pr-20 ${
+          className={`absolute top-0 left-0 right-0 flex items-center h-16 md:h-20 px-6 border-b border-hairline bg-brand-light/90 backdrop-blur-glass z-[9999] transition-all duration-500 ease-in-out pr-20 ${
             isScrolled ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
           }`}
         >
-          <h2 className="font-[Nyght_Serif] text-xl md:text-2xl text-black/80">{study.title}</h2>
+          <h2 className="font-[Nyght_Serif] text-xl md:text-2xl text-ink-strong">{study.title}</h2>
         </header>
 
         {/* Scrollable Content */}
         <div 
           ref={scrollRef}
           className="flex-1 overflow-y-auto overflow-x-hidden overscroll-none"
-          onScroll={(e) => {
-            const el = e.currentTarget;
-            setIsScrolled(el.scrollTop > 100);
-            setAtEnd(el.scrollTop + el.clientHeight >= el.scrollHeight - 100);
-          }}
+          onScroll={onScroll}
         >
-          <div className="px-6 md:px-10 py-10 md:py-16 pb-28 md:pb-32">
+          <div className="px-gutter md:px-gutter-lg py-10 md:py-16 pb-28 md:pb-32">
 
           {/* 2. Meta eyebrow, title & subtitle */}
           <div className="mb-14 md:mb-20">
-            <p className="font-sans font-medium text-[13px] uppercase tracking-wider text-black/50 flex flex-wrap items-center gap-x-3 gap-y-2 mb-6 pr-12 md:pr-0">
+            <p className="font-sans font-medium text-label uppercase tracking-wider text-ink-label flex flex-wrap items-center gap-x-3 gap-y-2 mb-6 pr-12 md:pr-0">
               {study.meta.map((m, i, arr) => (
                 <span key={m} className="flex items-center gap-3">
                   {m}
-                  {i < arr.length - 1 && <span aria-hidden className="text-black/25">·</span>}
+                  {i < arr.length - 1 && <span aria-hidden className="text-ink-ghost">·</span>}
                 </span>
               ))}
             </p>
             <h2
-              className="font-[Nyght_Serif] text-fluid-massive leading-[0.95] tracking-[-0.025em] font-normal"
+              className="font-[Nyght_Serif] text-fluid-massive leading-[0.95] tracking-display-tight font-normal"
             >
               {study.title}
               <em className="italic">.</em>
             </h2>
             {study.subtitle && (
-              <p className="font-sans text-black/70 max-w-2xl" style={{ fontSize: "clamp(20px, 2.5vw, 28px)", lineHeight: 1.4 }}>
+              <p className="font-sans text-ink-body max-w-2xl" style={{ fontSize: "clamp(20px, 2.5vw, 28px)", lineHeight: 1.4 }}>
                 {study.subtitle}
               </p>
             )}
@@ -200,17 +185,17 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                 )}
               </div>
               {study.coverCaption && (
-                <figcaption className="pt-4 italic opacity-60 text-[13px]">{study.coverCaption}</figcaption>
+                <figcaption className="pt-4 italic opacity-60 text-label">{study.coverCaption}</figcaption>
               )}
             </figure>
           )}
 
           {/* 4. Context - boxed aside below the hero, connects the dots */}
           {study.context && (
-            <div className="border border-black/15 p-6 md:p-8 mb-16 md:mb-20">
-              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-4">For context</p>
+            <div className="border border-hairline p-6 md:p-8 mb-16 md:mb-20">
+              <SectionLabel className="mb-4">For context</SectionLabel>
               <p
-                className="max-w-3xl text-black/70 font-sans text-fluid-body-sm leading-[1.6] font-normal"
+                className="max-w-3xl text-ink-body font-sans text-fluid-body-sm leading-body font-normal"
               >
                 {study.context}
               </p>
@@ -219,10 +204,10 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-10 mb-12 md:mb-20">
             <div className="md:col-span-3">
-              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider">The problem</p>
+              <SectionLabel>The problem</SectionLabel>
             </div>
             <p
-              className="md:col-span-9 font-sans max-w-3xl text-black/80 text-fluid-h4 leading-[1.4] tracking-[-0.01em] font-normal"
+              className="md:col-span-9 font-sans max-w-3xl text-ink-strong text-fluid-h4 leading-[1.4] tracking-snug font-normal"
             >
               {study.problem}
             </p>
@@ -231,10 +216,10 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
           {/* 5. Approach */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-10 mb-16 md:mb-24">
             <div className="md:col-span-3">
-              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider">Approach</p>
+              <SectionLabel>Approach</SectionLabel>
             </div>
             <p
-              className="md:col-span-9 font-sans max-w-3xl text-black/80 text-fluid-h4 leading-[1.4] tracking-[-0.01em] font-normal"
+              className="md:col-span-9 font-sans max-w-3xl text-ink-strong text-fluid-h4 leading-[1.4] tracking-snug font-normal"
             >
               {study.approach}
             </p>
@@ -243,20 +228,20 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
           {/* 6. Impact Stats (Moved from top) */}
           {study.impact.length > 0 && (
           <div className="mb-20 md:mb-24">
-            <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">The impact</p>
+            <SectionLabel className="mb-8">The impact</SectionLabel>
             {study.impactNote && (
-              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-6">{study.impactNote}</p>
+              <SectionLabel className="mb-6">{study.impactNote}</SectionLabel>
             )}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {study.impact.map((m) => (
-                <div key={m.label} className="p-6 md:p-8 rounded-2xl border border-black/10 bg-white/50 shadow-[0_4px_24px_rgba(0,0,0,0.02)] backdrop-blur-sm text-black flex flex-col justify-center items-center text-center transition-transform hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
+                <div key={m.label} className="p-6 md:p-8 rounded-card border border-hairline bg-white/50 shadow-card backdrop-blur-sm text-ink flex flex-col justify-center items-center text-center transition-transform hover:-translate-y-1 hover:shadow-card-hover">
                   <p
                     className="font-[Nyght_Serif]"
                     style={{ fontSize: "clamp(40px, 4vw, 56px)", lineHeight: 1, fontWeight: 400, letterSpacing: "-0.02em" }}
                   >
                     {m.value}
                   </p>
-                  <p className="mt-4 font-sans font-medium opacity-60 uppercase tracking-wider text-[11px] md:text-[12px]">{m.label}</p>
+                  <p className="mt-4 font-sans font-medium opacity-60 uppercase tracking-wider text-micro md:text-caption">{m.label}</p>
                 </div>
               ))}
             </div>
@@ -265,15 +250,15 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
 
           {/* 7. Design Decisions */}
           <div className="mb-24">
-            <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">Design decisions</p>
+            <SectionLabel className="mb-8">Design decisions</SectionLabel>
             <ol className="space-y-0">
               {study.decisions.map((d, i) => (
                 <li
                   key={d.title}
-                  className="py-8 md:py-12 border-t border-black/15 last:border-b flex flex-col gap-8 md:gap-12"
+                  className="py-8 md:py-12 border-t border-hairline last:border-b flex flex-col gap-8 md:gap-12"
                 >
                   <div className="grid grid-cols-12 items-baseline gap-4 md:gap-8">
-                    <span className="col-span-2 md:col-span-1 italic numeral text-[13px] opacity-50">
+                    <span className="col-span-2 md:col-span-1 italic numeral text-label opacity-50">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <h3
@@ -284,13 +269,13 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                     </h3>
                     <div className="col-span-12 md:col-span-6 flex flex-col gap-4">
                       <p
-                        className="text-black/70 font-sans"
+                        className="text-ink-body font-sans"
                         style={{ fontSize: "clamp(15px, 1.1vw, 17px)", lineHeight: 1.6 }}
                       >
                         {d.detail}
                       </p>
                       {d.image && (
-                        <div className="w-full max-w-[320px] bg-black/5 mt-4 rounded-xl overflow-hidden">
+                        <div className="w-full max-w-[320px] bg-ink-wash mt-4 rounded-card overflow-hidden">
                           <ImageWithFallback src={d.image} alt={d.title} className="w-full h-auto object-cover" />
                         </div>
                       )}
@@ -302,7 +287,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                       <div className={`grid gap-4 md:gap-6 ${d.videos.length === 4 ? "grid-cols-2 md:grid-cols-4" : d.videos.length > 1 ? "grid-cols-2" : "grid-cols-1 max-w-sm mx-auto"}`}>
                         {d.videos.map((vid, vIdx) => (
                           <div key={vIdx} className="flex flex-col gap-3">
-                            <div className="w-full rounded-[24px] overflow-hidden bg-black/5 shadow-md border border-black/5">
+                            <div className="w-full rounded-media overflow-hidden bg-ink-wash shadow-md border border-hairline-soft">
                               <VideoWithFallback
                                 src={vid.src}
                                 className="w-full h-auto block"
@@ -314,7 +299,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                               />
                             </div>
                             {vid.caption && (
-                              <p className="text-center font-sans text-[13px] text-black/50 px-2 leading-snug">
+                              <p className="text-center font-sans text-label text-ink-label px-2 leading-snug">
                                 {vid.caption}
                               </p>
                             )}
@@ -329,7 +314,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                       <div className={`grid gap-4 md:gap-6 ${d.images.length > 1 ? "grid-cols-2" : "grid-cols-1 max-w-sm mx-auto"}`}>
                         {d.images.map((img, imgIdx) => (
                           <div key={imgIdx} className="flex flex-col gap-3">
-                            <div className="w-full rounded-[24px] overflow-hidden bg-black/5 shadow-md border border-black/5">
+                            <div className="w-full rounded-media overflow-hidden bg-ink-wash shadow-md border border-hairline-soft">
                               <ImageWithFallback
                                 src={img.src}
                                 alt={img.caption || d.title}
@@ -337,7 +322,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                               />
                             </div>
                             {img.caption && (
-                              <p className="text-center font-sans text-[13px] text-black/50 px-2 leading-snug">
+                              <p className="text-center font-sans text-label text-ink-label px-2 leading-snug">
                                 {img.caption}
                               </p>
                             )}
@@ -349,8 +334,8 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                 </li>
               ))}
               {study.whatICut && (
-                <li className="grid grid-cols-12 items-baseline gap-4 md:gap-8 py-6 md:py-8 border-t border-black/15 last:border-b">
-                  <span className="col-span-2 md:col-span-1 italic numeral text-[13px] opacity-50">
+                <li className="grid grid-cols-12 items-baseline gap-4 md:gap-8 py-6 md:py-8 border-t border-hairline last:border-b">
+                  <span className="col-span-2 md:col-span-1 italic numeral text-label opacity-50">
                     {String(study.decisions.length + 1).padStart(2, "0")}
                   </span>
                   <h3
@@ -359,16 +344,16 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                   >
                     {study.whatICut.chips.map((chip, i) => (
                       <span key={chip}>
-                        <span className="text-black/35 line-through decoration-1 decoration-black/40 transition-colors duration-300 hover:text-black/60">
+                        <span className="text-ink-faint line-through decoration-1 decoration-black/40 transition-colors duration-300 hover:text-ink-muted">
                           {chip}
                         </span>
-                        {i < study.whatICut!.chips.length - 1 && <span className="text-black/25">, </span>}
+                        {i < study.whatICut!.chips.length - 1 && <span className="text-ink-ghost">, </span>}
                       </span>
                     ))}
-                    <span className="text-black/25">.</span>
+                    <span className="text-ink-ghost">.</span>
                   </h3>
                   <p
-                    className="col-span-12 md:col-span-6 text-black/70 font-sans"
+                    className="col-span-12 md:col-span-6 text-ink-body font-sans"
                     style={{ fontSize: "clamp(15px, 1.1vw, 17px)", lineHeight: 1.6 }}
                   >
                     {study.whatICut.caption}
@@ -381,27 +366,27 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
           {/* Designed in code - rendered as an editor snippet */}
           {study.noFigma && (
             <div className="mb-20 md:mb-24">
-              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">Designed in code</p>
-              <div className="bg-black text-[#fafaf7]">
-                <div className="flex items-center gap-2 px-5 md:px-8 py-3.5 border-b border-white/10">
-                  <span aria-hidden className="w-2.5 h-2.5 rounded-full bg-white/15" />
-                  <span aria-hidden className="w-2.5 h-2.5 rounded-full bg-white/15" />
-                  <span aria-hidden className="w-2.5 h-2.5 rounded-full bg-white/15" />
-                  <span className="ml-3 font-mono text-[12px] text-white/40">
+              <SectionLabel className="mb-8">Designed in code</SectionLabel>
+              <div className="bg-ink text-brand-light">
+                <div className="flex items-center gap-2 px-5 md:px-8 py-3.5 border-b border-paper-hairline">
+                  <span aria-hidden className="w-2.5 h-2.5 rounded-full bg-glass" />
+                  <span aria-hidden className="w-2.5 h-2.5 rounded-full bg-glass" />
+                  <span aria-hidden className="w-2.5 h-2.5 rounded-full bg-glass" />
+                  <span className="ml-3 font-mono text-caption text-paper-faint">
                     {study.title.toLowerCase().replace(/\s+/g, "-")}.tsx
                   </span>
                 </div>
-                <div className="px-5 md:px-8 py-8 md:py-10 font-mono text-[14px] md:text-[15px] leading-[1.9]">
+                <div className="px-5 md:px-8 py-8 md:py-10 font-mono text-meta md:text-meta leading-loose">
                   {study.noFigma.split(/(?<=[.!?])\s+/).map((line, i) => (
-                    <p key={i} className="text-white/50" style={{ paddingLeft: "3ch", textIndent: "-3ch" }}>
+                    <p key={i} className="text-paper-muted" style={{ paddingLeft: "3ch", textIndent: "-3ch" }}>
                       {"// "}
                       {line}
                     </p>
                   ))}
-                  <p className="mt-6 text-white/90">
-                    <span className="text-white/50">const</span> spec <span className="text-white/50">=</span> {"<"}WorkingPrototype{" "}
+                  <p className="mt-6 text-paper-strong">
+                    <span className="text-paper-muted">const</span> spec <span className="text-paper-muted">=</span> {"<"}WorkingPrototype{" "}
                     {"/>"};
-                    <span aria-hidden className="text-white/40 animate-pulse"> ▍</span>
+                    <span aria-hidden className="text-paper-faint animate-pulse"> ▍</span>
                   </p>
                 </div>
               </div>
@@ -411,7 +396,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
           {/* 8. Before/After Slider */}
           {study.beforeAfter && study.slug !== "quick-vibe-check" && study.slug !== "the-number-that-matters" && (
             <div className="mb-24">
-              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">The redesign</p>
+              <SectionLabel className="mb-8">The redesign</SectionLabel>
               <BeforeAfterSlider
                 before={study.beforeAfter.before}
                 after={study.beforeAfter.after}
@@ -430,7 +415,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                   key={i}
                   className={`${s.wide ? "md:col-span-2" : ""} overflow-hidden`}
                 >
-                  <div className={`${s.wide ? "aspect-[16/8]" : "aspect-[4/3]"} bg-black/5`}>
+                  <div className={`${s.wide ? "aspect-[16/8]" : "aspect-[4/3]"} bg-ink-wash`}>
                     {s.src.match(/\.(mp4|webm|mov)$/i) ? (
                       <VideoWithFallback
                         className="w-full h-full object-cover"
@@ -446,7 +431,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                       <ImageWithFallback src={s.src} alt={s.caption} className="w-full h-full object-cover" />
                     )}
                   </div>
-                  <figcaption className="pt-4 pb-2 italic opacity-60 text-[13px]">{s.caption}</figcaption>
+                  <figcaption className="pt-4 pb-2 italic opacity-60 text-label">{s.caption}</figcaption>
                 </figure>
               ))}
             </div>
@@ -455,10 +440,10 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
 
           {/* Early Signal */}
           {study.earlySignal && (
-            <div className="mb-24 border-l-2 border-black/20 pl-6 md:pl-10">
-              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-6">Early Signal</p>
+            <div className="mb-24 border-l-2 border-ink-ghost pl-6 md:pl-10">
+              <SectionLabel className="mb-6">Early Signal</SectionLabel>
               <p
-                className="font-[Nyght_Serif] italic text-black/90 max-w-3xl"
+                className="font-[Nyght_Serif] italic text-ink-strong max-w-3xl"
                 style={{ fontSize: "clamp(24px, 3vw, 40px)", lineHeight: 1.2, letterSpacing: "-0.01em" }}
               >
                 "{study.earlySignal}"
@@ -469,29 +454,29 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
           {/* What we're watching - directional community-health metrics, quiet ledger rows */}
           {study.watching && (
             <div className="mb-24">
-              <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-8">What we're watching</p>
+              <SectionLabel className="mb-8">What we're watching</SectionLabel>
               <ul>
                 {study.watching.metrics.map((m) => (
-                  <li key={m} className="py-4 md:py-5 border-t border-black/15 last:border-b">
+                  <li key={m} className="py-4 md:py-5 border-t border-hairline last:border-b">
                     <p
-                      className="font-[Nyght_Serif] text-black/85"
+                      className="font-[Nyght_Serif] text-ink-strong"
                       style={{ fontSize: "clamp(18px, 2vw, 26px)", lineHeight: 1.2, fontWeight: 400, letterSpacing: "-0.01em" }}
                     >
-                      <span aria-hidden className="text-black/35 mr-3 text-[0.8em]">↑</span>
+                      <span aria-hidden className="text-ink-faint mr-3 text-[0.8em]">↑</span>
                       {m}
                     </p>
                   </li>
                 ))}
               </ul>
               {study.watching.caption && (
-                <p className="font-sans italic text-[14px] text-black/50 mt-6">{study.watching.caption}</p>
+                <p className="font-sans italic text-meta text-ink-label mt-6">{study.watching.caption}</p>
               )}
             </div>
           )}
 
           {/* Beyond the design - open product questions, footer-feel closing band */}
           {study.beyondDesign && (
-            <div className="relative -mx-6 md:-mx-10 px-6 md:px-10 py-16 md:py-24 overflow-hidden">
+            <div className="relative -mx-6 md:-mx-10 px-gutter md:px-gutter-lg py-16 md:py-24 overflow-hidden">
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-0"
@@ -503,7 +488,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                 }}
               />
               <div className="relative">
-                <p className="font-sans font-medium text-[13px] text-black/50 uppercase tracking-wider mb-10 text-center">You're probably wondering</p>
+                <SectionLabel className="mb-10 text-center">You're probably wondering</SectionLabel>
                 {/* Mobile: two rows that hug their content, centered when they
                     fit and horizontally scrollable (left edge stays reachable)
                     when they don't. */}
@@ -526,7 +511,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                   {study.beyondDesign.questions.map((q) => renderChip(q, q.question, true))}
                 </div>
                 <div className="text-center pt-4 md:pt-8">
-                  <p className="font-sans italic text-[14px] text-black/55 mb-3">{study.beyondDesign.ctaLead}</p>
+                  <p className="font-sans italic text-meta text-ink-muted mb-3">{study.beyondDesign.ctaLead}</p>
                   <HoverLink
                     href={LETS_TALK_MAILTO}
                     className="font-[Nyght_Serif] italic"
@@ -559,8 +544,8 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
 
           {/* Previous / Next - slim bar the sticky footer hands off to */}
           {(prevStudy || nextStudy) && onNavigate && (
-            <div className="-mx-6 md:-mx-10 -mb-28 md:-mb-32 border-t border-black/10">
-              <div className="px-6 md:px-10 flex items-center justify-between gap-4 py-5 md:py-6">
+            <div className="-mx-6 md:-mx-10 -mb-28 md:-mb-32 border-t border-hairline">
+              <div className="px-gutter md:px-gutter-lg flex items-center justify-between gap-4 py-5 md:py-6">
                 {prevStudy ? (
                   <button
                     type="button"
@@ -574,7 +559,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                     >
                       ←
                     </span>
-                    <span className="font-[Nyght_Serif] font-normal text-sm md:text-lg text-black/70 group-hover:text-black transition-colors duration-300 truncate relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-current after:scale-x-0 after:origin-left after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                    <span className="font-[Nyght_Serif] font-normal text-sm md:text-lg text-ink-body group-hover:text-ink transition-colors duration-300 truncate relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-current after:scale-x-0 after:origin-left after:transition-transform after:duration-300 group-hover:after:scale-x-100">
                       {prevStudy.title}
                     </span>
                   </button>
@@ -587,7 +572,7 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
                     aria-label={`Next case study: ${nextStudy.title}`}
                     className="group inline-flex items-center justify-end gap-2 md:gap-3 min-w-0 max-w-[50%] text-right cursor-pointer ml-auto"
                   >
-                    <span className="font-[Nyght_Serif] font-normal text-sm md:text-lg text-black/70 group-hover:text-black transition-colors duration-300 truncate relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-current after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                    <span className="font-[Nyght_Serif] font-normal text-sm md:text-lg text-ink-body group-hover:text-ink transition-colors duration-300 truncate relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-current after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
                       {nextStudy.title}
                     </span>
                     <span
@@ -607,13 +592,13 @@ export function CaseStudyModal({ study, prevStudy, nextStudy, onNavigate, onClos
 
         {/* Reveal-on-Scroll Footer - hands off to the prev/next bar at page end */}
         <footer
-          className={`absolute bottom-0 left-0 right-0 py-5 border-t border-black/10 bg-[#fafaf7]/90 backdrop-blur-md z-[9999] transition-all duration-500 ease-in-out ${
+          className={`absolute bottom-0 left-0 right-0 py-5 border-t border-hairline bg-brand-light/90 backdrop-blur-glass z-[9999] transition-all duration-500 ease-in-out ${
             isScrolled && !atEnd ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
           }`}
         >
-          <div className="px-6 md:px-10 flex items-center justify-between gap-6 flex-wrap">
+          <div className="px-gutter md:px-gutter-lg flex items-center justify-between gap-6 flex-wrap">
             <div className="flex items-baseline gap-4 md:gap-6 flex-wrap">
-              <p className="italic opacity-60 text-[14px]">Want the full walkthrough?</p>
+              <p className="italic opacity-60 text-meta">Want the full walkthrough?</p>
               <HoverLink
                 href={LETS_TALK_MAILTO}
                 className="font-[Nyght_Serif] italic"

@@ -559,7 +559,7 @@ export function HeroScrubPrototype() {
     textShadow: "0 1px 14px rgba(0,0,0,0.6)",
   } as const;
   const headlineEl = (
-    <h1 className="text-[clamp(30px,8vw,52px)] md:text-[clamp(36px,6vw,96px)]" style={headlineStyle}>
+    <h1 className="text-fluid-hero-sm md:text-fluid-h1" style={headlineStyle}>
       I make things that
       <br />
       blow people&rsquo;s minds.
@@ -582,7 +582,7 @@ export function HeroScrubPrototype() {
       <div aria-hidden style={{ position: "absolute", inset: 0, zIndex: 3, pointerEvents: "none", background: scrimBg }} />
 
       {/* headline — top-left on all breakpoints */}
-      <div className="absolute inset-x-0 top-0 px-6 md:px-10 pt-6 md:pt-8" style={{ pointerEvents: "none", zIndex: 6 }}>
+      <div className="absolute inset-x-0 top-0 px-gutter md:px-gutter-lg pt-6 md:pt-8" style={{ pointerEvents: "none", zIndex: 6 }}>
         <div style={{ maxWidth: "60rem" }}>{headlineEl}</div>
       </div>
 
@@ -617,7 +617,7 @@ export function HeroScrubPrototype() {
       </button>
 
       {/* BOTTOM slot — desktop: name + socials + full role; mobile: the tagline (punchline) */}
-      <div className="absolute inset-x-0 bottom-0 px-6 md:px-10 pb-6 md:pb-10" style={{ zIndex: 6 }}>
+      <div className="absolute inset-x-0 bottom-0 px-gutter md:px-gutter-lg pb-6 md:pb-10" style={{ zIndex: 6 }}>
         {/* desktop: name + socials + role */}
         <div className="hidden md:block">
           <div className="flex items-center gap-4">

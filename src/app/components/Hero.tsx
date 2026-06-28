@@ -9,7 +9,7 @@ import { motion } from "motion/react";
 
 export function Hero() {
   return (
-    <section id="top" className="relative w-full h-[100svh] [@media(min-height:640px)]:min-h-[640px] bg-black overflow-hidden z-20">
+    <section id="top" className="relative w-full h-[100svh] [@media(min-height:640px)]:min-h-[640px] bg-ink overflow-hidden z-20">
       <div className="absolute inset-0">
           <picture>
             <source media="(max-width: 768px)" srcSet="/hero-mobile-fallback.webp" />
@@ -64,10 +64,10 @@ export function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="absolute left-0 right-0 top-0 px-6 md:px-10 pt-20 md:pt-24 pointer-events-none"
+          className="absolute left-0 right-0 top-0 px-gutter md:px-gutter-lg pt-20 md:pt-24 pointer-events-none"
         >
           <h1
-            className="font-[Nyght_Serif] text-white max-w-5xl text-fluid-hero leading-[1.0] font-normal tracking-[-0.03em]"
+            className="font-[Nyght_Serif] text-white max-w-5xl text-fluid-hero leading-display font-normal tracking-[-0.03em]"
             style={{
               textShadow:
                 "0 0 18px rgba(255,255,255,0.55), 0 0 48px rgba(255,180,116,0.35), 0 0 90px rgba(255,120,80,0.2)",
@@ -79,7 +79,7 @@ export function Hero() {
           </h1>
 
           {/* Company line — directly below headline, all viewports */}
-          <div className="mt-5 md:mt-6 text-white font-sans uppercase tracking-widest text-[11px] md:text-[14px] font-medium opacity-90 drop-shadow-md">
+          <div className="mt-5 md:mt-6 text-white font-sans uppercase tracking-widest text-micro md:text-meta font-medium opacity-90 drop-shadow-md">
             Product Designer @{" "}
             <a
               href="https://www.ambitionbox.com"

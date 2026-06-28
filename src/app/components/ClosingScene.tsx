@@ -81,7 +81,7 @@ function FilmTile({ videoId, poster, title }: { videoId: string; poster: string;
 
   return (
     <div
-      className="group relative h-full w-full overflow-hidden bg-black cursor-pointer"
+      className="group relative h-full w-full overflow-hidden bg-ink cursor-pointer"
       onClick={() => openMediaViewer({ type: "video", videoId, title })}
     >
       <ImageWithFallback
@@ -95,8 +95,8 @@ function FilmTile({ videoId, poster, title }: { videoId: string; poster: string;
         className="pointer-events-none absolute inset-0 flex items-end p-3 transition-opacity duration-300 opacity-100"
         style={{ background: "linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.55) 100%)" }}
       >
-        <span className="flex items-center gap-2 font-sans text-[12px] text-white/90">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-white/15 text-[9px] backdrop-blur-sm">▶</span>
+        <span className="flex items-center gap-2 font-sans text-caption text-paper-strong">
+          <span className="grid h-5 w-5 place-items-center rounded-full bg-glass text-[9px] backdrop-blur-sm">▶</span>
           {title}
         </span>
       </div>
@@ -162,7 +162,7 @@ function MobileFilmStrip() {
       className="md:hidden flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
       {loop.map((t, i) => (
-        <div key={i} className="mr-3 aspect-[4/5] w-[72vw] shrink-0 snap-center">
+        <div key={i} className="mr-3 aspect-card w-[72vw] shrink-0 snap-center">
           {t.kind === "film" ? (
             <FilmTile videoId={t.videoId} poster={t.poster} title={t.title} />
           ) : (
@@ -199,15 +199,15 @@ export function ClosingScene() {
 
       {/* ── Foreground (Curtain) ──────────────────────────────────────── */}
       <div className="col-start-1 row-start-1 relative z-10 flex flex-col pointer-events-none">
-        <div ref={collageRef} className="bg-[#0c0b0d] pointer-events-auto">
+        <div ref={collageRef} className="bg-surface-night pointer-events-auto">
           {/* ── Heading ─────────────────────────────────────────────────────── */}
-          <div id="off-the-clock" className="px-6 md:px-10 pt-28 md:pt-40 pb-12 md:pb-16 scroll-mt-24">
+          <div id="off-the-clock" className="px-gutter md:px-gutter-lg pt-28 md:pt-40 pb-12 md:pb-16 scroll-mt-24">
             <div className="mb-12 md:mb-16 max-w-4xl">
-              <h2 className="font-[Nyght_Serif] text-[clamp(32px,4vw,64px)] text-[#f3f3f3] font-normal tracking-[-0.01em]">
+              <h2 className="font-[Nyght_Serif] text-fluid-h2 text-surface-mist font-normal tracking-snug">
                 The same eye, <span className="italic">elsewhere</span>.
               </h2>
               <p
-                className="italic opacity-60 mt-4 max-w-xl text-[#f3f3f3]"
+                className="italic opacity-60 mt-4 max-w-xl text-surface-mist"
                 style={{ fontSize: "clamp(15px, 1.3vw, 18px)", lineHeight: 1.55 }}
               >
                 Design taught me to solve. Cameras taught me to see.
@@ -216,7 +216,7 @@ export function ClosingScene() {
           </div>
 
           {/* ── Collage wall ────────────────────────────────────────────────── */}
-          <div className="px-6 md:px-10 pb-28 md:pb-40">
+          <div className="px-gutter md:px-gutter-lg pb-28 md:pb-40">
             {/* Mobile: swipeable film strip (consistent aspect, seamless loop). */}
             <MobileFilmStrip />
 
@@ -292,7 +292,7 @@ function FooterContent({ scrollYProgress }: { scrollYProgress: any }) {
         />
 
         {/* Pitch - centered, glowing, on the open band */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-10 text-center relative z-10">
+        <div className="flex-1 flex flex-col items-center justify-center px-gutter md:px-gutter-lg text-center relative z-10">
 
           <div className="max-w-3xl">
             <h2
@@ -323,7 +323,7 @@ function FooterContent({ scrollYProgress }: { scrollYProgress: any }) {
                 "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.95) 100%)",
             }}
           />
-          <div className="relative px-6 md:px-10 pb-8 pt-16 text-white">
+          <div className="relative px-gutter md:px-gutter-lg pb-8 pt-16 text-white">
             <div className="flex flex-col items-center md:items-end md:flex-row md:justify-between gap-6">
               <ul className="flex flex-wrap items-center justify-center md:justify-start gap-4">
                 {footerLinks.map(([label, href], idx) => (
@@ -332,17 +332,17 @@ function FooterContent({ scrollYProgress }: { scrollYProgress: any }) {
                       href={href}
                       target={href.startsWith("http") ? "_blank" : undefined}
                       rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      className="text-[14px]"
+                      className="text-meta"
                     >
                       {label} ↗
                     </HoverLink>
                     {idx < footerLinks.length - 1 && (
-                      <span className="opacity-40 select-none text-[12px]">·</span>
+                      <span className="opacity-40 select-none text-caption">·</span>
                     )}
                   </li>
                 ))}
               </ul>
-              <div className="italic text-[13px] opacity-80 text-center md:text-left">
+              <div className="italic text-label opacity-80 text-center md:text-left">
                 <span>© 2026 Anmol Maggon</span>
               </div>
             </div>

@@ -22,17 +22,17 @@ function HomePage() {
     <>
       <main>
         <HeroScrubPrototype />
-        <Suspense fallback={<div className="min-h-screen bg-[#fafaf7]" />}>
+        <Suspense fallback={<div className="min-h-screen bg-brand-light" />}>
           <CaseStudies />
           <TechStackJar />
           <OperatingPrinciples />
 
           <div
             data-nav-theme="dark"
-            className="soul-world relative overflow-clip bg-[#06110f] text-[#f5f3ee]"
+            className="soul-world relative overflow-clip bg-brand-dark text-surface-loader"
             style={{
               background:
-                "linear-gradient(180deg, #06110f 0%, #071018 42%, #0c0b0d 78%, #0c0b0d 100%)",
+                "linear-gradient(180deg, var(--p-ink) 0%, var(--p-night-2) 42%, var(--p-night) 78%, var(--p-night) 100%)",
             }}
           >
             <ClosingScene />
@@ -48,7 +48,7 @@ export default function App() {
   return (
     <GlobalProvider>
       <SmoothScroll>
-        <div className="min-h-screen w-full bg-[#fafaf7] text-black antialiased">
+        <div className="min-h-screen w-full bg-brand-light text-ink antialiased">
           <MediaViewerModal />
           <Nav />
           <Routes>

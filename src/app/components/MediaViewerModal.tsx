@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useGlobalContext } from "../context/GlobalContext";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { CloseButton } from "./CloseButton";
 
 export function MediaViewerModal() {
   const { mediaViewerData, closeMediaViewer } = useGlobalContext();
@@ -29,20 +30,16 @@ export function MediaViewerModal() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-10"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-scrim-heavy backdrop-blur-sm p-4 md:p-10"
       onClick={closeMediaViewer}
     >
       {/* Close button */}
-      <button
+      <CloseButton
         onClick={closeMediaViewer}
-        aria-label="Close"
-        className="fixed top-6 right-6 md:top-8 md:right-8 z-[110] flex items-center justify-center w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
+        tone="onDark"
+        iconSize={24}
+        className="fixed top-6 right-6 md:top-8 md:right-8 z-[110] w-12 h-12"
+      />
 
       {/* Content container */}
       <div 
@@ -64,7 +61,7 @@ export function MediaViewerModal() {
               title={mediaViewerData.title || "Video"}
               allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
-              className="w-full h-full border-0 rounded-lg shadow-2xl"
+              className="w-full h-full border-0 rounded-card shadow-2xl"
             />
           </div>
         )}

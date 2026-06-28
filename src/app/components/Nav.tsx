@@ -94,13 +94,13 @@ export function Nav() {
         className={`absolute inset-0 -z-10 transition-all duration-500 ease-out ${
           scrolled
             ? onDark
-              ? "bg-black/80 backdrop-blur-md border-b border-white/10"
-              : "bg-brand-light/95 backdrop-blur-md border-b border-black/5"
+              ? "bg-scrim-strong backdrop-blur-glass border-b border-paper-hairline"
+              : "bg-brand-light/95 backdrop-blur-glass border-b border-hairline-soft"
             : "bg-transparent"
         }`}
       />
 
-      <div className={`flex items-center justify-between px-6 md:px-10 py-5 transition-colors duration-500 ${textColor}`}>
+      <div className={`flex items-center justify-between px-gutter md:px-gutter-lg py-5 transition-colors duration-500 ${textColor}`}>
         {/* logo — hidden in the hero (name lives bottom-left of the sequence), fades in on scroll */}
         <HoverLink
           href="#top"
@@ -113,7 +113,7 @@ export function Nav() {
 
         {/* desktop compact bar — links + CTA, only once scrolled past the hero */}
         <nav
-          className={`hidden md:flex items-center gap-10 text-[16px] font-sans tracking-wide font-medium transition-opacity duration-500 ${
+          className={`hidden md:flex items-center gap-10 text-base font-sans tracking-wide font-medium transition-opacity duration-500 ${
             scrolled ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         >
@@ -158,7 +158,7 @@ export function Nav() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-[60] md:hidden pointer-events-auto bg-black text-white flex flex-col"
+            className="fixed inset-0 z-[60] md:hidden pointer-events-auto bg-ink text-white flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -185,7 +185,7 @@ export function Nav() {
                   href={l.href}
                   onClick={() => setMenuOpen(false)}
                   {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="font-[Nyght_Serif] py-3 text-white/90 hover:text-white transition-colors text-fluid-h2 font-normal tracking-[-0.02em] leading-[1.05]"
+                  className="font-[Nyght_Serif] py-3 text-paper-strong hover:text-white transition-colors text-fluid-h2 font-normal tracking-display leading-[1.05]"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.08 + i * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -200,7 +200,7 @@ export function Nav() {
                 href={LETS_TALK_MAILTO}
                 onClick={() => setMenuOpen(false)}
                 variant="dark"
-                className="justify-center w-full px-5 py-4 text-[16px]"
+                className="justify-center w-full px-5 py-4 text-base"
               >
                 Let's Talk
               </ButtonCTA>

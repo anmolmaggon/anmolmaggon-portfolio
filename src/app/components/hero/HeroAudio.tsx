@@ -34,7 +34,7 @@ export function HeroAudio({
       onClick={handleClick}
       aria-label={audible ? "Mute background music" : "Unmute background music"}
       className={`${positionClassName} z-40 w-11 h-11 rounded-full
-                 bg-black/30 backdrop-blur-md border border-white/20
+                 bg-black/30 backdrop-blur-glass border border-white/20
                  flex items-center justify-center text-white
                  hover:bg-black/50 hover:scale-105 transition-all duration-300
                  cursor-pointer shadow-lg`}

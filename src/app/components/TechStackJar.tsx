@@ -343,11 +343,11 @@ function Firefly({
             <motion.div
               initial={{ opacity: 0, y: 8, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              className="pointer-events-none whitespace-nowrap rounded-full border border-[#ffe8a3]/25 bg-[#07110f]/88 px-4 py-2.5 text-center shadow-[0_18px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl"
+              className="pointer-events-none whitespace-nowrap rounded-full border border-jar-rim/25 bg-brand-dark/88 px-4 py-2.5 text-center shadow-[0_18px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl"
             >
-              <p className="font-sans text-[12px] font-medium leading-none text-[#fff5cf]">
+              <p className="font-sans text-caption font-medium leading-none text-jar-glow">
                 {tool.name}
-                <span className="ml-2 text-[#fff5cf]/48">/ {tool.role}</span>
+                <span className="ml-2 text-jar-glow/48">/ {tool.role}</span>
               </p>
             </motion.div>
           </Html>
@@ -481,7 +481,7 @@ export function TechStackJar() {
     <section
       ref={sectionRef}
       id="stack"
-      className="relative isolate overflow-hidden bg-[#fafaf7] px-6 pb-28 pt-20 text-[#171613] md:px-10 md:pb-20 md:pt-28"
+      className="relative isolate overflow-hidden bg-brand-light px-6 pb-28 pt-20 text-surface-graphite md:px-10 md:pb-20 md:pt-28"
       onClick={(e) => {
         // Tap-outside-to-deselect: clear unless the tap landed on the 3D canvas
         // (firefly taps keep their pin; empty-canvas taps are cleared by the
@@ -502,7 +502,7 @@ export function TechStackJar() {
         }}
       />
 
-      <div className="relative z-10 mx-auto grid min-h-[560px] max-w-[1680px] items-center gap-12 lg:grid-cols-[minmax(500px,0.9fr)_minmax(480px,600px)] lg:gap-[clamp(56px,6vw,124px)]">
+      <div className="relative z-10 mx-auto grid min-h-[560px] max-w-page items-center gap-12 lg:grid-cols-[minmax(500px,0.9fr)_minmax(480px,600px)] lg:gap-[clamp(56px,6vw,124px)]">
         <div className="relative mx-auto aspect-[1122/1402] w-full max-w-[540px] overflow-visible md:max-w-[550px] scale-[1.18] md:scale-100 origin-center">
           
           <img
@@ -552,19 +552,19 @@ export function TechStackJar() {
 
         <div className="relative z-20 max-w-[600px] pb-4 lg:pb-0">
           <h2
-            className="font-[Nyght_Serif] text-[#171613] text-fluid-h2 leading-[1] font-normal tracking-[0]"
+            className="font-[Nyght_Serif] text-surface-graphite text-fluid-h2 leading-display font-normal tracking-[0]"
           >
             Borrowed light.
           </h2>
 
-          <div className="mt-7 space-y-5 font-sans text-[16px] leading-[1.7] text-[#4d4a43] md:text-[18px]">
+          <div className="mt-7 space-y-5 font-sans text-base leading-[1.7] text-jar-ink md:text-lg">
             <p>
               Tools are fireflies. They glow for a while, pull everyone closer, and make the dark feel easier to read.
             </p>
             <p>
               I catch what helps, study it closely, and use it to see further. But I try not to mistake the glow for the craft.
             </p>
-            <p className="text-[#5b4512]">
+            <p className="text-jar-gold">
               The tools move on. The taste, judgment, and care have to stay.
             </p>
           </div>

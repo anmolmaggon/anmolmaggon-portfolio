@@ -1,0 +1,189 @@
+/* ============================================================================
+   tokens.css — Design tokens (single source of truth)
+   ----------------------------------------------------------------------------
+   THREE-TIER ARCHITECTURE (read DESIGN.md §3–§7 for the why):
+
+     Layer 1 · PRIMITIVES   raw values, named for what they ARE   (:root, --p-*, --ms-*)
+     Layer 2 · SEMANTIC      named for what they're FOR, alias L1  (:root, --dur-*, --z-*, --story-*)
+     Layer 3 · EXPOSURE      semantic tokens surfaced as Tailwind v4 utilities (@theme)
+
+   Components consume Layer 3 utilities — NEVER raw values:
+       text-ink-body · border-hairline · bg-surface-night · bg-scrim · bg-glass
+       px-gutter · py-section · gap-gutter · rounded-media · shadow-card
+       tracking-display · leading-body · aspect-card · max-w-reading · ease-quint
+   …and Layer 2 vars for the few non-utility cases (durations, z, gradients, glow):
+       duration-[var(--dur-state)] · z-[var(--z-nav)] · style={{ textShadow: 'var(--glow-warm)' }}
+
+   WHERE OTHER TOKENS LIVE (don't duplicate — alias the owner):
+     • Brand color + fluid type → src/styles/tailwind.css (@theme)
+         brand-light #fafaf7 · brand-dark #06110f · text-fluid-* clamp utilities
+     • Type faces + type classes → src/styles/fonts.css
+     • shadcn/Figma scaffold (--background, --primary, oklch grays, --chart-*, --sidebar-*)
+         → src/styles/theme.css  ⚠ LEGACY — do not extend (DESIGN.md §3.4).
+
+   TOKENIZATION RULE: tokenize systemic/reused values. Genuinely one-off,
+   scene-internal values (a single gradient's secondary stops, a one-image aspect
+   ratio) stay as LOCAL constants in their component — a value used once is not a token.
+
+   INK is PURE BLACK at alpha (= legacy text-black/NN). PAPER is PURE WHITE at alpha
+   (= text-white/NN). #06110f (brand-dark) is for solid dark *surfaces* only.
+   ========================================================================== */
+
+:root {
+  /* ══ Layer 1 · PRIMITIVES ════════════════════════════════════════════════ */
+
+  /* color hues */
+  --p-black:    #000000; /* base for the ink (text/line/scrim) scale */
+  --p-white:    #ffffff; /* base for the paper/glass (on-dark) scale */
+  --p-cream:    var(--color-brand-light); /* #fafaf7 — owned by tailwind.css */
+  --p-ink:      var(--color-brand-dark);  /* #06110f — owned by tailwind.css */
+  --p-night:    #0c0b0d; /* closing collage wall */
+  --p-night-2:  #071018; /* soul-world gradient mid-stop */
+  --p-graphite: #171613; /* About client names */
+  --p-loader:   #f5f3ee; /* warm off-white wordmark on black */
+  --p-mist:     #f3f3f3; /* light heading on dark (closing scene) */
+
+  /* duration primitives (ms) */
+  --ms-150: 150ms; --ms-250: 250ms; --ms-280: 280ms; --ms-300: 300ms;
+  --ms-500: 500ms; --ms-900: 900ms; --ms-1200: 1200ms;
+
+  /* Tailwind owns the base spacing scale (--spacing: 0.25rem → p-4, gap-2, …).
+     We add NAMED rhythm spacing in @theme below; the numeric scale stays default. */
+
+  /* ══ Layer 2 · SEMANTIC (non-utility) ════════════════════════════════════ */
+
+  /* Motion · duration roles. No named-duration utility namespace in Tailwind, so
+     consume as duration-[var(--dur-state)]. Workhorses: --dur-hover, --dur-state. */
+  --dur-micro:    var(--ms-150);  /* tiny color/opacity nudges */
+  --dur-drawer:   var(--ms-250);  /* mobile drawer, note pop-in */
+  --dur-invert:   var(--ms-280);  /* "Nothing changes" section invert */
+  --dur-hover:    var(--ms-300);  /* WORKHORSE — underline, chip, hover color */
+  --dur-state:    var(--ms-500);  /* WORKHORSE — reveal, content shift, nav fade */
+  --dur-image:    var(--ms-900);  /* slow image/poster scale on hover */
+  --dur-entrance: var(--ms-1200); /* hero first paint */
+
+  /* Spring physics live in JS (motion/react useSpring), not CSS. Canonical configs:
+       cursor follow · deliberate : { stiffness: 300, damping: 28, mass: 0.5 }
+       cursor follow · snappy     : { stiffness: 350, damping: 30, mass: 0.4 }
+       R3F firefly damp           : THREE.MathUtils.damp(cur, target, 4, delta) */
+
+  /* Z-index ladder — z-[var(--z-nav)]. Cursor delight portals to <body>; renders
+     on top by document order — don't invent higher numbers. */
+  --z-base: 0; --z-hero: 20; --z-nav: 50; --z-loader: 100; --z-overlay: 9999;
+
+  /* Text/box glows — story accents, applied inline (not Tailwind utilities). */
+  --glow-warm:    0 0 18px rgba(255, 247, 230, 0.55), 0 0 42px rgba(255, 214, 150, 0.35), 0 1px 1px rgba(0, 0, 0, 0.25); /* hero headline + closing pitch ONLY */
+  --glow-divider: 0 0 12px rgba(0, 0, 0, 0.40); /* before/after slider handle */
+  --glow-rim:     0 0 15px rgba(255, 255, 255, 0.20); /* subtle light rim */
+
+  /* Color-as-story — COLOR ONLY INSIDE DELIGHT MOMENTS, never chrome. One palette
+     per scene; primary signature hue tokenized, secondary gradient stops stay local
+     to the scene (one-off). See DESIGN.md §9.4. */
+  --story-hospitality:     #ffe30b; /* ButlerNote book-yellow wash */
+  --story-hospitality-aura:#ffc934; /* note aura glow */
+  --story-sticky:          #fff59d; /* StickyNote FAB + card */
+  --story-ichigo-rod:      #c39a63; /* ScrollCursor wooden rod (→ #6f5230) */
+  --story-ichigo-paper:    #f6eed9; /* aged scroll paper (→ #efe4c8) */
+  --story-ichigo-plum:     #c0445a; /* plum blossom accent */
+  --story-sakura:          #fcd6e6; /* SakuraPetals (→ #ec99b8) */
+  --story-goldfish:        #f9c06a; /* goldfish body (→ #e0613a) */
+  --story-goldfish-water:  #3c8a9c; /* water teal */
+  --story-firefly-glow:    #ffe8a1; /* TechStackJar warm glow (per-tool accents vary) */
+  --story-modal-lavender:  rgba(171, 143, 255, 0.12); /* "Beyond the design" tint */
+  --story-modal-blue:      rgba(127, 200, 232, 0.05); /* lavender → cool blue, low alpha */
+}
+
+/* ══ Layer 3 · EXPOSURE — semantic tokens as Tailwind v4 utilities ══════════
+   Tailwind v4 emits a utility only when used, so unused tokens add no CSS. Each
+   color-mix role emits a solid-color base + an @supports(color-mix) alpha override
+   (graceful degradation on ancient browsers). */
+@theme {
+  /* ── COLOR · ink (text & hairlines on cream — PURE BLACK at alpha) ──────── */
+  --color-ink:           var(--p-black);                                    /* solid titles */
+  --color-ink-strong:    color-mix(in srgb, var(--p-black) 85%, transparent); /* emphatic body / metric labels */
+  --color-ink-body:      color-mix(in srgb, var(--p-black) 70%, transparent); /* running body, subtitles */
+  --color-ink-muted:     color-mix(in srgb, var(--p-black) 55%, transparent); /* one-liners, supporting */
+  --color-ink-label:     color-mix(in srgb, var(--p-black) 50%, transparent); /* ALL-CAPS labels, eyebrows, captions */
+  --color-ink-faint:     color-mix(in srgb, var(--p-black) 35%, transparent); /* struck "What I cut", dormant titles */
+  --color-ink-ghost:     color-mix(in srgb, var(--p-black) 25%, transparent); /* · separators, baseline list titles */
+  --color-hairline:      color-mix(in srgb, var(--p-black) 12%, transparent); /* CANONICAL editorial rule / border */
+  --color-hairline-soft: color-mix(in srgb, var(--p-black) 8%,  transparent); /* softer divider */
+  --color-ink-wash:      color-mix(in srgb, var(--p-black) 5%,  transparent); /* hover plate, skeleton bg */
+
+  /* ── COLOR · paper (text & hairlines on ink/dark — PURE WHITE at alpha) ─── */
+  --color-paper:          var(--p-white);                                    /* solid light-on-dark */
+  --color-paper-strong:   color-mix(in srgb, var(--p-white) 90%, transparent); /* near-solid on dark */
+  --color-paper-body:     color-mix(in srgb, var(--p-white) 70%, transparent); /* body on dark */
+  --color-paper-muted:    color-mix(in srgb, var(--p-white) 55%, transparent); /* supporting on dark */
+  --color-paper-faint:    color-mix(in srgb, var(--p-white) 40%, transparent); /* captions on dark */
+  --color-paper-hairline: color-mix(in srgb, var(--p-white) 10%, transparent); /* rule on dark */
+
+  /* ── COLOR · surfaces (cream & ink own brand-light / brand-dark) ────────── */
+  --color-surface-black:    var(--p-black);    /* loader, hero bed, mobile menu */
+  --color-surface-night:    var(--p-night);    /* closing collage wall */
+  --color-surface-graphite: var(--p-graphite); /* About client names */
+  --color-surface-loader:   var(--p-loader);   /* loader wordmark */
+  --color-surface-mist:     var(--p-mist);     /* closing-scene light heading on dark */
+
+  /* ── COLOR · scrim (media/modal overlays) + glass (frosted fills) ───────── */
+  --color-scrim:        color-mix(in srgb, var(--p-black) 40%, transparent); /* modal backdrop, image veil */
+  --color-scrim-strong: color-mix(in srgb, var(--p-black) 80%, transparent); /* heavy image veil */
+  --color-scrim-heavy:  color-mix(in srgb, var(--p-black) 95%, transparent); /* mobile menu cover */
+  --color-glass:        color-mix(in srgb, var(--p-white) 15%, transparent); /* play buttons, frosted chips */
+
+  /* ── COLOR · scene "Borrowed light" (TechStackJar) — warm/golden TEXT ──────
+     Story palette, but named & reused across the scene, so exposed as utilities
+     (the chrome stays monochrome; this color lives only inside that one section). */
+  --color-jar-ink:  #4d4a43; /* warm-brown body copy on cream */
+  --color-jar-gold: #5b4512; /* golden-brown emphasis line ("the golden thing") */
+  --color-jar-glow: #fff5cf; /* tooltip text — warm cream on the dark label */
+  --color-jar-rim:  #ffe8a3; /* tooltip border — gold */
+
+  /* ── EASING ─────────────────────────────────────────────────────────────── */
+  --ease-quint: cubic-bezier(0.16, 1, 0.3, 1); /* SIGNATURE — entrances, reveals, nav, invert */
+  --ease-out:   cubic-bezier(0, 0, 0.2, 1);    /* hover scale/opacity */
+  --ease-soft:  cubic-bezier(0.4, 0, 0.2, 1);  /* loops, scroll-reveal */
+
+  /* ── SPACING · rhythm (named; numeric Tailwind scale stays default) ──────
+     → px-gutter, py-section, gap-gutter, etc. Gutter/section step up at md:. */
+  --spacing-gutter:     1.5rem; /* px-6  — section horizontal padding (mobile) */
+  --spacing-gutter-lg:  2.5rem; /* px-10 — section horizontal padding (≥ md) */
+  --spacing-section:    6rem;   /* py-24 — section vertical rhythm (mobile) */
+  --spacing-section-lg: 10rem;  /* py-40 — section vertical rhythm (≥ md) */
+
+  /* ── RADIUS (additive to scaffold radii in theme.css) ───────────────────────
+     Scale: 0 (chrome/ledger) → control 3px (actions) → card/media (content) → full (icons).
+     Radius encodes role; sharp actions match the editorial field. Tune --radius-control here. */
+  --radius-control: 2px;  /* actionable chips, CTA buttons, tags — crisp, joins the sharp field */
+  --radius-card:    1rem; /* impact stat cards (= rounded-2xl) */
+  --radius-media:   24px; /* video/image cards in modal */
+
+  /* ── ELEVATION — light & premium, never heavy ───────────────────────────── */
+  --shadow-card:       0 4px 24px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.04);
+  --shadow-float:      0 34px 70px -24px rgba(0, 0, 0, 0.40), 0 2px 10px rgba(0, 0, 0, 0.08); /* cursor note */
+
+  /* ── BLUR (chrome / frosted glass) ──────────────────────────────────────── */
+  --blur-glass: 12px; /* nav plate, reveal header, frosted chips (backdrop-blur-glass) */
+  --blur-soft:  4px;  /* gentle frost */
+
+  /* ── TRACKING (letter-spacing) ──────────────────────────────────────────── */
+  --tracking-display-tight: -0.025em; /* the largest display titles */
+  --tracking-display:       -0.02em;  /* display headlines */
+  --tracking-snug:          -0.01em;  /* sub-heads, client names */
+  --tracking-label:          0.04em;  /* eyebrows */
+  --tracking-caps:           0.14em;  /* micro ALL-CAPS (loader, company line) */
+
+  /* ── LEADING (line-height) ──────────────────────────────────────────────── */
+  --leading-display: 1.0; /* big serif headlines */
+  --leading-tight:   1.2; /* sub-heads, decision titles */
+  --leading-body:    1.6; /* running body copy */
+  --leading-loose:   1.9; /* "designed in code" mono block */
+
+  /* ── ASPECT ─────────────────────────────────────────────────────────────── */
+  --aspect-card: 4 / 5; /* case-study preview cards */
+
+  /* ── CONTAINER (max-width; prose=4xl / wide=5xl already exist as defaults) ─ */
+  --container-reading: 48rem;  /* common reading column (= max-w-3xl) → max-w-reading */
+  --container-page:    105rem; /* outer page max (~1680px) → max-w-page */
+}

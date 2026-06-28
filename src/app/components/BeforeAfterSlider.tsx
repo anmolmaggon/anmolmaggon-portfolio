@@ -30,12 +30,12 @@ export function BeforeAfterSlider({
         
         {/* 1. Header Labels (Caption Style, aligned to container edges) */}
         <div className={`flex justify-between w-full mb-4 px-1 ${isMobileLayout ? "max-w-[400px]" : ""} pointer-events-none`}>
-          <span className="italic opacity-60 text-[13px]">Before</span>
-          <span className="italic opacity-60 text-[13px]">After</span>
+          <span className="italic opacity-60 text-label">Before</span>
+          <span className="italic opacity-60 text-label">After</span>
         </div>
 
         {/* 2. Scrollable Container for the actual slider */}
-        <div className={`w-full ${isMobileLayout ? "h-[75vh] overflow-y-auto rounded-xl border border-black/10 shadow-lg" : ""} bg-[#fafaf7]`}>
+        <div className={`w-full ${isMobileLayout ? "h-[75vh] overflow-y-auto rounded-card border border-hairline shadow-lg" : ""} bg-brand-light`}>
           <div className={`relative inline-block w-full ${!isMobileLayout ? "max-w-full overflow-hidden" : ""} select-none`}>
             {/* Base layer: AFTER. No max-h restriction so it grows fully to its natural height */}
             <img
@@ -66,7 +66,7 @@ export function BeforeAfterSlider({
               <div
                 className={`${
                   isMobileLayout ? "sticky top-6" : "absolute top-6 left-1/2"
-                } -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-black text-[14px]`}
+                } -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-ink text-meta`}
               >
                 ↔
               </div>
@@ -87,7 +87,7 @@ export function BeforeAfterSlider({
       </div>
 
       {caption && (
-        <figcaption className={`pt-4 italic opacity-60 text-[13px] text-center ${isMobileLayout ? "max-w-[400px]" : ""}`}>
+        <figcaption className={`pt-4 italic opacity-60 text-label text-center ${isMobileLayout ? "max-w-[400px]" : ""}`}>
           {caption}
         </figcaption>
       )}

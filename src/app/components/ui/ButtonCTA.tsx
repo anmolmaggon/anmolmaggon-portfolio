@@ -5,13 +5,13 @@ type ButtonCTAProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
 };
 
 export function ButtonCTA({ variant, children, className = "", ...props }: ButtonCTAProps) {
-  const baseClasses = "flex items-center gap-2 rounded-full backdrop-blur-sm transition-all duration-300 border font-sans font-medium text-[15px]";
+  const baseClasses = "flex items-center gap-2 rounded-control backdrop-blur-sm transition-all duration-300 border font-sans font-medium text-[15px]";
   
   let variantClasses = "";
   if (variant === "dark") {
-    variantClasses = "bg-white text-black border-white hover:bg-white/90 hover:scale-105";
+    variantClasses = "bg-white text-ink border-white hover:bg-white/90 hover:scale-105";
   } else if (variant === "light") {
-    variantClasses = "bg-black text-white border-black hover:bg-black/80 hover:scale-105";
+    variantClasses = "bg-ink text-white border-black hover:bg-black/80 hover:scale-105";
   } else {
     variantClasses = "bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/40 hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]";
   }

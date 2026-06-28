@@ -38,13 +38,14 @@ body {
 }
 
 .animate-slide-up-fade {
-  animation: slideUpFade 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Signature ease — see --ease-quint in tokens.css (literal fallback kept). */
+  animation: slideUpFade 2s var(--ease-quint, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
 }
 
 /* When the "Nothing changes" principle is hovered, the section inverts — flip
    the fixed nav along with it so the whole frame changes state. */
 header {
-  transition: filter 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: filter var(--dur-invert, 0.28s) var(--ease-quint, cubic-bezier(0.16, 1, 0.3, 1));
 }
 html[data-invert="1"] header {
   filter: invert(1);

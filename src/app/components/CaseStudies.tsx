@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { VideoWithFallback } from "./VideoWithFallback";
+import { Pill } from "./Pill";
 import { CaseStudyModal, type CaseStudyDetail } from "./CaseStudyModal";
 
 type Study = CaseStudyDetail & {
@@ -325,10 +326,10 @@ export function CaseStudies() {
   const nextStudy = activeIndex !== -1 ? studies[(activeIndex + 1) % studies.length] : null;
 
   return (
-    <section id="work" className="relative z-10 px-6 md:px-10 pt-16 md:pt-24 pb-12 md:pb-16 scroll-mt-24">
+    <section id="work" className="relative z-10 px-gutter md:px-gutter-lg pt-16 md:pt-24 pb-12 md:pb-16 scroll-mt-24">
       <div className="mb-4 md:mb-8 max-w-4xl">
         <p
-          className="font-[Nyght_Serif] text-black/70"
+          className="font-[Nyght_Serif] text-ink-body"
           style={{
             fontSize: "clamp(20px, 2.4vw, 34px)",
             lineHeight: 1.1,
@@ -368,7 +369,7 @@ export function CaseStudies() {
 
                 <div className="flex-1 min-w-0 transition-transform duration-500 ease-out group-hover:translate-x-[72px] md:group-hover:translate-x-[96px]">
                   <h3
-                    className="font-[Nyght_Serif] transition-colors duration-500 text-black/25 group-hover:text-black"
+                    className="font-[Nyght_Serif] transition-colors duration-500 text-ink-ghost group-hover:text-ink"
                     style={{
                       fontSize: "clamp(36px, 6vw, 96px)",
                       lineHeight: 0.95,
@@ -380,14 +381,14 @@ export function CaseStudies() {
                   </h3>
 
                   <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-hover:max-h-12 group-hover:opacity-100 group-hover:mt-3">
-                    <p className="font-sans text-black/60" style={{ fontSize: 14 }}>
+                    <p className="font-sans text-ink-muted" style={{ fontSize: 14 }}>
                       {s.oneLiner || s.meta.join(" • ")}
                     </p>
                   </div>
                 </div>
 
                 <div
-                  className="hidden md:block pointer-events-none absolute right-[6%] top-1/2 w-[320px] aspect-[4/5] opacity-0 scale-90 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:scale-100 rounded-none shadow-2xl bg-white"
+                  className="hidden md:block pointer-events-none absolute right-[6%] top-1/2 w-[320px] aspect-card opacity-0 scale-90 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:scale-100 rounded-none shadow-2xl bg-white"
                   style={{ transform: `translateY(-50%) rotate(${s.tilt}deg)` }}
                 >
                   {s.previewVideo ? (
@@ -417,8 +418,8 @@ export function CaseStudies() {
                   "Know more" pill. The whole card is the tap target; the pill is
                   a visual affordance (a span), not a nested button, but carries
                   the site's hover/pressed states. */}
-              <div className="md:hidden border border-black/12 bg-white/40">
-                <div className="w-full aspect-[4/5] overflow-hidden bg-black/[0.03]">
+              <div className="md:hidden border border-hairline bg-white/40">
+                <div className="w-full aspect-card overflow-hidden bg-black/[0.03]">
                   {s.previewVideo ? (
                     <VideoWithFallback
                       className="w-full h-full object-cover"
@@ -440,15 +441,15 @@ export function CaseStudies() {
                   )}
                 </div>
 
-                <div className="px-4 py-5 border-t border-black/12">
+                <div className="px-4 py-5 border-t border-hairline">
                   <h3
-                    className="font-[Nyght_Serif] text-black"
+                    className="font-[Nyght_Serif] text-ink"
                     style={{ fontSize: "clamp(28px, 7vw, 44px)", lineHeight: 1.0, fontWeight: 400, letterSpacing: "-0.025em" }}
                   >
                     {s.title}
                   </h3>
 
-                  <p className="mt-3 font-sans text-black/55" style={{ fontSize: 13.5, lineHeight: 1.4 }}>
+                  <p className="mt-3 font-sans text-ink-muted" style={{ fontSize: 13.5, lineHeight: 1.4 }}>
                     {s.oneLiner || s.subtitle || s.meta.join(" • ")}
                   </p>
 
@@ -456,9 +457,9 @@ export function CaseStudies() {
                     <div className="mt-4 space-y-2.5">
                       {s.impact.slice(0, 3).map((m) => (
                         <div key={m.label} className="flex items-center gap-3">
-                          <span aria-hidden className="shrink-0 w-[9px] h-[9px] bg-black/80" />
-                          <p className="font-sans text-black/65" style={{ fontSize: 13 }}>
-                            <span className="font-medium text-black">{m.value} </span>
+                          <span aria-hidden className="shrink-0 w-[9px] h-[9px] bg-scrim-strong" />
+                          <p className="font-sans text-ink-body" style={{ fontSize: 13 }}>
+                            <span className="font-medium text-ink">{m.value} </span>
                             {m.label}
                           </p>
                         </div>
@@ -466,16 +467,13 @@ export function CaseStudies() {
                     </div>
                   )}
 
-                  <span
-                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-black text-white px-5 py-2.5 font-sans font-medium transition-all duration-300 hover:bg-black/80 hover:scale-105 active:scale-95"
-                    style={{ fontSize: 13 }}
-                  >
+                  <Pill as="span" variant="solid" size="md" className="mt-6">
                     Know more
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M5 12h14" />
                       <path d="m12 5 7 7-7 7" />
                     </svg>
-                  </span>
+                  </Pill>
                 </div>
               </div>
             </button>
