@@ -14,6 +14,10 @@ interface GlobalContextValue {
   // Drives the mute button's icon so a blocked/silent autoplay shows as muted.
   musicPlaying: boolean;
   setMusicPlaying: (v: boolean) => void;
+  // True while the hero track is buffering/loading after an unmute request — drives a
+  // spinner on the mute button so a tap doesn't read as "on" before sound actually starts.
+  audioLoading: boolean;
+  setAudioLoading: (v: boolean) => void;
   // Lets the mute button ask the hero to start playback DIRECTLY inside the click
   // handler (reliable on mobile). The hero registers its play fn; the button calls it.
   requestMusicPlay: () => void;
@@ -42,6 +46,7 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
   const [isBackgroundAudioPaused, setIsBackgroundAudioPaused] = useState(false);
   const [mediaViewerData, setMediaViewerData] = useState<MediaViewerData>(null);
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const [audioLoading, setAudioLoading] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("gussa_is_muted", isMuted.toString());
@@ -78,6 +83,8 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
         setMuted,
         musicPlaying,
         setMusicPlaying,
+        audioLoading,
+        setAudioLoading,
         requestMusicPlay,
         registerMusicPlay,
         isBackgroundAudioPaused,

@@ -514,9 +514,9 @@ export function TechStackJar() {
 
           {/* Mobile: the swarm reads slightly low-and-right, so nudge the
               firefly layers up and left to sit inside the jar. */}
-          <div ref={portalRef} className="absolute inset-[15%_15%_10%] z-50 pointer-events-none -translate-x-[6%] md:translate-x-0" />
+          <div ref={portalRef} className="absolute inset-[15%_15%_10%] z-50 pointer-events-none translate-x-[calc(-6%_-_4px)] md:translate-x-0" />
 
-          <div className="absolute inset-[15%_15%_10%] z-20 -translate-x-[6%] md:translate-x-0">
+          <div className="absolute inset-[15%_15%_10%] z-20 translate-x-[calc(-6%_-_4px)] md:translate-x-0">
             {isVisible && (
               <FireflyJarCanvas
                 portalRef={portalRef}
@@ -536,7 +536,7 @@ export function TechStackJar() {
           
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-[22%_20%_15%] z-[25] opacity-50 mix-blend-screen -translate-x-[6%] md:translate-x-0"
+            className="pointer-events-none absolute inset-[22%_20%_15%] z-[25] opacity-50 mix-blend-screen translate-x-[calc(-6%_-_4px)] md:translate-x-0"
             style={{
               background:
                 "radial-gradient(ellipse 50% 45% at 50% 45%, rgba(255, 217, 105, 0.25) 0%, rgba(255, 198, 88, 0.08) 45%, transparent 80%)",

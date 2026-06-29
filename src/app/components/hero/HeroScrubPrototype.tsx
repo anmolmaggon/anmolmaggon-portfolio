@@ -75,12 +75,15 @@ const heroGlow = "0 1px 3px rgba(0,0,0,0.55), 0 2px 28px rgba(0,0,0,0.55)";
 
 export function HeroScrubPrototype() {
   // GlobalAudio is removed — the hero owns its own track; only isMuted is shared.
-  const { isMuted, setMusicPlaying, registerMusicPlay } = useGlobalContext();
+  const { isMuted, setMusicPlaying, setAudioLoading, registerMusicPlay } = useGlobalContext();
   const isMutedRef = useRef(isMuted);
   isMutedRef.current = isMuted;
   // report actual playback to the mute button (so blocked/silent reads as muted)
   const setMusicPlayingRef = useRef(setMusicPlaying);
   setMusicPlayingRef.current = setMusicPlaying;
+  // report buffering so the mute button can show a spinner instead of a premature "on"
+  const setAudioLoadingRef = useRef(setAudioLoading);
+  setAudioLoadingRef.current = setAudioLoading;
   const registerMusicPlayRef = useRef(registerMusicPlay);
   registerMusicPlayRef.current = registerMusicPlay;
   const applyAudioRef = useRef<() => void>(() => {});
@@ -269,11 +272,15 @@ export function HeroScrubPrototype() {
           },
           onStateChange: (e: any) => {
             const S = window.YT?.PlayerState;
-            if (e?.data === S?.PLAYING) {
+            if (e?.data === S?.BUFFERING) {
+              setAudioLoadingRef.current(true);
+            } else if (e?.data === S?.PLAYING) {
               startFadeIn();
               setMusicPlayingRef.current(true);
+              setAudioLoadingRef.current(false);
             } else if (e?.data === S?.PAUSED) {
               setMusicPlayingRef.current(false);
+              setAudioLoadingRef.current(false);
             }
             if (e?.data === S?.ENDED) {
               try {
@@ -543,10 +550,10 @@ export function HeroScrubPrototype() {
     fontFamily: "'Nyght Serif', serif",
     color: "#fff",
     fontWeight: 400,
-    lineHeight: 1.0,
     letterSpacing: "-0.03em",
-    // font-size lives in className so it can track the case-study titles per-breakpoint:
-    // mobile = clamp(30px,8vw,52px) (the mobile card title), md+ = clamp(36px,6vw,96px) (the desktop card title).
+    // font-size + line-height live in className so they can step per-breakpoint:
+    // mobile wraps to 3 lines so it gets looser leading (leading-tight); desktop stays
+    // tight (leading-display = 1.0) for its 2-line composition.
     textShadow: heroGlow,
     margin: 0,
   } as const;
@@ -559,10 +566,14 @@ export function HeroScrubPrototype() {
     textShadow: "0 1px 14px rgba(0,0,0,0.6)",
   } as const;
   const headlineEl = (
-    <h1 className="text-fluid-hero-sm md:text-fluid-h1" style={headlineStyle}>
-      I make things that
-      <br />
-      blow people&rsquo;s minds.
+    <h1 className="text-fluid-h1 leading-tight md:leading-display" style={headlineStyle}>
+      I make{" "}
+      <br className="md:hidden" />
+      things that{" "}
+      <br className="hidden md:block" />
+      blow{" "}
+      <br className="md:hidden" />
+      people&rsquo;s minds.
     </h1>
   );
   const roleEl = (extra: React.CSSProperties = {}) => (
@@ -583,7 +594,7 @@ export function HeroScrubPrototype() {
 
       {/* headline — top-left on all breakpoints */}
       <div className="absolute inset-x-0 top-0 px-gutter md:px-gutter-lg pt-6 md:pt-8" style={{ pointerEvents: "none", zIndex: 6 }}>
-        <div style={{ maxWidth: "60rem" }}>{headlineEl}</div>
+        <div className="pr-14 md:pr-0" style={{ maxWidth: "60rem" }}>{headlineEl}</div>
       </div>
 
       {/* section nav — stacked top-right, scrolls away WITH the hero (not sticky) */}

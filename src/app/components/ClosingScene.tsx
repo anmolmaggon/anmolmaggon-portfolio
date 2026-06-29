@@ -202,7 +202,7 @@ export function ClosingScene() {
         <div ref={collageRef} className="bg-surface-night pointer-events-auto">
           {/* ── Heading ─────────────────────────────────────────────────────── */}
           <div id="off-the-clock" className="px-gutter md:px-gutter-lg pt-28 md:pt-40 pb-12 md:pb-16 scroll-mt-24">
-            <div className="mb-12 md:mb-16 max-w-4xl">
+            <div className="max-w-4xl">
               <h2 className="font-[Nyght_Serif] text-fluid-h2 text-surface-mist font-normal tracking-snug">
                 The same eye, <span className="italic">elsewhere</span>.
               </h2>
@@ -296,12 +296,12 @@ function FooterContent({ scrollYProgress }: { scrollYProgress: any }) {
 
           <div className="max-w-3xl">
             <h2
-              className="font-[Nyght_Serif] text-white text-fluid-h2"
+              className="font-[Nyght_Serif] text-white text-fluid-h2 md:whitespace-nowrap"
               style={{
                 textShadow: TEXT_GLOW,
               }}
             >
-              Got a <em className="italic">world worth building</em>? Let's make it real.
+              Got a <em className="italic">world worth building</em>?<br /> Let's make it real.
             </h2>
             <HoverLink
               href={LETS_TALK_MAILTO}

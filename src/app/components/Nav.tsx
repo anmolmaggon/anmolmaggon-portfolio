@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { HoverLink } from "./HoverLink";
 import { ButtonCTA } from "./ui/ButtonCTA";
 import { LETS_TALK_MAILTO } from "../data/contact";
+import linkedInLogo from "../../imports/InBug-Black.png";
+import instagramLogo from "../../imports/Instagram_Glyph_Black.svg";
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -178,14 +180,14 @@ export function Nav() {
               </button>
             </div>
 
-            <nav className="flex-1 flex flex-col justify-center gap-2 px-6">
+            <nav className="flex-1 flex flex-col justify-center gap-1 px-6">
               {links.map((l, i) => (
                 <motion.a
                   key={l.label}
                   href={l.href}
                   onClick={() => setMenuOpen(false)}
                   {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="font-[Nyght_Serif] py-3 text-paper-strong hover:text-white transition-colors text-fluid-h2 font-normal tracking-display leading-[1.05]"
+                  className="font-sans py-2 text-paper-strong hover:text-white transition-colors text-fluid-h2 font-medium tracking-wide leading-tight"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.08 + i * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -196,6 +198,36 @@ export function Nav() {
             </nav>
 
             <div className="px-6 pb-10">
+              <div className="mb-6 border-t border-paper-hairline pt-6">
+                <div className="-ml-3 flex items-center gap-2">
+                  <motion.a
+                    href="https://www.linkedin.com/in/anmolmaggon40/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex h-12 w-12 items-center justify-center rounded-full"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.08 + links.length * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <img src={linkedInLogo} alt="" aria-hidden="true" className="h-6 w-6 object-contain invert opacity-80 transition-opacity hover:opacity-100" />
+                  </motion.a>
+                  <motion.a
+                    href="https://www.instagram.com/anmol.maggon/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex h-12 w-12 items-center justify-center rounded-full"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.08 + (links.length + 1) * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <img src={instagramLogo} alt="" aria-hidden="true" className="h-6 w-6 object-contain invert opacity-80 transition-opacity hover:opacity-100" />
+                  </motion.a>
+                </div>
+              </div>
               <ButtonCTA
                 href={LETS_TALK_MAILTO}
                 onClick={() => setMenuOpen(false)}
