@@ -8,6 +8,9 @@ type Study = CaseStudyDetail & {
   slug: string;
   image: string;
   previewVideo?: string;
+  /** Mobile-only preview override. When set, the mobile card shows this image
+      instead of the previewVideo/image. Desktop hover preview is unaffected. */
+  mobileImage?: string;
   tilt: number;
   oneLiner?: string;
 };
@@ -17,7 +20,7 @@ const USE_TIGHT_NOTES_CASE_STUDY = false;
 
 const notesStudyFull: Study = {
     slug: "notes",
-    number: "01",
+    number: "03",
     title: "Notes",
     subtitle: "A 24-hour format for the work thoughts that never come out.",
     client: "AmbitionBox Communities",
@@ -27,6 +30,7 @@ const notesStudyFull: Study = {
     oneLiner: "Every work thought that dies in your head.",
     image: "/case-studies/notes/preview.svg",
     previewVideo: "/case-studies/notes/preview.mp4",
+    mobileImage: "/case-studies/quick-vibe-check/Notes_Mobile.webp",
     cover: "/case-studies/notes/cover.svg",
     coverVideo: "/case-studies/notes/cover.mp4",
     tilt: -6,
@@ -143,71 +147,9 @@ const notesStudyTight: Study = {
 };
 
 const studies: Study[] = [
-  USE_TIGHT_NOTES_CASE_STUDY ? notesStudyTight : notesStudyFull,
-  {
-    slug: "the-number-that-matters",
-    number: "02",
-    title: "Negotiate With Data",
-    client: "AmbitionBox · Salaries",
-    year: "2025",
-    role: "Product Designer",
-    meta: ["Product Designer", "2025", "Shipped"],
-    oneLiner: "Data to negotiate your next offer.",
-    subtitle: "Fixing a broken Information Architecture",
-    image: "/case-studies/salary-pages/93c0467c-99f4-4090-ae81-d80f876e3c30.png",
-    previewVideo: "/case-studies/salary-pages/preview.mp4",
-    cover: "/case-studies/salary-pages/cover.webp",
-    tilt: 5,
-    problem:
-      "How might we fix a chaotic, cluttered salary page where dangerously broad ranges and generic designations leave users more confused than when they arrived?",
-    approach:
-      "I rebuilt the entire information architecture. Instead of showing broad, generic averages that didn't mean anything, we narrowed the salary ranges based on specific roles and locations—turning a confusing page into a clear tool you could actually use in a negotiation.",
-    impact: [
-      { value: "+27%", label: "perceived salary accuracy" },
-      { value: "+10%", label: "avg. time spent per user (ATP)" },
-      { value: "Stable", label: "bounce rate" },
-      { value: "Zero", label: "drop in signups" },
-    ],
-    decisions: [
-      { 
-        title: "Narrowing the ranges (Generic vs. Non-Generic)", 
-        detail: "The old page treated a generic 'Engineer' the same as a hyper-specific role, leading to massively broad, unhelpful salary ranges. We separated them, ensuring users only saw narrow, apple-to-apple comparisons that actually made sense.",
-        videos: [{ src: "/case-studies/salary-pages/Generic Designation.mov", caption: "Generic roles suppress deep insights; picking a department unlocks the full suite" }]
-      },
-      { 
-        title: "Restructuring the Information Architecture", 
-        detail: "Years of patchwork additions had buried the most important insights under layers of clutter. I restructured what goes where — surfacing take-home pay, pay structure breakdowns, and benchmarks to the top, and pushing secondary data below the fold. The hierarchy now mirrors how people actually negotiate: lead with the number, then show the evidence.",
-        videos: [{ src: "/case-studies/salary-pages/Information Hierarchy.mov", caption: "The restructured page hierarchy — key numbers first, evidence second" }]
-      },
-      { 
-        title: "Making It Breathe", 
-        detail: "The old page was a wall of text with SEO-stuffed section titles like 'Swiggy Experience wise salary for Fleet Manager in Procurement and Supply Chain department.' I kept the full keyword string in the HTML for crawlers but split it visually — a clean title up top, context pushed into a subtle breadcrumb below. Combined with generous whitespace, illustrations, and a scannable layout, the page finally felt like something you'd actually want to use.",
-        videos: [{ src: "/case-studies/salary-pages/SEO title.mov", caption: "Clean section titles with SEO context tucked into breadcrumbs" }]
-      },
-      { 
-        title: "Killing the winning design due to data limits", 
-        detail: "We tried different layout approaches and user-tested them. We had a clear winner, but I had to kill it. Our backend data couldn't support the layout honestly. Designing a beautiful UI for thin data is just lying with pixels, so I pivoted the layout to match the true limitations of our database.",
-        images: [{ src: "/case-studies/salary-pages/Killed Layout.png", caption: "The wireframe we killed — users loved it, but the data couldn't back it" }]
-      },
-    ],
-    beyondDesign: {
-      questions: [
-        { label: "Identifying generic roles?", question: "How did you figure out the taxonomy for generic vs. non-generic designations in the Salary project?" },
-        { label: "Handling top-earner data?", question: "How do you handle outliers and top-earner data so it doesn't skew the averages?" },
-        { label: "Did blurring hurt SEO?", question: "Did the blur gating strategy negatively impact SEO or search rankings?" },
-        { label: "Why kill the winning UI?", question: "Why exactly did you kill the layout that won in user testing?" }
-      ],
-      ctaLead: "Want the full walkthrough?"
-    },
-    beforeAfter: {
-      before: "/case-studies/salary-pages/Salary Before.png",
-      after: "/case-studies/salary-pages/Salary After.png",
-    },
-    shots: [],
-  },
   {
     slug: "quick-vibe-check",
-    number: "03",
+    number: "01",
     title: "Vibe Check",
     client: "AmbitionBox · Reviews",
     year: "2026",
@@ -216,6 +158,7 @@ const studies: Study[] = [
     oneLiner: "AI summaries for company reviews.",
     image: "/case-studies/quick-vibe-check/preview.svg",
     previewVideo: "/case-studies/quick-vibe-check/preview.mp4",
+    mobileImage: "/case-studies/quick-vibe-check/VibeCheck_Mobile.webp",
     cover: "/case-studies/quick-vibe-check/image.png",
     subtitle: "An AI insights engine that gives job seekers an instant, honest read on company culture.",
     tilt: -4,
@@ -271,6 +214,69 @@ const studies: Study[] = [
     },
     shots: [],
   },
+  {
+    slug: "the-number-that-matters",
+    number: "02",
+    title: "Negotiate With Data",
+    client: "AmbitionBox · Salaries",
+    year: "2025",
+    role: "Product Designer",
+    meta: ["Product Designer", "2025", "Shipped"],
+    oneLiner: "Data to negotiate your next offer.",
+    subtitle: "Fixing a broken Information Architecture",
+    image: "/case-studies/salary-pages/93c0467c-99f4-4090-ae81-d80f876e3c30.png",
+    previewVideo: "/case-studies/salary-pages/preview.mp4",
+    mobileImage: "/case-studies/quick-vibe-check/Salary_Mobile.webp",
+    cover: "/case-studies/salary-pages/cover.webp",
+    tilt: 5,
+    problem:
+      "How might we fix a chaotic, cluttered salary page where dangerously broad ranges and generic designations leave users more confused than when they arrived?",
+    approach:
+      "I rebuilt the entire information architecture. Instead of showing broad, generic averages that didn't mean anything, we narrowed the salary ranges based on specific roles and locations—turning a confusing page into a clear tool you could actually use in a negotiation.",
+    impact: [
+      { value: "+27%", label: "perceived salary accuracy" },
+      { value: "+10%", label: "avg. time spent per user (ATP)" },
+      { value: "Stable", label: "bounce rate" },
+      { value: "Zero", label: "drop in signups" },
+    ],
+    decisions: [
+      { 
+        title: "Narrowing the ranges (Generic vs. Non-Generic)", 
+        detail: "The old page treated a generic 'Engineer' the same as a hyper-specific role, leading to massively broad, unhelpful salary ranges. We separated them, ensuring users only saw narrow, apple-to-apple comparisons that actually made sense.",
+        videos: [{ src: "/case-studies/salary-pages/Generic Designation.mov", caption: "Generic roles suppress deep insights; picking a department unlocks the full suite" }]
+      },
+      { 
+        title: "Restructuring the Information Architecture", 
+        detail: "Years of patchwork additions had buried the most important insights under layers of clutter. I restructured what goes where — surfacing take-home pay, pay structure breakdowns, and benchmarks to the top, and pushing secondary data below the fold. The hierarchy now mirrors how people actually negotiate: lead with the number, then show the evidence.",
+        videos: [{ src: "/case-studies/salary-pages/Information Hierarchy.mov", caption: "The restructured page hierarchy — key numbers first, evidence second" }]
+      },
+      { 
+        title: "Making It Breathe", 
+        detail: "The old page was a wall of text with SEO-stuffed section titles like 'Swiggy Experience wise salary for Fleet Manager in Procurement and Supply Chain department.' I kept the full keyword string in the HTML for crawlers but split it visually — a clean title up top, context pushed into a subtle breadcrumb below. Combined with generous whitespace, illustrations, and a scannable layout, the page finally felt like something you'd actually want to use.",
+        videos: [{ src: "/case-studies/salary-pages/SEO title.mov", caption: "Clean section titles with SEO context tucked into breadcrumbs" }]
+      },
+      { 
+        title: "Killing the winning design due to data limits", 
+        detail: "We tried different layout approaches and user-tested them. We had a clear winner, but I had to kill it. Our backend data couldn't support the layout honestly. Designing a beautiful UI for thin data is just lying with pixels, so I pivoted the layout to match the true limitations of our database.",
+        images: [{ src: "/case-studies/salary-pages/Killed Layout.png", caption: "The wireframe we killed — users loved it, but the data couldn't back it" }]
+      },
+    ],
+    beyondDesign: {
+      questions: [
+        { label: "Identifying generic roles?", question: "How did you figure out the taxonomy for generic vs. non-generic designations in the Salary project?" },
+        { label: "Handling top-earner data?", question: "How do you handle outliers and top-earner data so it doesn't skew the averages?" },
+        { label: "Did blurring hurt SEO?", question: "Did the blur gating strategy negatively impact SEO or search rankings?" },
+        { label: "Why kill the winning UI?", question: "Why exactly did you kill the layout that won in user testing?" }
+      ],
+      ctaLead: "Want the full walkthrough?"
+    },
+    beforeAfter: {
+      before: "/case-studies/salary-pages/Salary Before.png",
+      after: "/case-studies/salary-pages/Salary After.png",
+    },
+    shots: [],
+  },
+  USE_TIGHT_NOTES_CASE_STUDY ? notesStudyTight : notesStudyFull,
 ];
 
 export function CaseStudies() {
@@ -420,7 +426,15 @@ export function CaseStudies() {
                   the site's hover/pressed states. */}
               <div className="md:hidden border border-hairline bg-white/40">
                 <div className="w-full aspect-card overflow-hidden bg-black/[0.03]">
-                  {s.previewVideo ? (
+                  {s.mobileImage ? (
+                    <ImageWithFallback
+                      src={s.mobileImage}
+                      alt={`${s.title} preview`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : s.previewVideo ? (
                     <VideoWithFallback
                       className="w-full h-full object-cover"
                       autoPlay
