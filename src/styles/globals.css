@@ -24,6 +24,21 @@ body {
   pointer-events: none;
 }
 
+/* ── Widow control (site-wide) ─────────────────────────────────────────────
+   Never strand a lone word on the last line. The `text-wrap` longhands
+   (text-wrap-mode / text-wrap-style) both INHERIT, so setting `pretty` on the
+   root cascades to every text block — divs included, not just <p> — which is
+   what makes this a true guarantee instead of per-string &nbsp;. Short display
+   text uses `balance` for even line lengths on top of that. Both degrade to
+   normal wrapping where unsupported, and both respect deliberate <br>/&nbsp;
+   breaks (hero headline, the "Nothing changes" shake). */
+html {
+  text-wrap: pretty;
+}
+:where(h1, h2, h3, h4, h5, h6, .display) {
+  text-wrap: balance;
+}
+
 @keyframes slideUpFade {
   0% {
     opacity: 0;

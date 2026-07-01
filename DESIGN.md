@@ -211,6 +211,7 @@ Letter-spacing and line-height are tokenized (exposed via `@theme` → `tracking
 - **Section labels:** ALL-CAPS, `font-sans font-medium text-label tracking-wider` at `text-ink-label`. This is the *only* ALL-CAPS in the system.
 - **Metadata / credits:** sentence case, `·`-separated (`Product Designer · 2026 · Shipped`), at `text-ink-label`/`text-ink-muted`.
 - **Numerals in ledgers:** zero-padded (`String(i+1).padStart(2,"0")`), `.numeral`, `text-ink-ghost`.
+- **No widows.** Wrapping is handled globally in [`globals.css`](src/styles/globals.css): the root sets `text-wrap: pretty` (both longhands inherit, so *every* text block — divs included — avoids a lone last-word) and headings/`.display` add `text-wrap: balance` for even lines. Don't hand-set `&nbsp;`/`<br>` to fix widows; reserve those for *deliberate* breaks (the hero headline, the "Nothing changes" shake).
 - Don't mix more than display-serif + system-sans. No third face.
 
 ---
