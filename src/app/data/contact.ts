@@ -5,10 +5,10 @@
 
 export const CONTACT_EMAIL = "anmolmaggon40@gmail.com";
 
-const LETS_TALK_SUBJECT = "Let's chat about your portfolio & work";
+const LETS_TALK_SUBJECT = "Loved your portfolio, let's talk";
 const LETS_TALK_BODY = `Hi Anmol,
 
-I was just looking through your portfolio and really loved your work. I'd love to connect and chat more about what you're up to!
+Your work and the craft behind it really stood out. I'd love to talk about [role / project] and how you work.
 
 Best,
 [Your Name]`;

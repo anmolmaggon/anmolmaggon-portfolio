@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { VideoWithFallback } from "./VideoWithFallback";
 import { Pill } from "./Pill";
+import { KnowMoreCursor } from "./KnowMoreCursor";
 import { CaseStudyModal, type CaseStudyDetail } from "./CaseStudyModal";
 
 type Study = CaseStudyDetail & {
@@ -22,12 +23,12 @@ const notesStudyFull: Study = {
     slug: "notes",
     number: "03",
     title: "Notes",
-    subtitle: "A 24-hour format for the work thoughts that never come out.",
+    subtitle: "Somewhere low-stakes to say what you'd never post out loud, gone in 24 hours.",
     client: "AmbitionBox Communities",
     year: "2026",
     role: "PM + Designer",
     meta: ["PM + Designer", "2026", "Pre-launch"],
-    oneLiner: "Every work thought that dies in your head.",
+    oneLiner: "The intrusive work thoughts that used to die in your head now have a home.",
     image: "/case-studies/notes/preview.svg",
     previewVideo: "/case-studies/notes/preview.mp4",
     mobileImage: "/case-studies/quick-vibe-check/Notes_Mobile.webp",
@@ -155,12 +156,12 @@ const studies: Study[] = [
     year: "2026",
     role: "Product Designer",
     meta: ["Product Designer", "2026", "Live"],
-    oneLiner: "AI summaries for company reviews.",
+    oneLiner: "Know what a company is really like before you say yes.",
     image: "/case-studies/quick-vibe-check/preview.svg",
     previewVideo: "/case-studies/quick-vibe-check/preview.mp4",
     mobileImage: "/case-studies/quick-vibe-check/VibeCheck_Mobile.webp",
     cover: "/case-studies/quick-vibe-check/image.png",
-    subtitle: "An AI insights engine that gives job seekers an instant, honest read on company culture.",
+    subtitle: "An AI read on a company's culture, backed by real reviews you can check yourself.",
     tilt: -4,
     context:
       "AmbitionBox users are job seekers at the highest-stakes moments of their careers: preparing for an interview or deciding whether to accept an offer. They are looking for honest, unfiltered signals about what working there is actually like.",
@@ -176,23 +177,23 @@ const studies: Study[] = [
     ],
     decisions: [
       { 
-        title: "Designing for Proof & Trust", 
+        title: "Designing for proof & trust",
         detail: "AI summaries inherently trigger skepticism. I established strict visual boundaries for AI-generated content to clearly distinguish it from user-generated reviews. More importantly, I eliminated the \"black box\"—every single AI claim is clickable, instantly anchoring the user to the exact raw reviews that generated it.",
         videos: [{ src: "/case-studies/quick-vibe-check/Trust.mov", caption: "Clicking an insight reveals the raw reviews" }]
       },
       { 
-        title: "Inverting the Information Architecture", 
+        title: "Inverting the page hierarchy",
         detail: "Instead of forcing users to pan for gold in chronological feeds, I inverted the page hierarchy. The AI summary becomes the hero above the fold, while the raw reviews act as a supporting ledger of evidence below.",
         videos: [{ src: "/case-studies/quick-vibe-check/Inversion.mov", caption: "The Quick Vibe Check UI sitting above the fold" }]
       },
       { 
-        title: "Elevating Marginalized Signals", 
+        title: "Surfacing the signal women couldn't find",
         detail: "Qualitative feedback revealed that female candidates struggled to find reliable safety and culture signals. I pushed for a gender split across both overall and category ratings, specifically highlighting areas where women rate the company significantly lower than men. Senior stakeholders — all male — pushed back. I had to build the case that this signal was precisely the kind of insight our female users couldn't find anywhere else.",
         videos: [{ src: "/case-studies/quick-vibe-check/Gender.mov", caption: "Overall ratings split by gender directly under the summary" }]
       },
       {
-        title: "Navigating the B2B/B2C Marketplace Tension",
-        detail: "The hardest challenge wasn't the AI; it was the business model. We had to show job seekers ruthlessly honest summaries without making our Sales team look bad in front of potential paying employers. We balanced the visual design to maintain objectivity without hostility, while simultaneously mapping new ad slots to ensure the above-the-fold summary didn't cannibalize our ad impressions."
+        title: "Balancing honesty and the business",
+        detail: "The hardest challenge wasn't the AI; it was the business model. We had to show job seekers ruthlessly honest summaries without making Sales look bad to the employers who pay us. I kept the summary objective but not hostile, and mapped new ad slots so the honest read didn't cost us ad revenue."
       },
     ],
     beyondDesign: {
@@ -222,8 +223,8 @@ const studies: Study[] = [
     year: "2025",
     role: "Product Designer",
     meta: ["Product Designer", "2025", "Shipped"],
-    oneLiner: "Data to negotiate your next offer.",
-    subtitle: "Fixing a broken Information Architecture",
+    oneLiner: "The salary data you need to negotiate your next offer.",
+    subtitle: "Rebuilding a cluttered salary page into a tool you can actually negotiate with.",
     image: "/case-studies/salary-pages/93c0467c-99f4-4090-ae81-d80f876e3c30.png",
     previewVideo: "/case-studies/salary-pages/preview.mp4",
     mobileImage: "/case-studies/quick-vibe-check/Salary_Mobile.webp",
@@ -241,17 +242,17 @@ const studies: Study[] = [
     ],
     decisions: [
       { 
-        title: "Narrowing the ranges (Generic vs. Non-Generic)", 
+        title: "Narrowing the salary ranges",
         detail: "The old page treated a generic 'Engineer' the same as a hyper-specific role, leading to massively broad, unhelpful salary ranges. We separated them, ensuring users only saw narrow, apple-to-apple comparisons that actually made sense.",
         videos: [{ src: "/case-studies/salary-pages/Generic Designation.mov", caption: "Generic roles suppress deep insights; picking a department unlocks the full suite" }]
       },
       { 
-        title: "Restructuring the Information Architecture", 
+        title: "Restructuring the page hierarchy",
         detail: "Years of patchwork additions had buried the most important insights under layers of clutter. I restructured what goes where — surfacing take-home pay, pay structure breakdowns, and benchmarks to the top, and pushing secondary data below the fold. The hierarchy now mirrors how people actually negotiate: lead with the number, then show the evidence.",
         videos: [{ src: "/case-studies/salary-pages/Information Hierarchy.mov", caption: "The restructured page hierarchy — key numbers first, evidence second" }]
       },
       { 
-        title: "Making It Breathe", 
+        title: "Making it breathe",
         detail: "The old page was a wall of text with SEO-stuffed section titles like 'Swiggy Experience wise salary for Fleet Manager in Procurement and Supply Chain department.' I kept the full keyword string in the HTML for crawlers but split it visually — a clean title up top, context pushed into a subtle breadcrumb below. Combined with generous whitespace, illustrations, and a scannable layout, the page finally felt like something you'd actually want to use.",
         videos: [{ src: "/case-studies/salary-pages/SEO title.mov", caption: "Clean section titles with SEO context tucked into breadcrumbs" }]
       },
@@ -281,6 +282,19 @@ const studies: Study[] = [
 
 export function CaseStudies() {
   const [active, setActive] = useState<CaseStudyDetail | null>(null);
+
+  // Desktop delight: a "Know more" button that rides the cursor while a row is
+  // hovered. Gated behind a hover-capable, fine pointer so touch devices keep
+  // the tappable pill and never get a stranded cursor or `cursor: none`.
+  const [canHover, setCanHover] = useState(false);
+  const [hoveringCard, setHoveringCard] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const sync = () => setCanHover(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -353,14 +367,20 @@ export function CaseStudies() {
           <li key={s.number} className="group relative z-0 hover:z-50">
             <button
               type="button"
-              onClick={() => handleNavigate(s)}
+              onClick={() => {
+                setHoveringCard(false);
+                handleNavigate(s);
+              }}
               onMouseEnter={(event) => {
                 event.currentTarget.querySelector("video")?.play().catch(() => {});
+                if (canHover) setHoveringCard(true);
               }}
               onMouseLeave={(event) => {
                 event.currentTarget.querySelector("video")?.pause();
+                setHoveringCard(false);
               }}
               className="w-full text-left block py-8 md:py-10 cursor-pointer"
+              style={canHover ? { cursor: "none" } : undefined}
             >
               {/* Desktop: faded titles that reveal subtext + a floating preview
                   on hover. Hidden on mobile where there's no hover. */}
@@ -386,8 +406,11 @@ export function CaseStudies() {
                     {s.title}
                   </h3>
 
-                  <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-hover:max-h-12 group-hover:opacity-100 group-hover:mt-3">
-                    <p className="font-sans text-ink-muted" style={{ fontSize: 14 }}>
+                  <div className="overflow-hidden transition-[max-height,margin] duration-500 ease-out max-h-0 group-hover:max-h-16 group-hover:mt-6">
+                    <p
+                      className="font-sans text-ink-muted opacity-0 translate-y-1 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:translate-y-0"
+                      style={{ fontSize: "clamp(16px, 1.3vw, 18px)", lineHeight: 1.35 }}
+                    >
                       {s.oneLiner || s.meta.join(" • ")}
                     </p>
                   </div>
@@ -495,12 +518,14 @@ export function CaseStudies() {
         ))}
       </ul>
 
-      <CaseStudyModal 
-        study={active} 
+      <KnowMoreCursor active={canHover && hoveringCard && active === null} />
+
+      <CaseStudyModal
+        study={active}
         prevStudy={prevStudy}
         nextStudy={nextStudy}
         onNavigate={(study) => handleNavigate(study)}
-        onClose={() => handleNavigate(null)} 
+        onClose={() => handleNavigate(null)}
       />
     </section>
   );
