@@ -23,11 +23,11 @@ const notesStudyFull: Study = {
     slug: "notes",
     number: "03",
     title: "Notes",
-    subtitle: "Somewhere low-stakes to say what you'd never post out loud, gone in 24 hours.",
+    subtitle: "A low-stakes place for the workplace thoughts that were never worth a permanent post, gone in 24 hours.",
     client: "AmbitionBox Communities",
     year: "2026",
-    role: "PM + Designer",
-    meta: ["PM + Designer", "2026", "Pre-launch"],
+    role: "Product Manager + Product Designer",
+    meta: ["Product Manager + Product Designer", "2026", "Pre-launch"],
     oneLiner: "The intrusive work thoughts that used to die in your head now have a home.",
     image: "/case-studies/notes/preview.svg",
     previewVideo: "/case-studies/notes/preview.mp4",
@@ -35,22 +35,22 @@ const notesStudyFull: Study = {
     cover: "/case-studies/notes/cover.svg",
     coverVideo: "/case-studies/notes/cover.mp4",
     tilt: -6,
-    context: "AmbitionBox is one of India's largest company-review and salary-insights platforms. Communities is its pseudonymous space, where professionals discuss work candidly – without real names.",
+    context: "AmbitionBox is one of India's largest company-review and salary-insights platforms. Communities is its pseudonymous space, where professionals discuss work candidly, without real names.",
     problem: "How might we capture the intrusive work thoughts that users currently swallow because they fear being judged?",
-    approach: "Notes makes sharing feel as light as the thought itself. Every note disappears in 24 hours, never touches your profile, and is posted under whichever identity fits the moment.",
-    noFigma: "I built the spec as a coded prototype instead of static mocks — partly to test if AI-assisted prototyping could cut 'thought-to-live' time, partly to see motion and library behavior in context instead of imagining it. It didn't save calendar days. But it kept every design decision documented as I went, made prototyping tangible in ways Figma couldn't, and taught me where the foundational gaps in this workflow still live.",
+    approach: "Notes makes sharing feel as light as the thought itself. Every note disappears in 24 hours and is posted under whichever work identity you choose, never your real name.",
+    noFigma: "I built the spec as a coded prototype instead of static mocks, partly to test whether AI-assisted prototyping could shorten thought-to-live time, and partly to see motion and library behavior in context instead of imagining it. It didn't save calendar days, but it kept every design decision documented as I went, made prototyping tangible in ways Figma couldn't, and showed me where the gaps in this workflow still live.",
     impact: [],
     decisions: [
       {
         title: "A sticky note, not a post",
-        detail: "The sticky note is the most universal workplace artifact – on monitors, meeting room walls, desk edges everywhere. Notes borrows that shape because the format doesn't need teaching. One canvas, type resizes to fit, no scrolling – brevity is built into the container.",
+        detail: "The sticky note is the most universal workplace artifact, on monitors, meeting-room walls, and desk edges everywhere. Notes borrows that shape because it needs no explaining.",
         videos: [
           { src: "/case-studies/notes/Express.mov", caption: "A space to let out your everyday work thoughts" }
         ]
       },
       {
-        title: "Fun is the on-ramp",
-        detail: "To balance low cognitive load for the writer with high engagement for the reader, expression needed to feel playful but remain cheap to build. We reused an existing GIF API and kept logic basic, ensuring we didn't bloat the MVP while still solving for reader boredom.",
+        title: "Fun is the invitation",
+        detail: "To keep the writer's effort low while giving readers something worth opening, expression had to feel playful yet stay cheap to build. We reused an existing GIF API and kept the logic simple, adding enough range for notes to feel alive without bloating the MVP.",
         videos: [
           { src: "/case-studies/notes/Note Color.mov", caption: "Dress up your thoughts with vibrant backgrounds" },
           { src: "/case-studies/notes/Sticker.mov", caption: "Add playful visual cues to your message" },
@@ -60,14 +60,14 @@ const notesStudyFull: Study = {
       },
       {
         title: "Identity fits the moment",
-        detail: "Each note is posted as a designation or \"works at Company X\" – never a real name. Pseudonymity is the platform's core primitive; Notes just lets users wear it more flexibly.",
+        detail: "Each note is posted as a designation or as \"works at Company X\", never a real name. Pseudonymity is the platform's core primitive, and Notes lets users wear it more flexibly.",
         videos: [
           { src: "/case-studies/notes/Identity Selection.mov", caption: "Choose the identity you're most comfortable with" }
         ]
       },
       {
         title: "Temporary by contract",
-        detail: "A note disappears after 24 hours. No archive, no history – when it's gone, it's gone."
+        detail: "A note disappears after 24 hours. No archive, no history. When it's gone, it's gone."
       }
     ],
     watching: {
@@ -81,17 +81,17 @@ const notesStudyFull: Study = {
     coverCaption: "Consume what other professionals are sharing candidly and react.",
     beyondDesign: {
       questions: [
-        { label: "How do you moderate without real names?", question: "How does moderation work when no one has a real name?" },
-        { label: "How do you get content on day one?", question: "How do you kickstart content when the product is brand new?" },
-        { label: "How do you sort notes?", question: "How do you sort notes?" },
-        { label: "How does personalization work?", question: "How do you personalize content for users?" },
-        { label: "Can your employer trace you?", question: "Can your employer trace you on a pseudonymous platform?" }
+        { label: "Moderating without names?", question: "How does moderation work when no one has a real name?" },
+        { label: "Cold-start content?", question: "How do you kickstart content when the product is brand new?" },
+        { label: "Sorting notes?", question: "How do you sort notes?" },
+        { label: "Personalization?", question: "How do you personalize content for users?" },
+        { label: "Can employers trace you?", question: "Can your employer trace you on a pseudonymous platform?" }
       ],
       ctaLead: "Want the full walkthrough?"
     },
     whatICut: {
       chips: ["Templates", "Daily prompts", "Direct Message", "Comments", "Archive"],
-      caption: "Templates and Archive are power-user features — useless if the core doesn't work. Daily prompts and Comments are Phase II bets on habit and conversation. Each cut was a bet that the core question — will people share when the format feels genuinely low-stakes? — deserves a clean answer first."
+      caption: "Templates and Archive are power-user features, useless if the core doesn't work. Daily prompts and Comments are Phase II bets on habit and conversation. Every cut protected one question that deserves a clean answer first: will people share more when the format feels genuinely low-stakes?"
     },
     shots: [],
 };
@@ -143,7 +143,7 @@ const notesStudyTight: Study = {
   whatICut: {
     ...notesStudyFull.whatICut!,
     caption:
-      "Templates, prompts, DMs, comments, and archive all made the product heavier. Each cut was a bet that the core question — will people share when the format feels genuinely low-stakes? — deserves a clean answer first.",
+      "Templates, prompts, DMs, comments, and archive all made the product heavier. Every cut protected one question that deserves a clean answer first: will people share more when the format feels genuinely low-stakes?",
   },
 };
 
@@ -168,7 +168,7 @@ const studies: Study[] = [
     problem:
       "How might we give job seekers an instant, synthesized read on a company's culture without losing the raw honesty of individual reviews?",
     approach:
-      "I designed an AI summary — the information architecture, the trust model, and the clear visual boundary between AI and user content — placed directly above the fold to replace guessing with a structured, honest read.",
+      "I designed an AI summary, owning the information architecture, the trust model, and the clear visual boundary between AI and user content, and placed it above the fold so people open with a structured, honest read instead of a guess.",
     impact: [
       { value: "10k+", label: "companies live with summaries" },
       { value: "78%", label: "positive in-product feedback" },
@@ -176,24 +176,24 @@ const studies: Study[] = [
       { value: "+17%", label: "avg. time spent per user" },
     ],
     decisions: [
-      { 
-        title: "Designing for proof & trust",
-        detail: "AI summaries inherently trigger skepticism. I established strict visual boundaries for AI-generated content to clearly distinguish it from user-generated reviews. More importantly, I eliminated the \"black box\"—every single AI claim is clickable, instantly anchoring the user to the exact raw reviews that generated it.",
-        videos: [{ src: "/case-studies/quick-vibe-check/Trust.mov", caption: "Clicking an insight reveals the raw reviews" }]
-      },
-      { 
-        title: "Inverting the page hierarchy",
-        detail: "Instead of forcing users to pan for gold in chronological feeds, I inverted the page hierarchy. The AI summary becomes the hero above the fold, while the raw reviews act as a supporting ledger of evidence below.",
-        videos: [{ src: "/case-studies/quick-vibe-check/Inversion.mov", caption: "The Quick Vibe Check UI sitting above the fold" }]
-      },
-      { 
-        title: "Surfacing the signal women couldn't find",
-        detail: "Qualitative feedback revealed that female candidates struggled to find reliable safety and culture signals. I pushed for a gender split across both overall and category ratings, specifically highlighting areas where women rate the company significantly lower than men. Senior stakeholders — all male — pushed back. I had to build the case that this signal was precisely the kind of insight our female users couldn't find anywhere else.",
+      {
+        title: "Doubling down on the gender gap",
+        detail: "When we split the ratings by gender, users kept telling us how useful that gap was, how differently women and men rate the same company. That signal resonated, so we doubled down and made it prominent above the fold.",
         videos: [{ src: "/case-studies/quick-vibe-check/Gender.mov", caption: "Overall ratings split by gender directly under the summary" }]
       },
       {
-        title: "Balancing honesty and the business",
-        detail: "The hardest challenge wasn't the AI; it was the business model. We had to show job seekers ruthlessly honest summaries without making Sales look bad to the employers who pay us. I kept the summary objective but not hostile, and mapped new ad slots so the honest read didn't cost us ad revenue."
+        title: "Designing for proof & trust",
+        detail: "AI summaries invite skepticism by default. I set strict visual boundaries so the AI summary reads as clearly distinct from real reviews, then made its reasoning visible: every claim is clickable and opens the exact reviews that produced it.",
+        videos: [{ src: "/case-studies/quick-vibe-check/Trust.mov", caption: "Clicking an insight reveals the raw reviews" }]
+      },
+      {
+        title: "Insights first, details later",
+        detail: "The old page led with a raw chronological feed and surfaced plenty users didn't need. I made the new AI read the starting point, with the reviews below it as proof and the clutter cleared away. People want the verdict first and the evidence a scroll away.",
+        videos: [{ src: "/case-studies/quick-vibe-check/Inversion.mov", caption: "The Quick Vibe Check UI sitting above the fold" }]
+      },
+      {
+        title: "Balancing candor with the business",
+        detail: "The hardest part wasn't the AI summary, it was making an honest read coexist with a two-sided business that serves both job seekers and the employers they're evaluating. Keeping the summary candid for users without ignoring that tension was the real design challenge, and how I solved it is a conversation I would rather have in person."
       },
     ],
     beyondDesign: {
@@ -209,6 +209,7 @@ const studies: Study[] = [
       chips: ["Department filters", "Endless scroll", "Granular tags"],
       caption: "I initially wanted department-level AI summaries. But data showed users just glance at the overall level. So I killed my own feature to get the core concept shipped."
     },
+    heroLayout: "beforeAfter",
     beforeAfter: {
       before: "/case-studies/quick-vibe-check/Company Reviews Page.png",
       after: "/case-studies/quick-vibe-check/Thick Data copy.png",
@@ -224,7 +225,7 @@ const studies: Study[] = [
     role: "Product Designer",
     meta: ["Product Designer", "2025", "Shipped"],
     oneLiner: "The salary data you need to negotiate your next offer.",
-    subtitle: "Rebuilding a cluttered salary page into a tool you can actually negotiate with.",
+    subtitle: "Turning a cluttered salary page into a clear read on what a role really pays, so people can compare and walk into a negotiation informed.",
     image: "/case-studies/salary-pages/93c0467c-99f4-4090-ae81-d80f876e3c30.png",
     previewVideo: "/case-studies/salary-pages/preview.mp4",
     mobileImage: "/case-studies/quick-vibe-check/Salary_Mobile.webp",
@@ -233,7 +234,7 @@ const studies: Study[] = [
     problem:
       "How might we fix a chaotic, cluttered salary page where dangerously broad ranges and generic designations leave users more confused than when they arrived?",
     approach:
-      "I rebuilt the entire information architecture. Instead of showing broad, generic averages that didn't mean anything, we narrowed the salary ranges based on specific roles and locations—turning a confusing page into a clear tool you could actually use in a negotiation.",
+      "I approached it as negotiation prep, not a data dump. I rebuilt the information architecture around the handful of numbers people actually negotiate with, and hid anything too noisy to trust.",
     impact: [
       { value: "+27%", label: "perceived salary accuracy" },
       { value: "+10%", label: "avg. time spent per user (ATP)" },
@@ -241,36 +242,37 @@ const studies: Study[] = [
       { value: "Zero", label: "drop in signups" },
     ],
     decisions: [
-      { 
-        title: "Narrowing the salary ranges",
-        detail: "The old page treated a generic 'Engineer' the same as a hyper-specific role, leading to massively broad, unhelpful salary ranges. We separated them, ensuring users only saw narrow, apple-to-apple comparisons that actually made sense.",
-        videos: [{ src: "/case-studies/salary-pages/Generic Designation.mov", caption: "Generic roles suppress deep insights; picking a department unlocks the full suite" }]
+      {
+        title: "Separating real roles from generic titles",
+        detail: "The old page priced a generic 'Manager' the same as a hyper-specific role, producing ranges so broad they were useless. Averaging an IT Manager with an HR Manager tells neither of them what they are worth. We split them apart, so users only saw narrow, apples-to-apples comparisons that actually held up in a negotiation.",
+        videos: [{ src: "/case-studies/salary-pages/Generic Designation.mov", caption: "Generic roles hide the detail; choosing a department unlocks the full breakdown" }]
       },
-      { 
+      {
         title: "Restructuring the page hierarchy",
-        detail: "Years of patchwork additions had buried the most important insights under layers of clutter. I restructured what goes where — surfacing take-home pay, pay structure breakdowns, and benchmarks to the top, and pushing secondary data below the fold. The hierarchy now mirrors how people actually negotiate: lead with the number, then show the evidence.",
-        videos: [{ src: "/case-studies/salary-pages/Information Hierarchy.mov", caption: "The restructured page hierarchy — key numbers first, evidence second" }]
+        detail: "Years of patchwork additions had buried the most important insights under layers of clutter. I restructured what goes where, surfacing take-home pay, pay-structure breakdowns, and benchmarks at the top, and pushing secondary data below the fold.",
+        videos: [{ src: "/case-studies/salary-pages/Information Hierarchy.mov", caption: "The restructured page hierarchy, key numbers first and evidence second" }]
       },
-      { 
+      {
         title: "Making it breathe",
-        detail: "The old page was a wall of text with SEO-stuffed section titles like 'Swiggy Experience wise salary for Fleet Manager in Procurement and Supply Chain department.' I kept the full keyword string in the HTML for crawlers but split it visually — a clean title up top, context pushed into a subtle breadcrumb below. Combined with generous whitespace, illustrations, and a scannable layout, the page finally felt like something you'd actually want to use.",
+        detail: "The old titles were SEO word-salad, like 'Swiggy Experience wise salary for Fleet Manager in Procurement and Supply Chain.' I kept the keywords in the markup for crawlers but surfaced a clean title, pushed the rest into a breadcrumb, and let the page breathe until it felt like something people wanted to consume.",
         videos: [{ src: "/case-studies/salary-pages/SEO title.mov", caption: "Clean section titles with SEO context tucked into breadcrumbs" }]
       },
-      { 
-        title: "Killing the winning design due to data limits", 
-        detail: "We tried different layout approaches and user-tested them. We had a clear winner, but I had to kill it. Our backend data couldn't support the layout honestly. Designing a beautiful UI for thin data is just lying with pixels, so I pivoted the layout to match the true limitations of our database.",
-        images: [{ src: "/case-studies/salary-pages/Killed Layout.png", caption: "The wireframe we killed — users loved it, but the data couldn't back it" }]
+      {
+        title: "Killing the winning design",
+        detail: "We tested several layout approaches and had a clear winner, but I had to kill it. Our backend data couldn't support that layout honestly, and a polished UI on top of thin data only misleads people. So I reshaped the layout to match what the data could actually stand behind.",
+        images: [{ src: "/case-studies/salary-pages/Killed Layout.png", caption: "The wireframe we killed, loved in testing but the data couldn't back it" }]
       },
     ],
     beyondDesign: {
       questions: [
-        { label: "Identifying generic roles?", question: "How did you figure out the taxonomy for generic vs. non-generic designations in the Salary project?" },
+        { label: "Identifying generic roles?", question: "How did you define the taxonomy for generic vs. specific designations?" },
         { label: "Handling top-earner data?", question: "How do you handle outliers and top-earner data so it doesn't skew the averages?" },
         { label: "Did blurring hurt SEO?", question: "Did the blur gating strategy negatively impact SEO or search rankings?" },
         { label: "Why kill the winning UI?", question: "Why exactly did you kill the layout that won in user testing?" }
       ],
       ctaLead: "Want the full walkthrough?"
     },
+    heroLayout: "beforeAfter",
     beforeAfter: {
       before: "/case-studies/salary-pages/Salary Before.png",
       after: "/case-studies/salary-pages/Salary After.png",

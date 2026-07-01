@@ -1,6 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export function VideoWithFallback({ className, style, ...rest }: React.VideoHTMLAttributes<HTMLVideoElement>) {
+type VideoWithFallbackProps = React.VideoHTMLAttributes<HTMLVideoElement> & {
+  /** object-fit of the inner <video>. Defaults to "cover" (fills + crops). Use
+      "contain" to show the whole frame (letterboxed) — e.g. tall phone recordings. */
+  fit?: "cover" | "contain";
+  /** Override the inner <video> classes entirely (e.g. to let it size to its own
+      dimensions instead of filling the wrapper). Defaults to `w-full h-full object-{fit}`. */
+  mediaClassName?: string;
+};
+
+export function VideoWithFallback({ className, style, fit = "cover", mediaClassName, ...rest }: VideoWithFallbackProps) {
   const [isLoading, setIsLoading] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -41,7 +50,7 @@ export function VideoWithFallback({ className, style, ...rest }: React.VideoHTML
       />
       <video
         ref={videoRef}
-        className="w-full h-full object-cover"
+        className={mediaClassName ?? `w-full h-full ${fit === "contain" ? "object-contain" : "object-cover"}`}
         onLoadedData={handleLoadedData}
         {...rest}
       />

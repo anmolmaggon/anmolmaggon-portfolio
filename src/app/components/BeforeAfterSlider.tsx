@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type Props = {
   before: string;
@@ -23,6 +23,18 @@ export function BeforeAfterSlider({
   isMobileLayout = false,
 }: Props) {
   const [pos, setPos] = useState(50);
+  const areaRef = useRef<HTMLDivElement>(null);
+
+  // Desktop nicety: hovering across the image wipes the comparison (no click
+  // needed). Touch devices never fire mousemove, so mobile is unaffected; drag
+  // and keyboard still work everywhere.
+  const handleHover = (e: React.MouseEvent) => {
+    const el = areaRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const next = ((e.clientX - rect.left) / rect.width) * 100;
+    setPos(Math.max(0, Math.min(100, next)));
+  };
 
   return (
     <figure className="w-full flex flex-col items-center">
@@ -35,8 +47,12 @@ export function BeforeAfterSlider({
         </div>
 
         {/* 2. Scrollable Container for the actual slider */}
-        <div className={`w-full ${isMobileLayout ? "h-[75vh] overflow-y-auto rounded-card border border-hairline shadow-lg" : ""} bg-brand-light`}>
-          <div className={`relative inline-block w-full ${!isMobileLayout ? "max-w-full overflow-hidden" : ""} select-none`}>
+        <div className={`w-full ${isMobileLayout ? "h-[75vh] overflow-y-auto border border-hairline" : ""} bg-brand-light`}>
+          <div
+            ref={areaRef}
+            onMouseMove={handleHover}
+            className={`relative inline-block w-full ${!isMobileLayout ? "max-w-full overflow-hidden" : ""} select-none`}
+          >
             {/* Base layer: AFTER. No max-h restriction so it grows fully to its natural height */}
             <img
               src={after}
@@ -80,7 +96,7 @@ export function BeforeAfterSlider({
               value={pos}
               onChange={(e) => setPos(Number(e.target.value))}
               aria-label="Drag to compare the design before and after the redesign"
-              className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize touch-pan-y"
             />
           </div>
         </div>

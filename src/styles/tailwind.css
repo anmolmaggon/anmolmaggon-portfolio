@@ -18,9 +18,11 @@
   --text-fluid-h2:      clamp(34px, 3.8vw, 64px); /* section titles */
   --text-fluid-h3:      clamp(24px, 2.5vw, 36px); /* sub-headers, client names */
   --text-fluid-h4:      clamp(20px, 2.4vw, 34px); /* approach/problem body */
+  --text-fluid-h4-sm:   clamp(20px, 2.4vw, 28px); /* modal subtitle + decision/whatICut titles (capped smaller than h4) */
   --text-fluid-h5:      clamp(18px, 2vw, 26px);   /* watching metrics */
   --text-fluid-body:    clamp(15px, 1.2vw, 19px); /* body */
   --text-fluid-body-sm: clamp(15px, 1.1vw, 17px); /* dense body, captions */
+  --text-fluid-stat:    clamp(40px, 4vw, 56px);   /* impact stat value (modal) */
 
   /* ── FONT SIZE · fixed UI-text scale → text-micro/caption/label/meta ──────
      The non-fluid sizes for chrome/labels/meta. (12/14/16/18 also exist as the

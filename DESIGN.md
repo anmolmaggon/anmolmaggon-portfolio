@@ -355,11 +355,11 @@ Global smooth scroll is **Lenis** (`SmoothScroll.tsx`), synced to the **GSAP** t
 |-----------------|-------|-----|
 | `rounded-control` (`--radius-control`) | 2px | **Actionable** chips, CTA buttons, `Label` tags |
 | `rounded-card` (`--radius-card`) | 1rem (16px) | Impact stat cards |
-| `rounded-media` (`--radius-media`) | 24px | Video/image cards in modal |
+| `rounded-media` (`--radius-media`) | 24px | *Reserved* — modal media is now **square** (see below); token kept for future soft-media use |
 | `rounded-full` (Tailwind) | circle | **Icon** controls only — close, mute, play, FAB |
 | `rounded-[var(--radius-scaffold)]` | 0.625rem | Legacy shadcn only |
 
-**Radius encodes role** — a deliberate scale, not decoration: **0** chrome/ledger → **2px** actions (`rounded-control`) → **16/24px** content/media → **circle** icon controls. Actions are kept *crisp* so they belong to the sharp editorial field rather than reading as web-app pills. The case-study modal is **full-bleed** (`rounded-none`); editorial surfaces favor **square/hairline** over rounded.
+**Radius encodes role** — a deliberate scale, not decoration: **0** chrome/ledger → **2px** actions (`rounded-control`) → **16px** content cards (`rounded-card`, e.g. impact stats) → **circle** icon controls. Actions are kept *crisp* so they belong to the sharp editorial field rather than reading as web-app pills. **Modal media is square and flat** — cover, decision clips, and selected screens use `rounded-none` with **no drop shadow** (a `bg-ink-wash` frame carries it; tall/portrait clips are `object-contain`, letterboxed). Heavy Tailwind shadows (`shadow-md`/`shadow-lg`) are **off-system** — the only sanctioned shadows are the feather-light `shadow-card*`/`shadow-float`. Editorial surfaces favor **square/hairline** over rounded.
 
 ### 7.3 Z-index ladder (use these, don't invent)
 

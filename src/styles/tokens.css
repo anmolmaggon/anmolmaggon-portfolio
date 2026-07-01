@@ -177,6 +177,7 @@
   /* ── LEADING (line-height) ──────────────────────────────────────────────── */
   --leading-display: 1.0; /* big serif headlines */
   --leading-tight:   1.2; /* sub-heads, decision titles */
+  --leading-prose:   1.4; /* large-body prose (modal problem/approach, subtitle) — avoids Tailwind's default leading-relaxed=1.625 */
   --leading-body:    1.6; /* running body copy */
   --leading-loose:   1.9; /* "designed in code" mono block */
 
