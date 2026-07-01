@@ -96,7 +96,11 @@ export function Nav() {
         className={`absolute inset-0 -z-10 transition-all duration-500 ease-out ${
           scrolled
             ? onDark
-              ? "bg-scrim-strong backdrop-blur-glass border-b border-paper-hairline"
+              // No backdrop-blur on the dark plate: at 80% scrim the frost is
+              // nearly invisible, but re-blurring the whole nav strip every
+              // scroll frame is a constant GPU cost that made the footer curtain
+              // reveal judder. Kept on the light plate, where the frost reads.
+              ? "bg-scrim-strong border-b border-paper-hairline"
               : "bg-brand-light/95 backdrop-blur-glass border-b border-hairline-soft"
             : "bg-transparent"
         }`}

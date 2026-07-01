@@ -407,6 +407,7 @@ function FireflyJarCanvas({
   onLeave,
   onPin,
   onClear,
+  onReady,
 }: {
   activeId: string | null;
   pinnedId: string | null;
@@ -416,6 +417,7 @@ function FireflyJarCanvas({
   onLeave: (id: string) => void;
   onPin: (id: string) => void;
   onClear: () => void;
+  onReady: () => void;
 }) {
   return (
     <Canvas
@@ -426,6 +428,7 @@ function FireflyJarCanvas({
       onCreated={({ gl }) => {
         gl.setClearColor("#06110f", 0);
         gl.outputColorSpace = THREE.SRGBColorSpace;
+        onReady();
       }}
     >
       <Suspense fallback={null}>
@@ -465,13 +468,21 @@ export function TechStackJar() {
 
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  // Fade the swarm in once WebGL is actually ready to paint, so the fireflies
+  // bloom in over ~700ms instead of snapping on all at once when the Canvas
+  // first renders (the empty-jar-then-pop). `isVisible` mounts the Canvas early
+  // (wide rootMargin below); `ready` flips on R3F's onCreated.
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setIsVisible(true);
       },
-      { rootMargin: "400px 0px" }
+      // Mount the Canvas ~1.5 viewports early so WebGL can build its 16 glow/
+      // logo textures before the jar is centered — otherwise a fast scroll
+      // reaches an empty jar before first paint.
+      { rootMargin: "1200px 0px" }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
@@ -516,13 +527,18 @@ export function TechStackJar() {
               firefly layers up and left to sit inside the jar. */}
           <div ref={portalRef} className="absolute inset-[15%_15%_10%] z-50 pointer-events-none translate-x-[calc(-6%_-_4px)] md:translate-x-0" />
 
-          <div className="absolute inset-[15%_15%_10%] z-20 translate-x-[calc(-6%_-_4px)] md:translate-x-0">
+          <div
+            className={`absolute inset-[15%_15%_10%] z-20 translate-x-[calc(-6%_-_4px)] transition-opacity duration-700 ease-out md:translate-x-0 ${
+              ready ? "opacity-100" : "opacity-0"
+            }`}
+          >
             {isVisible && (
               <FireflyJarCanvas
                 portalRef={portalRef}
                 activeId={activeId}
                 pinnedId={pinnedId}
                 reduceMotion={reduceMotion}
+                onReady={() => setReady(true)}
                 onHover={(id) => { if (canHover) setHoveredId(id); }}
                 onLeave={(id) => { if (canHover) setHoveredId((current) => (current === id ? null : current)); }}
                 onPin={(id) => setPinnedId((current) => (current === id ? null : id))}

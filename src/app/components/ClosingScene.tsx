@@ -1,10 +1,14 @@
-import { useEffect, useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useEffect, useRef, type RefObject } from "react";
+import { useReducedMotion } from "motion/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { HoverLink } from "./HoverLink";
 import { useGlobalContext } from "../context/GlobalContext";
 import { SectionHeader } from "./ui/SectionHeader";
 import { LETS_TALK_MAILTO } from "../data/contact";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /* Warm glow used on the closing pitch + email - a soft light bloom so the dark
    text reads as if lit from within against the bright meadow. */
@@ -176,13 +180,6 @@ function MobileFilmStrip() {
 
 export function ClosingScene() {
   const collageRef = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({
-    target: collageRef,
-    // Start fading when the bottom of the collage touches the bottom of the screen.
-    // Finish fading when the bottom of the collage touches the top of the screen.
-    // This perfectly matches the 100svh reveal, and avoids document-boundary overscroll bugs.
-    offset: ["end end", "end start"],
-  });
 
   // grid-cols-1 (= minmax(0,1fr)) bounds the single stacked column to the
   // container width so the mobile film strip's wide horizontal content scrolls
@@ -192,14 +189,22 @@ export function ClosingScene() {
     <section id="contact" className="relative grid grid-cols-1">
       {/* ── Background (Revealed Footer) ──────────────────────────────── */}
       <div className="col-start-1 row-start-1 h-full w-full z-0">
-        <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
-          <FooterContent scrollYProgress={scrollYProgress} />
+        {/* transform-gpu + backface-hidden promote this to its own compositor
+            layer so the (large) meadow image is painted once and merely
+            composited each frame, instead of repainting while the curtain
+            scrolls over it — that repaint was the "vibrating" reveal. Safe on a
+            sticky element: translateZ(0) applies after sticky positioning. */}
+        <div className="sticky top-0 h-[100svh] w-full overflow-hidden transform-gpu [backface-visibility:hidden]">
+          <FooterContent triggerRef={collageRef} />
         </div>
       </div>
 
       {/* ── Foreground (Curtain) ──────────────────────────────────────── */}
       <div className="col-start-1 row-start-1 relative z-10 flex flex-col pointer-events-none">
-        <div ref={collageRef} className="bg-surface-night pointer-events-auto">
+        {/* Own compositor layer too: the curtain then scrolls as a layer
+            translate (cheap) rather than repainting where it overlaps the
+            footer beneath. */}
+        <div ref={collageRef} className="bg-surface-night pointer-events-auto transform-gpu [backface-visibility:hidden]">
           {/* ── Heading ─────────────────────────────────────────────────────── */}
           <div id="off-the-clock" className="px-gutter md:px-gutter-lg pt-28 md:pt-40 pb-12 md:pb-16 scroll-mt-24">
             <div className="max-w-4xl">
@@ -251,13 +256,35 @@ export function ClosingScene() {
   );
 }
 
-function FooterContent({ scrollYProgress }: { scrollYProgress: any }) {
+function FooterContent({ triggerRef }: { triggerRef: RefObject<HTMLDivElement | null> }) {
   const reduce = useReducedMotion();
-  // Fade in the text/footer content as the background image is revealed.
-  // We clamp the range so that it reaches full opacity at 0.8 and STAYS at 1,
-  // preventing any fade-out at the very end of the scroll.
-  const opacity = useTransform(scrollYProgress, [0.1, 0.8], [0, 1]);
-  const y = useTransform(scrollYProgress, [0.1, 0.8], [50, 0]);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  // Fade + rise the pitch/footer in as the black curtain lifts to reveal the
+  // meadow. Driven by GSAP ScrollTrigger (not Motion's useScroll) so it shares
+  // Lenis's rAF via SmoothScroll's `lenis.on("scroll", ScrollTrigger.update)`.
+  // Motion's own loop reads scroll a frame late, which is what made this one
+  // scrubbed reveal judder while the rest of the site stayed smooth.
+  // Range mirrors the old offset (["end end","end start"]): the curtain bottom
+  // travelling viewport-bottom -> viewport-top. The fade occupies the 0.1->0.8
+  // slice and holds full opacity through the end (matching the old clamp).
+  useEffect(() => {
+    if (reduce) return; // reduced-motion: leave content visible, no scrub
+    const el = contentRef.current;
+    const trigger = triggerRef.current;
+    if (!el || !trigger) return;
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: { trigger, start: "bottom bottom", end: "bottom top", scrub: true },
+      });
+      tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.7 }, 0.1);
+      // Pad total duration to 1.0 so scroll 0->1 maps straight onto the timeline.
+      tl.to({}, { duration: 0.2 }, 0.8);
+    });
+    return () => ctx.revert();
+  }, [reduce, triggerRef]);
 
   return (
     <>
@@ -278,9 +305,10 @@ function FooterContent({ scrollYProgress }: { scrollYProgress: any }) {
         />
       </div>
 
-      <motion.div
+      <div
+        ref={contentRef}
         className="absolute inset-0 z-20 flex flex-col"
-        style={{ opacity: reduce ? 1 : opacity, y: reduce ? 0 : y }}
+        style={reduce ? undefined : { opacity: 0 }}
       >
         {/* Central vignette to ensure the white pitch text is legible against the bright sky */}
         <div 
@@ -348,7 +376,7 @@ function FooterContent({ scrollYProgress }: { scrollYProgress: any }) {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </>
   );
 }
