@@ -37,7 +37,6 @@ export function BeforeAfterSlider({
   const [pos, setPos] = useState(50);
   const areaRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
-  const startXRef = useRef<number | null>(null);
 
   const scrubToClientX = (clientX: number) => {
     const el = areaRef.current;
@@ -47,31 +46,29 @@ export function BeforeAfterSlider({
     setPos(Math.max(0, Math.min(100, next)));
   };
 
-  // Desktop nicety: hover-to-wipe. Touch devices never fire mousemove.
+  // Desktop nicety: hover across the image to wipe (no click needed).
   const handleHover = (e: React.MouseEvent) => scrubToClientX(e.clientX);
 
-  // Touch/pen drag. Mouse keeps the hover behaviour above, so ignore it here.
-  // With `touch-action: pan-y` the browser routes vertical gestures to the page
-  // scroll (firing pointercancel), so we only ever scrub on horizontal drags.
-  // A small horizontal threshold means a tap never scrubs — it only moves once
-  // the finger has actually dragged (tap jitter is ignored).
-  const DRAG_THRESHOLD = 6;
-  const startDrag = (e: React.PointerEvent) => {
-    if (e.pointerType === "mouse") return;
-    startXRef.current = e.clientX;
-    draggingRef.current = false;
-  };
-  const onDragMove = (e: React.PointerEvent) => {
-    if (startXRef.current === null) return;
-    if (!draggingRef.current) {
-      if (Math.abs(e.clientX - startXRef.current) < DRAG_THRESHOLD) return;
-      draggingRef.current = true; // crossed the threshold → it's a drag
-    }
+  // Only the grip drives the slider (mouse, touch, or pen). Dragging the grip
+  // compares; the rest of the image scrolls the page normally, so scrolling and
+  // tapping never move the divider. Pointer capture keeps the drag alive when
+  // the finger slips off the small grip; `touch-none` on it stops the drag from
+  // scrolling the page.
+  const startGripDrag = (e: React.PointerEvent) => {
+    draggingRef.current = true;
+    e.currentTarget.setPointerCapture(e.pointerId);
     scrubToClientX(e.clientX);
   };
-  const endDrag = () => {
+  const onGripDrag = (e: React.PointerEvent) => {
+    if (draggingRef.current) scrubToClientX(e.clientX);
+  };
+  const endGripDrag = (e: React.PointerEvent) => {
     draggingRef.current = false;
-    startXRef.current = null;
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* already released */
+    }
   };
 
   return (
@@ -92,16 +89,15 @@ export function BeforeAfterSlider({
           <div
             ref={areaRef}
             onMouseMove={handleHover}
-            onPointerDown={startDrag}
-            onPointerMove={onDragMove}
-            onPointerUp={endDrag}
-            onPointerCancel={endDrag}
-            // NOTE: no `overflow-hidden` here — that would make this the sticky
+            // No touch drag on the surface itself: swipes here scroll the page
+            // (any direction); only the grip compares. Keeps scroll/tap from
+            // ever nudging the divider.
+            // No `overflow-hidden` — that would make this the sticky
             // scroll-context and pin the grip to the (non-scrolling) surface. We
             // want the grip to stick to the real scroll container (the modal on
             // mobile, the 75vh frame on desktop). The BEFORE image is clipped by
             // clipPath, so we don't need overflow to clip it anyway.
-            className="relative w-full select-none touch-pan-y cursor-ew-resize"
+            className="relative w-full select-none cursor-ew-resize"
           >
             {/* Base layer: AFTER. h-auto so it grows to its natural height. */}
             <img
@@ -129,9 +125,17 @@ export function BeforeAfterSlider({
               className="pointer-events-none absolute top-0 bottom-0 w-[2px] bg-white/90 shadow-[0_0_12px_rgba(0,0,0,0.4)]"
               style={{ left: `${pos}%`, transform: "translateX(-1px)" }}
             >
-              {/* Offset = reveal-on-scroll modal header height (h-16 / md:h-20)
-                  + 12px, so the grip clears the header once it slides in. */}
-              <div className="sticky top-[calc(4rem+12px)] md:top-[calc(5rem+12px)] -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-ink text-meta">
+              {/* The grip is the sole drag control: `pointer-events-auto` (the
+                  divider itself is none) + `touch-none` so dragging it never
+                  scrolls. Offset = reveal-on-scroll modal header height
+                  (h-16 / md:h-20) + 12px, so it clears the header once it slides in. */}
+              <div
+                onPointerDown={startGripDrag}
+                onPointerMove={onGripDrag}
+                onPointerUp={endGripDrag}
+                onPointerCancel={endGripDrag}
+                className="pointer-events-auto touch-none cursor-grab active:cursor-grabbing sticky top-[calc(4rem+12px)] md:top-[calc(5rem+12px)] -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-ink text-meta"
+              >
                 ↔
               </div>
             </div>
