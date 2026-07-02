@@ -261,27 +261,36 @@ function FooterContent({ triggerRef }: { triggerRef: RefObject<HTMLDivElement | 
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   // Fade + rise the pitch/footer in as the black curtain lifts to reveal the
-  // meadow. Driven by GSAP ScrollTrigger (not Motion's useScroll) so it shares
-  // Lenis's rAF via SmoothScroll's `lenis.on("scroll", ScrollTrigger.update)`.
-  // Motion's own loop reads scroll a frame late, which is what made this one
-  // scrubbed reveal judder while the rest of the site stayed smooth.
-  // Range mirrors the old offset (["end end","end start"]): the curtain bottom
-  // travelling viewport-bottom -> viewport-top. The fade occupies the 0.1->0.8
-  // slice and holds full opacity through the end (matching the old clamp).
+  // meadow. ONE-SHOT reveal (GSAP ScrollTrigger, no `scrub`): it fires once as
+  // the curtain's bottom edge lifts past ~80% down the viewport, then the tween
+  // plays on its own compositor timeline. We deliberately do NOT scrub — a
+  // scroll-scrubbed version re-wrote opacity/transform every scroll frame, and
+  // that per-frame main-thread work was the footer's residual reveal lag.
+  // `ScrollTrigger.update` already runs each frame site-wide (a cheap position
+  // check); a one-shot adds no per-frame cost. `reverse` re-hides it on the way
+  // back up, matching the old behaviour.
   useEffect(() => {
-    if (reduce) return; // reduced-motion: leave content visible, no scrub
+    if (reduce) return; // reduced-motion: leave content visible, no reveal
     const el = contentRef.current;
     const trigger = triggerRef.current;
     if (!el || !trigger) return;
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        defaults: { ease: "none" },
-        scrollTrigger: { trigger, start: "bottom bottom", end: "bottom top", scrub: true },
-      });
-      tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.7 }, 0.1);
-      // Pad total duration to 1.0 so scroll 0->1 maps straight onto the timeline.
-      tl.to({}, { duration: 0.2 }, 0.8);
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger,
+            start: "bottom 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
     });
     return () => ctx.revert();
   }, [reduce, triggerRef]);
@@ -308,7 +317,11 @@ function FooterContent({ triggerRef }: { triggerRef: RefObject<HTMLDivElement | 
       <div
         ref={contentRef}
         className="absolute inset-0 z-20 flex flex-col"
-        style={reduce ? undefined : { opacity: 0 }}
+        // Pre-promote to its own compositor layer: this content is paint-heavy
+        // (full-screen radial vignette + glowing text-shadow pitch), so without
+        // a layer the reveal tween repaints all of it every frame — the lag.
+        // With the layer, opacity/transform composite; paint happens once.
+        style={reduce ? undefined : { opacity: 0, willChange: "transform, opacity" }}
       >
         {/* Central vignette to ensure the white pitch text is legible against the bright sky */}
         <div 

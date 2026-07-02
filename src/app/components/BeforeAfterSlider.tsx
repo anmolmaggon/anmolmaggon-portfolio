@@ -11,8 +11,20 @@ type Props = {
 
 /**
  * Drag-to-compare before/after slider for redesign case studies.
- * Built on a native range input → keyboard accessible (arrow keys) + touch drag for free.
- * Supports hover-to-drag on desktop via onMouseMove.
+ *
+ * Interaction:
+ *  - Desktop: hovering across the image wipes the comparison (no click needed).
+ *  - Touch/pen: press-and-drag horizontally to compare. The surface is
+ *    `touch-action: pan-y`, so vertical swipes stay with the page (the modal
+ *    scrolls) and only horizontal drags scrub — it never traps the scroll.
+ *  - Keyboard: the range input (visually hidden, `pointer-events-none`) keeps
+ *    arrow-key access for a11y.
+ *
+ * Height: the source shots are very tall portrait screenshots. On desktop the
+ * frame is capped (`md:h-[75vh]`) with its own scroll so the comparison stays
+ * contained (wheel-scroll chains to the modal at the ends). On mobile there is
+ * NO inner scroll box — the shots flow in the modal so vertical swipes scroll
+ * the page instead of getting trapped.
  */
 export function BeforeAfterSlider({
   before,
@@ -24,36 +36,63 @@ export function BeforeAfterSlider({
 }: Props) {
   const [pos, setPos] = useState(50);
   const areaRef = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);
 
-  // Desktop nicety: hovering across the image wipes the comparison (no click
-  // needed). Touch devices never fire mousemove, so mobile is unaffected; drag
-  // and keyboard still work everywhere.
-  const handleHover = (e: React.MouseEvent) => {
+  const scrubToClientX = (clientX: number) => {
     const el = areaRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const next = ((e.clientX - rect.left) / rect.width) * 100;
+    const next = ((clientX - rect.left) / rect.width) * 100;
     setPos(Math.max(0, Math.min(100, next)));
+  };
+
+  // Desktop nicety: hover-to-wipe. Touch devices never fire mousemove.
+  const handleHover = (e: React.MouseEvent) => scrubToClientX(e.clientX);
+
+  // Touch/pen drag. Mouse keeps the hover behaviour above, so ignore it here.
+  // With `touch-action: pan-y` the browser routes vertical gestures to the page
+  // scroll (firing pointercancel), so we only ever scrub on horizontal drags.
+  const startDrag = (e: React.PointerEvent) => {
+    if (e.pointerType === "mouse") return;
+    draggingRef.current = true;
+  };
+  const onDragMove = (e: React.PointerEvent) => {
+    if (draggingRef.current) scrubToClientX(e.clientX);
+  };
+  const endDrag = () => {
+    draggingRef.current = false;
   };
 
   return (
     <figure className="w-full flex flex-col items-center">
       <div className={`relative w-full flex flex-col items-center ${isMobileLayout ? "max-w-[400px]" : ""}`}>
-        
-        {/* 1. Header Labels (Caption Style, aligned to container edges) */}
+
+        {/* Header Labels (aligned to container edges) */}
         <div className={`flex justify-between w-full mb-4 px-1 ${isMobileLayout ? "max-w-[400px]" : ""} pointer-events-none`}>
           <span className="italic opacity-60 text-label">Before</span>
           <span className="italic opacity-60 text-label">After</span>
         </div>
 
-        {/* 2. Scrollable Container for the actual slider */}
-        <div className={`w-full ${isMobileLayout ? "h-[75vh] overflow-y-auto border border-hairline" : ""} bg-brand-light`}>
+        {/* Frame: fixed-height scroll viewport on desktop (contains the tall
+            portrait shots); flows in the modal on mobile (vertical swipes scroll
+            the page — no nested-scroll trap). */}
+        <div className={`w-full bg-brand-light md:h-[75vh] md:overflow-y-auto ${isMobileLayout ? "border border-hairline" : ""}`}>
+          {/* Comparison surface — full image height; drives `pos`. */}
           <div
             ref={areaRef}
             onMouseMove={handleHover}
-            className={`relative inline-block w-full ${!isMobileLayout ? "max-w-full overflow-hidden" : ""} select-none`}
+            onPointerDown={startDrag}
+            onPointerMove={onDragMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            // NOTE: no `overflow-hidden` here — that would make this the sticky
+            // scroll-context and pin the grip to the (non-scrolling) surface. We
+            // want the grip to stick to the real scroll container (the modal on
+            // mobile, the 75vh frame on desktop). The BEFORE image is clipped by
+            // clipPath, so we don't need overflow to clip it anyway.
+            className="relative w-full select-none touch-pan-y cursor-ew-resize"
           >
-            {/* Base layer: AFTER. No max-h restriction so it grows fully to its natural height */}
+            {/* Base layer: AFTER. h-auto so it grows to its natural height. */}
             <img
               src={after}
               alt={afterAlt}
@@ -70,25 +109,24 @@ export function BeforeAfterSlider({
               draggable={false}
             />
 
-            {/* Divider line + grip */}
+            {/* Divider line + grip. The line spans the full image height so any
+                vertical position is draggable. The grip is `sticky` so it stays
+                pinned near the top and reachable while you scroll the tall
+                comparison — relative to the modal on mobile, the 75vh frame on
+                desktop. */}
             <div
               className="pointer-events-none absolute top-0 bottom-0 w-[2px] bg-white/90 shadow-[0_0_12px_rgba(0,0,0,0.4)]"
               style={{ left: `${pos}%`, transform: "translateX(-1px)" }}
             >
-              {/* The grip stays pinned near the top. On the mobile layout the
-                  slider lives in its own vertical scroll container, so it's
-                  `sticky` there to stay visible (and draggable) at any scroll
-                  position; on desktop it's simply anchored near the top. */}
-              <div
-                className={`${
-                  isMobileLayout ? "sticky top-6" : "absolute top-6 left-1/2"
-                } -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-ink text-meta`}
-              >
+              {/* Offset = reveal-on-scroll modal header height (h-16 / md:h-20)
+                  + 12px, so the grip clears the header once it slides in. */}
+              <div className="sticky top-[calc(4rem+12px)] md:top-[calc(5rem+12px)] -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-ink text-meta">
                 ↔
               </div>
             </div>
 
-            {/* The actual control: full-area, invisible, drives `pos`. */}
+            {/* Keyboard-accessible control (a11y only). `pointer-events-none` so
+                the surface above owns pointer/touch; focus + arrow keys work. */}
             <input
               type="range"
               min={0}
@@ -96,7 +134,7 @@ export function BeforeAfterSlider({
               value={pos}
               onChange={(e) => setPos(Number(e.target.value))}
               aria-label="Drag to compare the design before and after the redesign"
-              className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize touch-pan-y"
+              className="pointer-events-none absolute inset-0 w-full h-full opacity-0"
             />
           </div>
         </div>
