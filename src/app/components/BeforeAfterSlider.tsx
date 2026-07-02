@@ -37,6 +37,7 @@ export function BeforeAfterSlider({
   const [pos, setPos] = useState(50);
   const areaRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
+  const startXRef = useRef<number | null>(null);
 
   const scrubToClientX = (clientX: number) => {
     const el = areaRef.current;
@@ -52,15 +53,25 @@ export function BeforeAfterSlider({
   // Touch/pen drag. Mouse keeps the hover behaviour above, so ignore it here.
   // With `touch-action: pan-y` the browser routes vertical gestures to the page
   // scroll (firing pointercancel), so we only ever scrub on horizontal drags.
+  // A small horizontal threshold means a tap never scrubs — it only moves once
+  // the finger has actually dragged (tap jitter is ignored).
+  const DRAG_THRESHOLD = 6;
   const startDrag = (e: React.PointerEvent) => {
     if (e.pointerType === "mouse") return;
-    draggingRef.current = true;
+    startXRef.current = e.clientX;
+    draggingRef.current = false;
   };
   const onDragMove = (e: React.PointerEvent) => {
-    if (draggingRef.current) scrubToClientX(e.clientX);
+    if (startXRef.current === null) return;
+    if (!draggingRef.current) {
+      if (Math.abs(e.clientX - startXRef.current) < DRAG_THRESHOLD) return;
+      draggingRef.current = true; // crossed the threshold → it's a drag
+    }
+    scrubToClientX(e.clientX);
   };
   const endDrag = () => {
     draggingRef.current = false;
+    startXRef.current = null;
   };
 
   return (
