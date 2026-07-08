@@ -417,7 +417,7 @@ export function HeroScrubPrototype() {
     // ---- preload ----
     // Chapter-A readiness → tells the Loader it can reveal. Chapter B streams behind the loop.
     let readyCount = 0;
-    const readyTarget = 24; // buffer first 24 frames (~0.5s) instead of all 242
+    const readyTarget = 2; // buffer only the first 2 frames to drop the loader instantly
     const signalReady = () => {
       if (window.__heroReady) return;
       window.__heroReady = true;
