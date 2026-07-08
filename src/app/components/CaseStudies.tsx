@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { VideoWithFallback } from "./VideoWithFallback";
 import { Pill } from "./Pill";
 import { KnowMoreCursor } from "./KnowMoreCursor";
-import { CaseStudyModal, type CaseStudyDetail } from "./CaseStudyModal";
+import type { CaseStudyDetail } from "./CaseStudyModal";
+
+const CaseStudyModal = lazy(() => import("./CaseStudyModal").then(m => ({ default: m.CaseStudyModal })));
 
 type Study = CaseStudyDetail & {
   slug: string;
@@ -438,6 +440,7 @@ export function CaseStudies() {
                       src={s.image}
                       alt={`${s.title} preview`}
                       className="w-full h-full object-contain"
+                      loading="lazy"
                     />
                   )}
                 </div>
@@ -522,13 +525,15 @@ export function CaseStudies() {
 
       <KnowMoreCursor active={canHover && hoveringCard && active === null} />
 
-      <CaseStudyModal
-        study={active}
-        prevStudy={prevStudy}
-        nextStudy={nextStudy}
-        onNavigate={(study) => handleNavigate(study)}
-        onClose={() => handleNavigate(null)}
-      />
+      <Suspense fallback={null}>
+        <CaseStudyModal
+          study={active}
+          prevStudy={prevStudy}
+          nextStudy={nextStudy}
+          onNavigate={(study) => handleNavigate(study)}
+          onClose={() => handleNavigate(null)}
+        />
+      </Suspense>
     </section>
   );
 }

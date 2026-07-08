@@ -417,7 +417,7 @@ export function HeroScrubPrototype() {
     // ---- preload ----
     // Chapter-A readiness → tells the Loader it can reveal. Chapter B streams behind the loop.
     let readyCount = 0;
-    const readyTarget = SEG_A;
+    const readyTarget = 24; // buffer first 24 frames (~0.5s) instead of all 242
     const signalReady = () => {
       if (window.__heroReady) return;
       window.__heroReady = true;
@@ -469,8 +469,12 @@ export function HeroScrubPrototype() {
     }
 
     load(segA, SEG_A, aPath, 16, true); // Chapter A gates the loader
-    load(segB, SEG_B, bPath, 16, false); // ending streams in the background
-    load(rest2, REST2_N, r2Path, 4, false); // F2 ambient streams in before the first pause (~18s in)
+    
+    // Delay Chapter B and rest frames to avoid flooding network queue on initial load
+    setTimeout(() => {
+      load(segB, SEG_B, bPath, 16, false); // ending streams in the background
+      load(rest2, REST2_N, r2Path, 4, false); // F2 ambient streams in before the first pause (~18s in)
+    }, 2500);
 
     resize();
     const ro = new ResizeObserver(() => resize());
@@ -541,11 +545,6 @@ export function HeroScrubPrototype() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // scrim darkens the top strip (headline + nav links) and the bottom strip (name),
-  // leaving the art bright through the middle so the white type always reads.
-  const scrimBg =
-    "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 38%, rgba(0,0,0,0) 68%, rgba(0,0,0,0.6) 100%)";
-
   const headlineStyle = {
     fontFamily: "'Nyght Serif', serif",
     color: "#fff",
@@ -589,8 +588,8 @@ export function HeroScrubPrototype() {
     >
       <canvas ref={canvasRef} style={{ display: "block", position: "absolute", inset: 0, zIndex: 1 }} />
 
-      {/* legibility scrim — darkens the top + bottom strips */}
-      <div aria-hidden style={{ position: "absolute", inset: 0, zIndex: 3, pointerEvents: "none", background: scrimBg }} />
+      {/* No legibility scrim — the type carries its own glow (heroGlow) so the
+          dawn-meadow art stays fully uncovered. */}
 
       {/* headline — top-left on all breakpoints */}
       <div className="absolute inset-x-0 top-0 px-gutter md:px-gutter-lg pt-6 md:pt-8" style={{ pointerEvents: "none", zIndex: 6 }}>

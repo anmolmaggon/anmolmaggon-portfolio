@@ -323,14 +323,8 @@ function FooterContent({ triggerRef }: { triggerRef: RefObject<HTMLDivElement | 
         // With the layer, opacity/transform composite; paint happens once.
         style={reduce ? undefined : { opacity: 0, willChange: "transform, opacity" }}
       >
-        {/* Central vignette to ensure the white pitch text is legible against the bright sky */}
-        <div 
-          aria-hidden
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: "radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 55%)"
-          }}
-        />
+        {/* No central vignette — the pitch carries its own glow (TEXT_GLOW),
+            so the meadow stays uncovered behind it. */}
 
         {/* Pitch - centered, glowing, on the open band */}
         <div className="flex-1 flex flex-col items-center justify-center px-gutter md:px-gutter-lg text-center relative z-10">
