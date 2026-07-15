@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { HeroAudio } from "./HeroAudio";
@@ -39,6 +39,7 @@ const heroGlow = "0 1px 3px rgba(0,0,0,0.55), 0 2px 28px rgba(0,0,0,0.55)";
 
 export function HeroScrubPrototype() {
   const { isMuted, setMusicPlaying, setAudioLoading, registerMusicPlay } = useGlobalContext();
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
   
   const isMutedRef = useRef(isMuted);
   isMutedRef.current = isMuted;
@@ -80,6 +81,7 @@ export function HeroScrubPrototype() {
 
     const onTimeUpdate = () => {
       if (vidA.currentTime > 0.15) {
+        setIsVideoLoading(false); // Only fade out when video ACTUALLY plays
         signalReady();
         vidA.removeEventListener("timeupdate", onTimeUpdate);
       }
@@ -399,6 +401,37 @@ export function HeroScrubPrototype() {
         <source src="/hero-loop.webm" type="video/webm" />
         <source src="/hero-loop.mp4" type="video/mp4" />
       </video>
+
+      {/* Video Loader (Option A) */}
+      <div 
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 3,
+          pointerEvents: "none",
+          opacity: isVideoLoading ? 1 : 0,
+          transition: "opacity 0.6s ease",
+        }}
+      >
+        <div 
+          style={{
+            width: "32px",
+            height: "32px",
+            border: "2px solid rgba(255, 255, 255, 0.15)",
+            borderTopColor: "rgba(255, 255, 255, 0.9)",
+            borderRadius: "50%",
+            animation: "heroVidSpinner 0.8s linear infinite",
+          }}
+        />
+        <style>{`
+          @keyframes heroVidSpinner {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
 
       <div className="absolute inset-x-0 top-0 px-gutter md:px-gutter-lg pt-6 md:pt-8" style={{ pointerEvents: "none", zIndex: 6 }}>
         <div className="pr-14 md:pr-0" style={{ maxWidth: "60rem" }}>{headlineEl}</div>
