@@ -2,3 +2,7 @@ node_modules/
 dist/
 .vite/
 .DS_Store
+
+# Temporary build artifacts for hero video
+scratch_bake/
+run_bake.sh
