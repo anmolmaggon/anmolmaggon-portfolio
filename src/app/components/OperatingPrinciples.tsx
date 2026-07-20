@@ -183,7 +183,27 @@ export function OperatingPrinciples() {
                   }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                 >
-                  {p.title}
+                  {p.id === "change" ? (
+                    <>
+                      {/* First "Nothing" turns red on hover (desktop) / tap
+                          (mobile). This section inverts — filter: invert(1) —
+                          while active, so the source color is the INVERSE of the
+                          red we want on screen: #1af6eb → #e50914 after the
+                          invert. Kept in lockstep with --dur-invert so it passes
+                          cleanly through the flip instead of flashing. */}
+                      <span
+                        style={{
+                          color: isHovered ? "#1af6eb" : undefined,
+                          transition: "color var(--dur-invert) var(--ease-quint)",
+                        }}
+                      >
+                        Nothing
+                      </span>
+                      {" changes if nothing changes"}
+                    </>
+                  ) : (
+                    p.title
+                  )}
                 </motion.h3>
 
                 <p
